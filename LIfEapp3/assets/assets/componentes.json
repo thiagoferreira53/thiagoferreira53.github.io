@@ -1,0 +1,830 @@
+[
+    {
+        "uid": 1,
+        "nome": "Argamassa de revestimento",
+        "descricao": "Argamassa de revestimento 2,5cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 2.20E-02,
+            "gwp": 8.60E+00,
+            "adpnf": 7.51E-08,
+            "adpf": 4.96E+01,
+            "ep": 5.88E-03,
+            "odp": 4.43E-07,
+            "pocp": 9.96E-04,
+            "ced": 5.99E+01
+        }
+    },
+    {
+        "uid": 2,
+        "nome": "Argamassa de assentamento",
+        "descricao": "Argamassa de assentamento bloco cerâmico 9cm (6 furos)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.13E-02,
+            "gwp": 4.41E+00,
+            "adpnf": 3.87E-08,
+            "adpf": 2.55E+01,
+            "ep": 3.02E-03,
+            "odp": 2.27E-07,
+            "pocp": 5.09E-04,
+            "ced": 3.08E+01
+        }
+    },
+    {
+        "uid": 3,
+        "nome": "Argamassa de assentamento",
+        "descricao": "Argamassa de assentamento bloco cerâmico 9cm (4 furos)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.43E-02,
+            "gwp": 5.58E+00,
+            "adpnf": 4.87E-08,
+            "adpf": 3.22E+01,
+            "ep": 3.81E-03,
+            "odp": 2.87E-077,
+            "pocp": 6.46E-04,
+            "ced": 3.89E+01
+        }
+    },
+    {
+        "uid": 4,
+        "nome": "Argamassa de assentamento",
+        "descricao": "Argamassa de assentamento bloco cerâmico 14cm (9 furos)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.24E-02,
+            "gwp": 4.84E+00,
+            "adpnf": 4.22E-08,
+            "adpf": 2.79E+01,
+            "ep": 3.30E-033,
+            "odp": 2.49E-07,
+            "pocp": 5.60E-04,
+            "ced": 3.37E+01
+        }
+    },
+    {
+        "uid": 5,
+        "nome": "Argamassa de assentamento",
+        "descricao": "Argamassa de assentamento bloco cerâmico 14cm (6 furos)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.22E-02,
+            "gwp": 4.78E+00,
+            "adpnf": 4.15E-08,
+            "adpf": 2.75E+01,
+            "ep": 3.26E-03,
+            "odp": 2.46E-07,
+            "pocp": 5.54E-04,
+            "ced": 3.33E+01
+        }
+    },
+    {
+        "uid": 6,
+        "nome": "Argamassa de assentamento",
+        "descricao": "Argamassa de assentamento tijolo cerâmico maciço 10cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 2.13E-02,
+            "gwp": 8.29E+00,
+            "adpnf": 7.26E-08,
+            "adpf": 4.80E+01,
+            "ep": 5.68E-03,
+            "odp": 4.29E-07,
+            "pocp": 9.61E-04,
+            "ced": 5.79E+01
+        }
+    },
+    {
+        "uid": 7,
+        "nome": "Argamassa de assentamento",
+        "descricao": "Argamassa de assentamento tijolo cerâmico maciço 9cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.91E-02,
+            "gwp": 7.46E+00,
+            "adpnf": 6.53E-08,
+            "adpf": 4.32E+01,
+            "ep": 5.11E-03,
+            "odp": 3.86E-07,
+            "pocp": 8.64E-04,
+            "ced": 5.21E+01
+        }
+    },
+    {
+        "uid": 8,
+        "nome": "Argamassa de assentamento",
+        "descricao": "Argamassa de assentamento bloco cerâmico 9cm (8 furos)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 9.54E-03,
+            "gwp": 3.74E+00,
+            "adpnf": 3.26E-08,
+            "adpf": 2.16E+01,
+            "ep": 2.55E-03,
+            "odp": 1.92E-07,
+            "pocp": 4.32E-04,
+            "ced": 2.60E+01
+        }
+    },
+    {
+        "uid": 9,
+        "nome": "Argamassa de assentamento",
+        "descricao": "Argamassa de assentamento bloco cerâmico 12cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.27E-02,
+            "gwp": 4.98E+00,
+            "adpnf": 4.35E-08,
+            "adpf": 2.87E+01,
+            "ep": 3.40E-03,
+            "odp": 2.56E-07,
+            "pocp": 5.76E-04,
+            "ced": 3.47E+01
+        }
+    },
+    {
+        "uid": 10,
+        "nome": "Argamassa de assentamento",
+        "descricao": "Argamassa de assentamento bloco de concreto 9cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 7.16E-03,
+            "gwp": 2.80E+00,
+            "adpnf": 2.45E-08,
+            "adpf": 1.62E+01,
+            "ep": 1.91E-03,
+            "odp": 1.44E-07,
+            "pocp": 3.24E-04,
+            "ced": 1.95E+01
+        }
+    },
+    {
+        "uid": 11,
+        "nome": "Argamassa de assentamento",
+        "descricao": "Argamassa de assentamento bloco de concreto 14cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.11E-02,
+            "gwp": 4.35E+00,
+            "adpnf": 3.80E-08,
+            "adpf": 2.51E+01,
+            "ep": 2.97E-03,
+            "odp": 2.24E-07,
+            "pocp": 5.03E-04,
+            "ced": 3.03E+01
+        }
+    },
+    {
+        "uid": 12,
+        "nome": "Alvenaria cerâmica",
+        "descricao": "Alvenaria bloco cerâmico 9cm (6 furos)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 3.35E-02,
+            "gwp": 1.32E+01,
+            "adpnf": 1.37E-07,
+            "adpf": 1.18E+02,
+            "ep": 8.06E-03,
+            "odp": 8.23E-07,
+            "pocp": 2.69E-03,
+            "ced": 1.49E+02
+        }
+    },
+    {
+        "uid": 13,
+        "nome": "Alvenaria cerâmica",
+        "descricao": "Alvenaria bloco cerâmico 9cm (4 furos)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 4.27E-02,
+            "gwp": 1.69E+01,
+            "adpnf": 1.74E-07,
+            "adpf": 1.50E+02,
+            "ep": 1.03E-02,
+            "odp": 1.05E-06,
+            "pocp": 3.43E-03,
+            "ced": 1.89E+02
+        }
+    },
+    {
+        "uid": 14,
+        "nome": "Alvenaria cerâmica",
+        "descricao": "Alvenaria bloco cerâmico 14cm (9 furos)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 3.69E-02,
+            "gwp": 1.46E+01,
+            "adpnf": 1.50E-07,
+            "adpf": 1.30E+02,
+            "ep": 8.86E-03,
+            "odp": 9.05E-07,
+            "pocp": 2.96E-03,
+            "ced": 1.63E+02
+        }
+    },
+    {
+        "uid": 15,
+        "nome": "Alvenaria cerâmica",
+        "descricao": "Alvenaria bloco cerâmico 12cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 3.44E-02,
+            "gwp": 1.36E+01,
+            "adpnf": 1.40E-07,
+            "adpf": 1.21E+02,
+            "ep": 8.27E-03,
+            "odp": 8.45E-07,
+            "pocp": 2.76E-03,
+            "ced": 1.53E+02
+        }
+    },
+    {
+        "uid": 16,
+        "nome": "Alvenaria cerâmica",
+        "descricao": "Alvenaria bloco cerâmico 9cm (8 furos)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 3.09E-02,
+            "gwp": 1.22E+01,
+            "adpnf": 1.26E-07,
+            "adpf": 1.09E+02,
+            "ep": 7.43E-03,
+            "odp": 7.59E-07,
+            "pocp": 2.48E-03,
+            "ced": 1.37E+02
+        }
+    },
+    {
+        "uid": 17,
+        "nome": "Alvenaria cerâmica",
+        "descricao": "Alvenaria tijolo cerâmico maciço 10cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 7.67E-02,
+            "gwp": 3.03E+01,
+            "adpnf": 3.12E-07,
+            "adpf": 2.70E+02,
+            "ep": 1.84E-02,
+            "odp": 1.88E-06,
+            "pocp": 6.15E-03,
+            "ced": 3.40E+02
+        }
+    },
+    {
+        "uid": 18,
+        "nome": "Alvenaria cerâmica",
+        "descricao": "Alvenaria tijolo cerâmico maciço 9cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 6.97E-02,
+            "gwp": 2.75E+01,
+            "adpnf": 2.84E-07,
+            "adpf": 2.45E+02,
+            "ep": 1.67E-02,
+            "odp": 1.71E-06,
+            "pocp": 5.59E-03,
+            "ced": 3.09E+02
+        }
+    },
+    {
+        "uid": 19,
+        "nome": "Alvenaria bloco de concreto",
+        "descricao": "Alvenaria bloco de concreto 9cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 2.82E-02,
+            "gwp": 7.48E+00,
+            "adpnf": 9.03E-08,
+            "adpf": 5.03E+01,
+            "ep": 6.74E-03,
+            "odp": 5.93E-07,
+            "pocp": 1.26E-03,
+            "ced": 6.67E+01
+        }
+    },
+    {
+        "uid": 20,
+        "nome": "Alvenaria bloco de concreto",
+        "descricao": "Alvenaria bloco de concreto 14cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 4.42E-02,
+            "gwp": 1.17E+01,
+            "adpnf": 1.42E-07,
+            "adpf": 7.90E+01,
+            "ep": 1.06E-02,
+            "odp": 9.32E-07,
+            "pocp": 1.97E-03,
+            "ced": 1.05E+02
+        }
+    },
+    {
+        "uid": 21,
+        "nome": "Concreto maciço",
+        "descricao": "Concreto maciço 10cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 7.96E-02,
+            "gwp": 2.62E+01,
+            "adpnf": 3.90E-07,
+            "adpf": 1.54E+02,
+            "ep": 1.94E-02,
+            "odp": 1.71E-06,
+            "pocp": 3.82E-03,
+            "ced": 1.90E+02
+        }
+    },
+    {
+        "uid": 22,
+        "nome": "Concreto maciço",
+        "descricao": "Concreto maciço 12cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 9.55E-02,
+            "gwp": 3.15E+01,
+            "adpnf": 4.68E-07,
+            "adpf": 1.84E+02,
+            "ep": 2.33E-02,
+            "odp": 2.05E-06,
+            "pocp": 4.58E-03,
+            "ced": 2.28E+02
+        }
+    },
+    {
+        "uid": 23,
+        "nome": "Aço",
+        "descricao": "Aço bloco de concreto",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 8.63E-03,
+            "gwp": 5.91E-01,
+            "adpnf": 1.54E-07,
+            "adpf": 6.40E+00,
+            "ep": 2.63E-03,
+            "odp": 4.01E-08,
+            "pocp": 3.35E-04,
+            "ced": 8.07E+00
+        }
+    },
+    {
+        "uid": 24,
+        "nome": "Aço",
+        "descricao": "Aço bloco cerâmico",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 6.04E-03,
+            "gwp": 3.40E-01,
+            "adpnf": 1.12E-07,
+            "adpf": 3.73E+00,
+            "ep": 1.77E-03,
+            "odp": 2.42E-08,
+            "pocp": 1.84E-04,
+            "ced": 4.75E+00
+        }
+    },
+    {
+        "uid": 25,
+        "nome": "Aço",
+        "descricao": "Aço tijolo cerâmico maciço",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 8.63E-03,
+            "gwp": 5.91E-01,
+            "adpnf": 1.54E-07,
+            "adpf": 6.40E+00,
+            "ep": 2.63E-03,
+            "odp": 4.01E-08,
+            "pocp": 3.35E-04,
+            "ced": 8.07E+00
+        }
+    },
+    {
+        "uid": 26,
+        "nome": "Armadura concreto maciço",
+        "descricao": "Armadura concreto maciço",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.84E-01,
+            "gwp": 5.63E+00,
+            "adpnf": 3.71E-06,
+            "adpf": 6.55E+01,
+            "ep": 4.91E-02,
+            "odp": 4.93E-07,
+            "pocp": 2.37E-03,
+            "ced": 8.72E+01
+        }
+    },
+    {
+        "uid": 27,
+        "nome": "Perfis de aço galvanizado",
+        "descricao": "Armadura concreto maciço",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.84E-01,
+            "gwp": 5.63E+00,
+            "adpnf": 3.71E-06,
+            "adpf": 6.55E+01,
+            "ep": 4.91E-02,
+            "odp": 4.93E-07,
+            "pocp": 2.37E-03,
+            "ced": 8.72E+01
+        }
+    },
+    {
+        "uid": 28,
+        "nome": "Aço",
+        "descricao": "Aço (sistemas 23,27,29)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 3.19E-02,
+            "gwp": 1.19E+00,
+            "adpnf": 6.31E-07,
+            "adpf": 1.35E+01,
+            "ep": 8.73E-03,
+            "odp": 9.64E-08,
+            "pocp": 5.55E-04,
+            "ced": 1.77E+01
+        }
+    },
+    {
+        "uid": 29,
+        "nome": "Aço",
+        "descricao": "Aço (sistemas 24,26,28)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 3.46E-02,
+            "gwp": 1.43E+00,
+            "adpnf": 6.77E-07,
+            "adpf": 1.61E+01,
+            "ep": 9.62E-03,
+            "odp": 1.12E-07,
+            "pocp": 6.97E-04,
+            "ced": 1.21E+01
+        }
+    },
+    {
+        "uid": 30,
+        "nome": "Aço",
+        "descricao": "Aço (sistema 25)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 2.58E-02,
+            "gwp": 1.02E+00,
+            "adpnf": 5.06E-07,
+            "adpf": 1.16E+01,
+            "ep": 7.12E-03,
+            "odp": 8.12E-08,
+            "pocp": 4.92E-04,
+            "ced": 1.51E+01
+        }
+    },
+    {
+        "uid": 31,
+        "nome": "Aço",
+        "descricao": "Aço (sistema 30)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 3.47E-02,
+            "gwp": 1.44E+00,
+            "adpnf": 6.77E-07,
+            "adpf": 1.62E+01,
+            "ep": 9.65E-03,
+            "odp": 1.13E-07,
+            "pocp": 7.07E-04,
+            "ced": 2.11E+01
+        }
+    },
+    {
+        "uid": 32,
+        "nome": "Aço",
+        "descricao": "Aço (sistema 41)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.22E-02,
+            "gwp": 8.20E-01,
+            "adpnf": 2.20E-07,
+            "adpf": 8.89E+00,
+            "ep": 3.72E-03,
+            "odp": 5.59E-08,
+            "pocp": 4.62E-04,
+            "ced": 1.12E+01
+        }
+    },
+    {
+        "uid": 33,
+        "nome": "Pintura",
+        "descricao": "Pintura",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 8.38E-03,
+            "gwp": 1.44E+00,
+            "adpnf": 6.50E-07,
+            "adpf": 1.62E+01,
+            "ep": 2.87E-03,
+            "odp": 1.09E-07,
+            "pocp": 8.38E-04,
+            "ced": 2.26E+01
+        }
+    },
+    {
+        "uid": 34,
+        "nome": "Placa de gesso",
+        "descricao": "Placa de gesso 2cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.72E-02,
+            "gwp": 2.56E+00,
+            "adpnf": 7.40E-08,
+            "adpf": 2.81E+01,
+            "ep": 4.05E-03,
+            "odp": 1.42E-07,
+            "pocp": 7.83E-04,
+            "ced": 4.21E+01
+        }
+    },
+    {
+        "uid": 35,
+        "nome": "Placa de gesso",
+        "descricao": "Placa de gesso 1,25cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.67E-02,
+            "gwp": 2.44E+00,
+            "adpnf": 7.27E-08,
+            "adpf": 2.66E+01,
+            "ep": 3.94E-03,
+            "odp": 1.32E-07,
+            "pocp": 7.57E-04,
+            "ced": 4.02E+01
+        }
+    },
+    {
+        "uid": 36,
+        "nome": "Gesso",
+        "descricao": "Gesso 0,2cm (sistema 3)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 6.15E-04,
+            "gwp": 1.33E-01,
+            "adpnf": 1.79E-09,
+            "adpf": 1.67E+00,
+            "ep": 1.26E-04,
+            "odp": 1.13E-08,
+            "pocp": 2.93E-05,
+            "ced": 2.10E+00
+        }
+    },
+    {
+        "uid": 37,
+        "nome": "Gesso",
+        "descricao": "Gesso 0,2cm (sistema 7)",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 6.17E-04,
+            "gwp": 1.33E-01,
+            "adpnf": 1.89E-09,
+            "adpf": 1.67E+00,
+            "ep": 1.26E-04,
+            "odp": 1.14E-08,
+            "pocp": 2.94E-05,
+            "ced": 2.10E+00
+        }
+    },
+    {
+        "uid": 38,
+        "nome": "Placa de gesso",
+        "descricao": "Placa de gesso 1,25cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.67E-02,
+            "gwp": 2.44E+00,
+            "adpnf": 7.27E-08,
+            "adpf": 2.66E+01,
+            "ep": 3.94E-03,
+            "odp": 1.32E-07,
+            "pocp": 7.57E-04,
+            "ced": 4.02E+01
+        }
+    },
+    {
+        "uid": 39,
+        "nome": "Forma",
+        "descricao": "Forma concreto maciço",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.23E-04,
+            "gwp": 2.50E-02,
+            "adpnf": 1.41E-09,
+            "adpf": 2.69E-01,
+            "ep": 3.42E-05,
+            "odp": 1.39E-09,
+            "pocp": 8.16E-06,
+            "ced": 4.96E-01
+        }
+    },
+    {
+        "uid": 40,
+        "nome": "Isolante",
+        "descricao": "Isolante de Poliestireno",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 3.32E-02,
+            "gwp": 1.04E+01,
+            "adpnf": 3.62E-07,
+            "adpf": 2.42E+02,
+            "ep": 3.92E-03,
+            "odp": 1.79E-07,
+            "pocp": 2.10E-03,
+            "ced": 2.72E+02
+        }
+    },
+    {
+        "uid": 41,
+        "nome": "Isolante",
+        "descricao": "Isolante de lã de rocha 9cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 3.23E-02,
+            "gwp": 3.83E+00,
+            "adpnf": 1.04E-07,
+            "adpf": 4.28E+01,
+            "ep": 6.10E-03,
+            "odp": 2.36E-07,
+            "pocp": 1.95E-03,
+            "ced": 5.25E+01
+        }
+    },
+    {
+        "uid": 42,
+        "nome": "Isolante",
+        "descricao": "Isolante de lã de rocha 4cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 1.44E-02,
+            "gwp": 1.70E+00,
+            "adpnf": 4.61E-08,
+            "adpf": 1.90E+01,
+            "ep": 2.71E-03,
+            "odp": 1.05E-07,
+            "pocp": 8.67E-04,
+            "ced": 2.33E+01
+        }
+    },
+    {
+        "uid": 43,
+        "nome": "Isolante",
+        "descricao": "Isolante de lã de rocha 7,5cm",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 2.70E-02,
+            "gwp": 3.19E+00,
+            "adpnf": 8.64E-08,
+            "adpf": 3.57E+01,
+            "ep": 5.08E-03,
+            "odp": 1.97E-07,
+            "pocp": 1.63E-03,
+            "ced": 4.37E+01
+        }
+    },
+    {
+        "uid": 44,
+        "nome": "MDF",
+        "descricao": "MDF",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 6.29E-02,
+            "gwp": -3.34E+01,
+            "adpnf": 1.90E-07,
+            "adpf": 1.04E+02,
+            "ep": 2.61E-02,
+            "odp": 8.44E-07,
+            "pocp": 6.63E-03,
+            "ced": 8.91E+02
+        }
+    },
+    {
+        "uid": 45,
+        "nome": "Granito",
+        "descricao": "Granito",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 2.79E-01,
+            "gwp": 5.51E+01,
+            "adpnf": 4.75E-07,
+            "adpf": 6.36E+02,
+            "ep": 1.02E-01,
+            "odp": 4.08E-06,
+            "pocp": 1.00E-02,
+            "ced": 9.00E+02
+        }
+    },
+    {
+        "uid": 46,
+        "nome": "Placa cimentícia",
+        "descricao": "Placa cimentícia",
+        "tipo": "",
+        "opcao1": "",
+        "opcao2": "",
+        "Impactos": {
+            "ap": 2.08E-02,
+            "gwp": 6.33E+00,
+            "adpnf": 3.88E-07,
+            "adpf": 6.07E+01,
+            "ep": 6.33E-03,
+            "odp": 3.09E-07,
+            "pocp": 1.13E-03,
+            "ced": 8.77E+01
+        }
+    }
+]

@@ -1,0 +1,68 @@
+[
+    {
+        "componente": "Argamassa de revestimento",
+        "consumo_componente": 5.99E+01,
+        "gwp": 8.61E+00,
+        "ap": 2.19E-02,
+        "ep": 5.87E-03,
+        "pocp": 9.95E-04,
+        "odp": 4.42E-07,
+        "adpnf": 7.51E-08,
+        "adpf": 4.97E+01
+    },
+    {
+        "componente": "Bloco concreto",
+        "consumo_componente": 6.67E+01,
+        "gwp": 7.48E+00,
+        "ap": 2.82E-02,
+        "ep": 6.74E-03,
+        "pocp": 1.26E-03,
+        "odp": 5.93E-07,
+        "adpnf": 9.03E-08,
+        "adpf": 5.03E+01
+    },
+    {
+        "componente": "Placa de Gesso",
+        "consumo_componente": 4.21E+01,
+        "gwp": 2.56E+00,
+        "ap": 1.72E-02,
+        "ep": 4.05E-03,
+        "pocp": 7.83E-04,
+        "odp": 1.42E-07,
+        "adpnf": 7.40E-08,
+        "adpf": 2.81E+01
+    },
+    {
+        "componente": "Pintura",
+        "consumo_componente": 2.26E+1,
+        "gwp": 2.87E+00,
+        "ap": 1.68E-02,
+        "ep": 5.73E-03,
+        "pocp": 1.68E-03,
+        "odp": 2.18E-07,
+        "adpnf": 1.30E-06,
+        "adpf": 3.24E+01
+    },
+    {
+        "componente": "Bloco cerâmico",
+        "consumo_componente": 1.49E+02,
+        "gwp": 1.32E+01,
+        "ap": 3.35E-02,
+        "ep": 8.06E-03,
+        "pocp": 2.69E-03,
+        "odp": 8.23E-07,
+        "adpnf": 1.37E-07,
+        "adpf": 1.18E+02
+    },
+    {
+        "componente": "Granito",
+        "consumo_componente": 9.00E+02,
+        "gwp": 5.51E+01,
+        "ap": 2.79E-01,
+        "ep": 1.02E-01,
+        "pocp": 1.00E-02,
+        "odp": 4.08E-06,
+        "adpnf": 4.75E-07,
+        "adpf": 6.36E+02
+    }
+]

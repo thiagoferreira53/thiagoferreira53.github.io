@@ -1,0 +1,77 @@
+{
+    "nome": "NBR 15575:2013",
+    "zonas": [
+        {
+            "zona": 1,
+            "absortancia_limite": 0.6,
+            "capacidade_minima": 130,
+            "transmitancia_maxima": {
+                "inferior_limite": 2.5,
+                "superior_limite": 2.5
+            }
+        },
+        {
+            "zona": 2,
+            "absortancia_limite": 0.6,
+            "capacidade_minima": 130,
+            "transmitancia_maxima": {
+                "inferior_limite": 2.5,
+                "superior_limite": 2.5
+            }
+        },
+        {
+            "zona": 3,
+            "absortancia_limite": 0.6,
+            "capacidade_minima": 130,
+            "transmitancia_maxima": {
+                "inferior_limite": 3.7,
+                "superior_limite": 2.5
+            }
+        },
+        {
+            "zona": 4,
+            "absortancia_limite": 0.6,
+            "capacidade_minima": 130,
+            "transmitancia_maxima": {
+                "inferior_limite": 3.7,
+                "superior_limite": 2.5
+            }
+        },
+        {
+            "zona": 5,
+            "absortancia_limite": 0.6,
+            "capacidade_minima": 130,
+            "transmitancia_maxima": {
+                "inferior_limite": 3.7,
+                "superior_limite": 2.5
+            }
+        },
+        {
+            "zona": 6,
+            "absortancia_limite": 0.6,
+            "capacidade_minima": 130,
+            "transmitancia_maxima": {
+                "inferior_limite": 3.7,
+                "superior_limite": 2.5
+            }
+        },
+        {
+            "zona": 7,
+            "absortancia_limite": 0.6,
+            "capacidade_minima": 130,
+            "transmitancia_maxima": {
+                "inferior_limite": 3.7,
+                "superior_limite": 2.5
+            }
+        },
+        {
+            "zona": 8,
+            "absortancia_limite": 0.6,
+            "capacidade_minima": 0,
+            "transmitancia_maxima": {
+                "inferior_limite": 3.7,
+                "superior_limite": 2.5
+            }
+        }
+    ]
+}

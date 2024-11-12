@@ -1,0 +1,4129 @@
+[
+    {
+        "nome": "Sistema 1 - Concreto Estrutural",
+        "imagem": "assets/systems/sistema1.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 216.8,
+                "espessura": 14
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.78,
+        "capacidade_termica": 209,
+        "impactos": {
+            "gwp": 2.95E+01,
+            "ap": 9.63E-02,
+            "ep": 2.59E-02,
+            "pocp": 4.75E-03,
+            "odp": 1.77E-06,
+            "adpnf": 1.07E-06,
+            "adpf": 1.88E+02
+        },
+        "consumo": {
+            "total": 2.37E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 1.95E+01,
+                    "gwp": 2.80E+00,
+                    "ap": 7.16E-03,
+                    "ep": 1.91E-03,
+                    "pocp": 3.25E-04,
+                    "odp": 1.44E-07,
+                    "adpnf": 2.45E-08,
+                    "adpf": 1.62E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 6.67E+01,
+                    "gwp": 7.48E+00,
+                    "ap": 2.82E-02,
+                    "ep": 6.74E-03,
+                    "pocp": 1.26E-03,
+                    "odp": 5.93E-07,
+                    "adpnf": 9.03E-08,
+                    "adpf": 5.03E+01
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 8.07E+00,
+                    "gwp": 5.91E-01,
+                    "ap": 8.63E-03,
+                    "ep": 2.63E-03,
+                    "pocp": 3.35E-04,
+                    "odp": 4.01E-08,
+                    "adpnf": 1.54E-07,
+                    "adpf": 6.40E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 2 - Concreto Estrutural",
+        "imagem": "assets/systems/sistema2.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 180.4,
+                "espessura": 13.5
+            },
+            "camadas": [
+                "Pintura interna",
+                "Gesso",
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.72,
+        "capacidade_termica": 178,
+        "impactos": {
+            "gwp": 2.35E+01,
+            "ap": 9.15E-02,
+            "ep": 2.41E-02,
+            "pocp": 4.53E-03,
+            "odp": 1.47E-06,
+            "adpnf": 1.07E-06,
+            "adpf": 1.67E+02
+        },
+        "consumo": {
+            "total": 2.19E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 5.99E+01,
+                    "gwp": 8.61E+00,
+                    "ap": 2.19E-02,
+                    "ep": 5.87E-03,
+                    "pocp": 9.95E-04,
+                    "odp": 4.42E-07,
+                    "adpnf": 7.51E-08,
+                    "adpf": 4.97E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 1.95E+01,
+                    "gwp": 2.80E+00,
+                    "ap": 7.16E-03,
+                    "ep": 1.91E-03,
+                    "pocp": 3.25E-04,
+                    "odp": 1.44E-07,
+                    "adpnf": 2.45E-08,
+                    "adpf": 1.62E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 6.67E+01,
+                    "gwp": 7.48E+00,
+                    "ap": 2.82E-02,
+                    "ep": 6.74E-03,
+                    "pocp": 1.26E-03,
+                    "odp": 5.93E-07,
+                    "adpnf": 9.03E-08,
+                    "adpf": 5.03E+01
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 8.07E+00,
+                    "gwp": 5.91E-01,
+                    "ap": 8.63E-03,
+                    "ep": 2.63E-03,
+                    "pocp": 3.35E-04,
+                    "odp": 4.01E-08,
+                    "adpnf": 1.54E-07,
+                    "adpf": 6.40E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                },
+                {
+                    "componente": "Placa de Gesso",
+                    "consumo_componente": 4.21E+01,
+                    "gwp": 2.56E+00,
+                    "ap": 1.72E-02,
+                    "ep": 4.05E-03,
+                    "pocp": 7.83E-04,
+                    "odp": 1.42E-07,
+                    "adpnf": 7.40E-08,
+                    "adpf": 2.81E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 3 - Concreto Estrutural",
+        "imagem": "assets/systems/sistema3.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 172,
+                "espessura": 11.7
+            },
+            "camadas": [
+                "Pintura interna",
+                "Gesso",
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.97,
+        "capacidade_termica": 159,
+        "impactos": {
+            "gwp": 2.10E+01,
+            "ap": 7.49E-02,
+            "ep": 2.02E-02,
+            "pocp": 3.78E-03,
+            "odp": 1.34E-06,
+            "adpnf": 9.96E-07,
+            "adpf": 1.40E+02
+        },
+        "consumo": {
+            "total": 1.79E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 5.99E+01,
+                    "gwp": 8.61E+00,
+                    "ap": 2.19E-02,
+                    "ep": 5.87E-03,
+                    "pocp": 9.96E-04,
+                    "odp": 4.43E-07,
+                    "adpnf": 7.52E-08,
+                    "adpf": 4.97E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 1.95E+01,
+                    "gwp": 2.80E+00,
+                    "ap": 7.16E-03,
+                    "ep": 1.91E-03,
+                    "pocp": 3.25E-04,
+                    "odp": 1.44E-07,
+                    "adpnf": 2.45E-08,
+                    "adpf": 1.62E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 6.67E+01,
+                    "gwp": 7.48E+00,
+                    "ap": 2.82E-02,
+                    "ep": 6.74E-03,
+                    "pocp": 1.26E-03,
+                    "odp": 5.93E-07,
+                    "adpnf": 9.03E-08,
+                    "adpf": 5.03E+01
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 8.07E+00,
+                    "gwp": 5.91E-01,
+                    "ap": 8.63E-03,
+                    "ep": 2.63E-03,
+                    "pocp": 3.35E-04,
+                    "odp": 4.01E-08,
+                    "adpnf": 1.54E-07,
+                    "adpf": 6.40E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                },
+                {
+                    "componente": "Gesso",
+                    "consumo_componente": 2.10E+00,
+                    "gwp": 1.33E-01,
+                    "ap": 6.15E-04,
+                    "ep": 1.26E-04,
+                    "pocp": 2.93E-05,
+                    "odp": 1.14E-08,
+                    "adpnf": 1.79E-09,
+                    "adpf": 1.67E+00
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 4 - Concreto Estrutural",
+        "imagem": "assets/systems/sistema4.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 170.0,
+                "espessura": 11.2
+            },
+            "camadas": [
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 3,
+        "capacidade_termica": 157,
+        "impactos": {
+            "gwp": 2.09E+01,
+            "ap": 7.43E-02,
+            "ep": 2.00E-02,
+            "pocp": 3.75E-03,
+            "odp": 1.33E-06,
+            "adpnf": 9.94E-07,
+            "adpf": 1.39E+02
+        },
+        "consumo": {
+            "total": 1.77E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 5.99E+01,
+                    "gwp": 8.61E+00,
+                    "ap": 2.19E-02,
+                    "ep": 5.87E-03,
+                    "pocp": 9.95E-04,
+                    "odp": 4.42E-07,
+                    "adpnf": 7.51E-08,
+                    "adpf": 4.97E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 1.95E+01,
+                    "gwp": 2.80E+00,
+                    "ap": 7.16E-03,
+                    "ep": 1.91E-03,
+                    "pocp": 3.25E-04,
+                    "odp": 1.44E-07,
+                    "adpnf": 2.45E-08,
+                    "adpf": 1.62E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 6.67E+01,
+                    "gwp": 7.48E+00,
+                    "ap": 2.82E-02,
+                    "ep": 6.74E-03,
+                    "pocp": 1.26E-03,
+                    "odp": 5.93E-07,
+                    "adpnf": 9.03E-08,
+                    "adpf": 5.03E+01
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 8.07E+00,
+                    "gwp": 5.91E-01,
+                    "ap": 8.63E-03,
+                    "ep": 2.63E-03,
+                    "pocp": 3.35E-04,
+                    "odp": 4.01E-08,
+                    "adpnf": 1.54E-07,
+                    "adpf": 6.40E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 1.44E+00,
+                    "ap": 8.38E-03,
+                    "ep": 2.87E-03,
+                    "pocp": 8.38E-04,
+                    "odp": 1.09E-07,
+                    "adpnf": 6.50E-07,
+                    "adpf": 1.62E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 5 - Concreto Estrutural",
+        "imagem": "assets/systems/sistema5.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 286.7,
+                "espessura": 19
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.69,
+        "capacidade_termica": 272,
+        "impactos": {
+            "gwp": 3.53E+01,
+            "ap": 1.16E-01,
+            "ep": 3.08E-02,
+            "pocp": 5.64E-03,
+            "odp": 2.19E-06,
+            "adpnf": 1.13E-06,
+            "adpf": 2.26E+02
+        },
+        "consumo": {
+            "total": 2.86E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.03E+01,
+                    "gwp": 4.35E+00,
+                    "ap": 1.11E-02,
+                    "ep": 2.97E-03,
+                    "pocp": 5.03E-04,
+                    "odp": 2.24E-07,
+                    "adpnf": 3.80E-08,
+                    "adpf": 2.51E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.05E+02,
+                    "gwp": 1.17E+01,
+                    "ap": 4.42E-02,
+                    "ep": 1.06E-02,
+                    "pocp": 1.97E-03,
+                    "odp": 9.32E-07,
+                    "adpnf": 1.42E-07,
+                    "adpf": 7.90E+01
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 8.07E+00,
+                    "gwp": 5.91E-01,
+                    "ap": 8.63E-03,
+                    "ep": 2.63E-03,
+                    "pocp": 3.35E-04,
+                    "odp": 4.01E-08,
+                    "adpnf": 1.54E-07,
+                    "adpf": 6.40E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 6 - Concreto Estrutural",
+        "imagem": "assets/systems/sistema6.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 249.7,
+                "espessura": 18.5
+            },
+            "camadas": [
+                "Pintura interna",
+                "Gesso",
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.64,
+        "capacidade_termica": 241,
+        "impactos": {
+            "gwp": 2.93E+01,
+            "ap": 1.12E-01,
+            "ep": 2.90E-02,
+            "pocp": 5.43E-03,
+            "odp": 1.89E-06,
+            "adpnf": 1.13E-06,
+            "adpf": 2.05E+02
+        },
+        "consumo": {
+            "total": 2.68E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 6.04E+01,
+                    "gwp": 8.67E+00,
+                    "ap": 2.21E-02,
+                    "ep": 5.92E-03,
+                    "pocp": 1.00E-03,
+                    "odp": 4.45E-07,
+                    "adpnf": 7.59E-08,
+                    "adpf": 5.01E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.03E+01,
+                    "gwp": 4.35E+00,
+                    "ap": 1.11E-02,
+                    "ep": 2.97E-03,
+                    "pocp": 5.03E-04,
+                    "odp": 2.24E-07,
+                    "adpnf": 3.80E-08,
+                    "adpf": 2.51E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.05E+02,
+                    "gwp": 1.17E+01,
+                    "ap": 4.42E-02,
+                    "ep": 1.06E-02,
+                    "pocp": 1.97E-03,
+                    "odp": 9.32E-07,
+                    "adpnf": 1.42E-07,
+                    "adpf": 7.90E+01
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 8.07E+00,
+                    "gwp": 5.91E-01,
+                    "ap": 8.63E-03,
+                    "ep": 2.63E-03,
+                    "pocp": 3.35E-04,
+                    "odp": 4.01E-08,
+                    "adpnf": 1.54E-07,
+                    "adpf": 6.40E+00
+                },
+                {
+                    "componente": "Placa de Gesso",
+                    "consumo_componente": 4.21E+01,
+                    "gwp": 2.56E+00,
+                    "ap": 1.72E-02,
+                    "ep": 4.05E-03,
+                    "pocp": 7.83E-04,
+                    "odp": 1.42E-07,
+                    "adpnf": 7.40E-08,
+                    "adpf": 2.81E+01
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 7 - Concreto Estrutural",
+        "imagem": "assets/systems/sistema7.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 241.6,
+                "espessura": 16.7
+            },
+            "camadas": [
+                "Pintura interna",
+                "Gesso",
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.86,
+        "capacidade_termica": 222,
+        "impactos": {
+            "gwp": 2.69E+01,
+            "ap": 9.51E-02,
+            "ep": 2.51E-02,
+            "pocp": 4.68E-03,
+            "odp": 1.76E-06,
+            "adpnf": 1.06E-06,
+            "adpf": 1.78E+02
+        },
+        "consumo": {
+            "total": 2.28E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 6.04E+01,
+                    "gwp": 8.67E+00,
+                    "ap": 2.21E-02,
+                    "ep": 5.92E-03,
+                    "pocp": 1.00E-03,
+                    "odp": 4.45E-07,
+                    "adpnf": 7.59E-08,
+                    "adpf": 5.01E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.03E+01,
+                    "gwp": 4.35E+00,
+                    "ap": 1.11E-02,
+                    "ep": 2.97E-03,
+                    "pocp": 5.03E-04,
+                    "odp": 2.24E-07,
+                    "adpnf": 3.80E-08,
+                    "adpf": 2.51E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.05E+02,
+                    "gwp": 1.17E+01,
+                    "ap": 4.42E-02,
+                    "ep": 1.06E-02,
+                    "pocp": 1.97E-03,
+                    "odp": 9.32E-07,
+                    "adpnf": 1.42E-07,
+                    "adpf": 7.90E+01
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 8.07E+00,
+                    "gwp": 5.91E-01,
+                    "ap": 8.63E-03,
+                    "ep": 2.63E-03,
+                    "pocp": 3.35E-04,
+                    "odp": 4.01E-08,
+                    "adpnf": 1.54E-07,
+                    "adpf": 6.40E+00
+                },
+                {
+                    "componente": "Gesso",
+                    "consumo_componente": 2.10E+00,
+                    "gwp": 1.33E-01,
+                    "ap": 6.17E-04,
+                    "ep": 1.26E-04,
+                    "pocp": 2.94E-05,
+                    "odp": 1.14E-08,
+                    "adpnf": 1.89E-09,
+                    "adpf": 1.67E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 8 - Concreto Estrutural",
+        "imagem": "assets/systems/sistema8.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 239.6,
+                "espessura": 16.5
+            },
+            "camadas": [
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.87,
+        "capacidade_termica": 221,
+        "impactos": {
+            "gwp": 2.68E+01,
+            "ap": 9.45E-02,
+            "ep": 2.50E-02,
+            "pocp": 4.65E-03,
+            "odp": 1.75E-06,
+            "adpnf": 1.06E-06,
+            "adpf": 1.77E+02
+        },
+        "consumo": {
+            "total": 2.26E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 6.04E+01,
+                    "gwp": 8.67E+00,
+                    "ap": 2.21E-02,
+                    "ep": 5.92E-03,
+                    "pocp": 1.00E-03,
+                    "odp": 4.45E-07,
+                    "adpnf": 7.59E-08,
+                    "adpf": 5.01E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.03E+01,
+                    "gwp": 4.35E+00,
+                    "ap": 1.11E-02,
+                    "ep": 2.97E-03,
+                    "pocp": 5.03E-04,
+                    "odp": 2.24E-07,
+                    "adpnf": 3.80E-08,
+                    "adpf": 2.51E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.05E+02,
+                    "gwp": 1.17E+01,
+                    "ap": 4.42E-02,
+                    "ep": 1.06E-02,
+                    "pocp": 1.97E-03,
+                    "odp": 9.32E-07,
+                    "adpnf": 1.42E-07,
+                    "adpf": 7.90E+01
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 8.07E+00,
+                    "gwp": 5.91E-01,
+                    "ap": 8.63E-03,
+                    "ep": 2.63E-03,
+                    "pocp": 3.35E-04,
+                    "odp": 4.01E-08,
+                    "adpnf": 1.54E-07,
+                    "adpf": 6.40E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 1.44E+00,
+                    "ap": 8.38E-03,
+                    "ep": 2.87E-03,
+                    "pocp": 8.38E-04,
+                    "odp": 1.09E-07,
+                    "adpnf": 6.50E-07,
+                    "adpf": 1.62E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 9 - Cerâmico",
+        "imagem": "assets/systems/sistema9.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 177.2,
+                "espessura": 14
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.46,
+        "capacidade_termica": 150,
+        "impactos": {
+            "gwp": 3.66E+01,
+            "ap": 1.03E-01,
+            "ep": 2.75E-02,
+            "pocp": 6.21E-03,
+            "odp": 2.07E-06,
+            "adpnf": 1.09E-06,
+            "adpf": 2.63E+02
+        },
+        "consumo": {
+            "total": 3.27E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.08E+01,
+                    "gwp": 4.40E+00,
+                    "ap": 1.13E-02,
+                    "ep": 3.02E-03,
+                    "pocp": 5.09E-04,
+                    "odp": 2.27E-07,
+                    "adpnf": 3.87E-08,
+                    "adpf": 2.55E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.49E+02,
+                    "gwp": 1.32E+01,
+                    "ap": 3.35E-02,
+                    "ep": 8.06E-03,
+                    "pocp": 2.69E-03,
+                    "odp": 8.23E-07,
+                    "adpnf": 1.37E-07,
+                    "adpf": 1.18E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 4.75E+00,
+                    "gwp": 3.40E-01,
+                    "ap": 6.04E-03,
+                    "ep": 1.77E-03,
+                    "pocp": 1.84E-04,
+                    "odp": 2.43E-08,
+                    "adpnf": 1.12E-07,
+                    "adpf": 3.73E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 10 - Cerâmico",
+        "imagem": "assets/systems/sistema10.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 140.9,
+                "espessura": 13.5
+            },
+            "camadas": [
+                "Pintura interna",
+                "Gesso",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.37,
+        "capacidade_termica": 120,
+        "impactos": {
+            "gwp": 3.06E+01,
+            "ap": 9.84E-02,
+            "ep": 2.56E-02,
+            "pocp": 6.00E-03,
+            "odp": 1.77E-06,
+            "adpnf": 1.09E-06,
+            "adpf": 2.41E+02
+        },
+        "consumo": {
+            "total": 3.09E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 5.99E+01,
+                    "gwp": 8.61E+00,
+                    "ap": 2.19E-02,
+                    "ep": 5.87E-03,
+                    "pocp": 9.95E-04,
+                    "odp": 4.42E-07,
+                    "adpnf": 7.51E-08,
+                    "adpf": 4.97E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.08E+01,
+                    "gwp": 4.40E+00,
+                    "ap": 1.13E-02,
+                    "ep": 3.02E-03,
+                    "pocp": 5.09E-04,
+                    "odp": 2.27E-07,
+                    "adpnf": 3.87E-08,
+                    "adpf": 2.55E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.49E+02,
+                    "gwp": 1.32E+01,
+                    "ap": 3.35E-02,
+                    "ep": 8.06E-03,
+                    "pocp": 2.69E-03,
+                    "odp": 8.23E-07,
+                    "adpnf": 1.37E-07,
+                    "adpf": 1.18E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 4.75E+00,
+                    "gwp": 3.40E-01,
+                    "ap": 6.04E-03,
+                    "ep": 1.77E-03,
+                    "pocp": 1.84E-04,
+                    "odp": 2.43E-08,
+                    "adpnf": 1.12E-07,
+                    "adpf": 3.73E+00
+                },
+                {
+                    "componente": "Placa de Gesso",
+                    "consumo_componente": 4.21E+01,
+                    "gwp": 2.56E+00,
+                    "ap": 1.72E-02,
+                    "ep": 4.05E-03,
+                    "pocp": 7.83E-04,
+                    "odp": 1.42E-07,
+                    "adpnf": 7.40E-08,
+                    "adpf": 2.81E+01
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 11 - Cerâmico",
+        "imagem": "assets/systems/sistema11.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 132.5,
+                "espessura": 11.7
+            },
+            "camadas": [
+                "Pintura interna",
+                "Gesso",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.59,
+        "capacidade_termica": 100,
+        "impactos": {
+            "gwp": 2.82E+01,
+            "ap": 8.18E-02,
+            "ep": 2.17E-02,
+            "pocp": 5.25E-03,
+            "odp": 1.64E-06,
+            "adpnf": 1.02E-06,
+            "adpf": 2.15E+02
+        },
+        "consumo": {
+            "total": 2.69E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 5.99E+01,
+                    "gwp": 8.61E+00,
+                    "ap": 2.19E-02,
+                    "ep": 5.87E-03,
+                    "pocp": 9.95E-04,
+                    "odp": 4.42E-07,
+                    "adpnf": 7.51E-08,
+                    "adpf": 4.97E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.08E+01,
+                    "gwp": 4.40E+00,
+                    "ap": 1.13E-02,
+                    "ep": 3.02E-03,
+                    "pocp": 5.09E-04,
+                    "odp": 2.27E-07,
+                    "adpnf": 3.87E-08,
+                    "adpf": 2.55E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.49E+02,
+                    "gwp": 1.32E+01,
+                    "ap": 3.35E-02,
+                    "ep": 8.06E-03,
+                    "pocp": 2.69E-03,
+                    "odp": 8.23E-07,
+                    "adpnf": 1.37E-07,
+                    "adpf": 1.18E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 4.75E+00,
+                    "gwp": 3.40E-01,
+                    "ap": 6.04E-03,
+                    "ep": 1.77E-03,
+                    "pocp": 1.84E-04,
+                    "odp": 2.43E-08,
+                    "adpnf": 1.12E-07,
+                    "adpf": 3.73E+00
+                },
+                {
+                    "componente": "Gesso",
+                    "consumo_componente": 2.10E+00,
+                    "gwp": 1.33E-01,
+                    "ap": 6.17E-04,
+                    "ep": 1.26E-04,
+                    "pocp": 2.94E-05,
+                    "odp": 1.14E-08,
+                    "adpnf": 1.89E-09,
+                    "adpf": 1.67E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 12 - Cerâmico",
+        "imagem": "assets/systems/sistema12.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 130.5,
+                "espessura": 11.5
+            },
+            "camadas": [
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.61,
+        "capacidade_termica": 98,
+        "impactos": {
+            "gwp": 2.80E+01,
+            "ap": 8.12E-02,
+            "ep": 2.16E-02,
+            "pocp": 5.22E-03,
+            "odp": 1.63E-06,
+            "adpnf": 1.01E-06,
+            "adpf": 2.13E+02
+        },
+        "consumo": {
+            "total": 2.67E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 5.99E+01,
+                    "gwp": 8.61E+00,
+                    "ap": 2.19E-02,
+                    "ep": 5.87E-03,
+                    "pocp": 9.95E-04,
+                    "odp": 4.42E-07,
+                    "adpnf": 7.51E-08,
+                    "adpf": 4.97E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.08E+01,
+                    "gwp": 4.40E+00,
+                    "ap": 1.13E-02,
+                    "ep": 3.02E-03,
+                    "pocp": 5.09E-04,
+                    "odp": 2.27E-07,
+                    "adpnf": 3.87E-08,
+                    "adpf": 2.55E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.49E+02,
+                    "gwp": 1.32E+01,
+                    "ap": 3.35E-02,
+                    "ep": 8.06E-03,
+                    "pocp": 2.69E-03,
+                    "odp": 8.23E-07,
+                    "adpnf": 1.37E-07,
+                    "adpf": 1.18E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 4.75E+00,
+                    "gwp": 3.40E-01,
+                    "ap": 6.04E-03,
+                    "ep": 1.77E-03,
+                    "pocp": 1.84E-04,
+                    "odp": 2.43E-08,
+                    "adpnf": 1.12E-07,
+                    "adpf": 3.73E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 1.44E+00,
+                    "ap": 8.38E-03,
+                    "ep": 2.87E-03,
+                    "pocp": 8.38E-04,
+                    "odp": 1.09E-07,
+                    "adpnf": 6.50E-07,
+                    "adpf": 1.62E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 13 - Cerâmico",
+        "imagem": "assets/systems/sistema13.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 106.5,
+                "espessura": 9
+            },
+            "camadas": [
+                "Bloco cerâmico",
+                "Argamassa de assentamento"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.99,
+        "capacidade_termica": 42,
+        "impactos": {
+            "gwp": 2.28E+01,
+            "ap": 6.30E-02,
+            "ep": 1.58E-02,
+            "pocp": 4.26E-03,
+            "odp": 1.36E-06,
+            "adpnf": 3.35E-07,
+            "adpf": 1.86E+02
+        },
+        "consumo": {
+            "total": 2.33E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.89E+01,
+                    "gwp": 5.58E+00,
+                    "ap": 1.43E-02,
+                    "ep": 3.82E-03,
+                    "pocp": 6.46E-04,
+                    "odp": 2.88E-07,
+                    "adpnf": 4.88E-08,
+                    "adpf": 3.22E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.89E+02,
+                    "gwp": 1.69E+01,
+                    "ap": 4.27E-02,
+                    "ep": 1.03E-02,
+                    "pocp": 3.43E-03,
+                    "odp": 1.05E-06,
+                    "adpnf": 1.74E-07,
+                    "adpf": 1.50E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 4.75E+00,
+                    "gwp": 3.40E-01,
+                    "ap": 6.04E-03,
+                    "ep": 1.77E-03,
+                    "pocp": 1.84E-04,
+                    "odp": 2.43E-08,
+                    "adpnf": 1.12E-07,
+                    "adpf": 3.73E+00
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 14 - Cerâmico",
+        "imagem": "assets/systems/sistema14.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 189.7,
+                "espessura": 19
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 1.85,
+        "capacidade_termica": 161,
+        "impactos": {
+            "gwp": 3.84E+01,
+            "ap": 1.08E-01,
+            "ep": 2.86E-02,
+            "pocp": 6.53E-03,
+            "odp": 2.17E-06,
+            "adpnf": 1.11E-06,
+            "adpf": 2.77E+02
+        },
+        "consumo": {
+            "total": 3.44E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.36E+01,
+                    "gwp": 4.84E+00,
+                    "ap": 1.24E-02,
+                    "ep": 3.30E-03,
+                    "pocp": 5.60E-04,
+                    "odp": 2.48E-07,
+                    "adpnf": 4.22E-08,
+                    "adpf": 2.79E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.63E+02,
+                    "gwp": 1.46E+01,
+                    "ap": 3.69E-02,
+                    "ep": 8.86E-03,
+                    "pocp": 2.96E-03,
+                    "odp": 9.05E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 1.30E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 4.75E+00,
+                    "gwp": 3.40E-01,
+                    "ap": 6.04E-03,
+                    "ep": 1.77E-03,
+                    "pocp": 1.84E-04,
+                    "odp": 2.43E-08,
+                    "adpnf": 1.12E-07,
+                    "adpf": 3.73E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 15 - Cerâmico",
+        "imagem": "assets/systems/sistema15.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 153.4,
+                "espessura": 18.5
+            },
+            "camadas": [
+                "Pintura interna",
+                "Gesso",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 1.74,
+        "capacidade_termica": 125,
+        "impactos": {
+            "gwp": 3.23E+01,
+            "ap": 1.03E-01,
+            "ep": 2.67E-02,
+            "pocp": 6.32E-03,
+            "odp": 1.87E-06,
+            "adpnf": 1.10E-06,
+            "adpf": 2.55E+02
+        },
+        "consumo": {
+            "total": 3.26E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 6.04E+01,
+                    "gwp": 8.67E+00,
+                    "ap": 2.21E-02,
+                    "ep": 5.92E-03,
+                    "pocp": 1.00E-03,
+                    "odp": 4.45E-07,
+                    "adpnf": 7.59E-08,
+                    "adpf": 5.01E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.33E+01,
+                    "gwp": 4.78E+00,
+                    "ap": 1.22E-02,
+                    "ep": 3.26E-03,
+                    "pocp": 5.54E-04,
+                    "odp": 2.46E-07,
+                    "adpnf": 4.15E-08,
+                    "adpf": 2.75E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.63E+02,
+                    "gwp": 1.46E+01,
+                    "ap": 3.69E-02,
+                    "ep": 8.86E-03,
+                    "pocp": 2.96E-03,
+                    "odp": 9.05E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 1.30E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 4.75E+00,
+                    "gwp": 3.40E-01,
+                    "ap": 6.04E-03,
+                    "ep": 1.77E-03,
+                    "pocp": 1.84E-04,
+                    "odp": 2.43E-08,
+                    "adpnf": 1.12E-07,
+                    "adpf": 3.73E+00
+                },
+                {
+                    "componente": "Placa de Gesso",
+                    "consumo_componente": 4.21E+01,
+                    "gwp": 2.56E+00,
+                    "ap": 1.72E-02,
+                    "ep": 4.05E-03,
+                    "pocp": 7.83E-04,
+                    "odp": 1.42E-07,
+                    "adpnf": 7.40E-08,
+                    "adpf": 2.81E+01
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 16 - Cerâmico",
+        "imagem": "assets/systems/sistema16.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 145.0,
+                "espessura": 16.7
+            },
+            "camadas": [
+                "Pintura interna",
+                "Gesso",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 1.85,
+        "capacidade_termica": 105,
+        "impactos": {
+            "gwp": 2.99E+01,
+            "ap": 8.62E-02,
+            "ep": 2.28E-02,
+            "pocp": 5.57E-03,
+            "odp": 1.74E-06,
+            "adpnf": 1.03E-06,
+            "adpf": 2.29E+02
+        },
+        "consumo": {
+            "total": 2.86E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 6.04E+01,
+                    "gwp": 8.67E+00,
+                    "ap": 2.21E-02,
+                    "ep": 5.92E-03,
+                    "pocp": 1.00E-03,
+                    "odp": 4.45E-07,
+                    "adpnf": 7.59E-08,
+                    "adpf": 5.01E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.33E+01,
+                    "gwp": 4.78E+00,
+                    "ap": 1.22E-02,
+                    "ep": 3.26E-03,
+                    "pocp": 5.54E-04,
+                    "odp": 2.46E-07,
+                    "adpnf": 4.15E-08,
+                    "adpf": 2.75E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.63E+02,
+                    "gwp": 1.46E+01,
+                    "ap": 3.69E-02,
+                    "ep": 8.86E-03,
+                    "pocp": 2.96E-03,
+                    "odp": 9.05E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 1.30E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 4.75E+00,
+                    "gwp": 3.40E-01,
+                    "ap": 6.04E-03,
+                    "ep": 1.77E-03,
+                    "pocp": 1.84E-04,
+                    "odp": 2.43E-08,
+                    "adpnf": 1.12E-07,
+                    "adpf": 3.73E+00
+                },
+                {
+                    "componente": "Gesso",
+                    "consumo_componente": 2.10E+00,
+                    "gwp": 1.33E-01,
+                    "ap": 6.17E-04,
+                    "ep": 1.26E-04,
+                    "pocp": 2.94E-05,
+                    "odp": 1.14E-08,
+                    "adpnf": 1.89E-09,
+                    "adpf": 1.67E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 17 - Cerâmico",
+        "imagem": "assets/systems/sistema17.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 143.0,
+                "espessura": 16.5
+            },
+            "camadas": [
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 1.96,
+        "capacidade_termica": 106,
+        "impactos": {
+            "gwp": 2.98E+01,
+            "ap": 8.56E-02,
+            "ep": 2.27E-02,
+            "pocp": 5.54E-03,
+            "odp": 1.73E-06,
+            "adpnf": 1.03E-06,
+            "adpf": 2.27E+02
+        },
+        "consumo": {
+            "total": 2.84E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 6.04E+01,
+                    "gwp": 8.67E+00,
+                    "ap": 2.21E-02,
+                    "ep": 5.92E-03,
+                    "pocp": 1.00E-03,
+                    "odp": 4.45E-07,
+                    "adpnf": 7.59E-08,
+                    "adpf": 5.01E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.33E+01,
+                    "gwp": 4.78E+00,
+                    "ap": 1.22E-02,
+                    "ep": 3.26E-03,
+                    "pocp": 5.54E-04,
+                    "odp": 2.46E-07,
+                    "adpnf": 4.15E-08,
+                    "adpf": 2.75E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.63E+02,
+                    "gwp": 1.46E+01,
+                    "ap": 3.69E-02,
+                    "ep": 8.86E-03,
+                    "pocp": 2.96E-03,
+                    "odp": 9.05E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 1.30E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 4.75E+00,
+                    "gwp": 3.40E-01,
+                    "ap": 6.04E-03,
+                    "ep": 1.77E-03,
+                    "pocp": 1.84E-04,
+                    "odp": 2.43E-08,
+                    "adpnf": 1.12E-07,
+                    "adpf": 3.73E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 1.44E+00,
+                    "ap": 8.38E-03,
+                    "ep": 2.87E-03,
+                    "pocp": 8.38E-04,
+                    "odp": 1.09E-07,
+                    "adpnf": 6.50E-07,
+                    "adpf": 1.62E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 18 - Cerâmico",
+        "imagem": "assets/systems/sistema18.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 92.0,
+                "espessura": 14
+            },
+            "camadas": [
+                "Bloco cerâmico",
+                "Argamassa de assentamento"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.37,
+        "capacidade_termica": 56,
+        "impactos": {
+            "gwp": 1.97E+01,
+            "ap": 5.52E-02,
+            "ep": 1.39E-02,
+            "pocp": 3.70E-03,
+            "odp": 1.18E-06,
+            "adpnf": 3.05E-07,
+            "adpf": 1.61E+02
+        },
+        "consumo": {
+            "total": 2.02E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.36E+01,
+                    "gwp": 4.82E+00,
+                    "ap": 1.23E-02,
+                    "ep": 3.30E-03,
+                    "pocp": 5.58E-04,
+                    "odp": 2.48E-07,
+                    "adpnf": 4.21E-08,
+                    "adpf": 2.78E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.63E+02,
+                    "gwp": 1.46E+01,
+                    "ap": 3.69E-02,
+                    "ep": 8.86E-03,
+                    "pocp": 2.96E-03,
+                    "odp": 9.05E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 1.30E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 4.75E+00,
+                    "gwp": 3.40E-01,
+                    "ap": 6.04E-03,
+                    "ep": 1.77E-03,
+                    "pocp": 1.84E-04,
+                    "odp": 2.43E-08,
+                    "adpnf": 1.12E-07,
+                    "adpf": 3.73E+00
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 19 - Cerâmico",
+        "imagem": "assets/systems/sistema19.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 185.7,
+                "espessura": 10
+            },
+            "camadas": [
+                "Tijolo maciço",
+                "Argamassa de assentamento"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 3.65,
+        "capacidade_termica": 158,
+        "impactos": {
+            "gwp": 3.91E+01,
+            "ap": 1.07E-01,
+            "ep": 2.67E-02,
+            "pocp": 7.45E-03,
+            "odp": 2.35E-06,
+            "adpnf": 5.39E-07,
+            "adpf": 3.24E+02
+        },
+        "consumo": {
+            "total": 4.06E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 5.79E+01,
+                    "gwp": 8.29E+00,
+                    "ap": 2.13E-02,
+                    "ep": 5.69E-03,
+                    "pocp": 9.61E-04,
+                    "odp": 4.29E-07,
+                    "adpnf": 7.26E-08,
+                    "adpf": 4.79E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 3.40E+02,
+                    "gwp": 3.03E+01,
+                    "ap": 7.67E-02,
+                    "ep": 1.84E-02,
+                    "pocp": 6.15E-03,
+                    "odp": 1.88E-06,
+                    "adpnf": 3.12E-07,
+                    "adpf": 2.70E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 8.07E+00,
+                    "gwp": 5.91E-01,
+                    "ap": 8.63E-03,
+                    "ep": 2.63E-03,
+                    "pocp": 3.35E-04,
+                    "odp": 4.01E-08,
+                    "adpnf": 1.54E-07,
+                    "adpf": 6.40E+00
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 20 - Concreto",
+        "imagem": "assets/systems/sistema20.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 242.3,
+                "espessura": 10
+            },
+            "camadas": [
+                "Concreto maciço"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 4.4,
+        "capacidade_termica": 240,
+        "impactos": {
+            "gwp": 2.95E+01,
+            "ap": 9.20E-02,
+            "ep": 2.56E-02,
+            "pocp": 5.94E-03,
+            "odp": 1.89E-06,
+            "adpnf": 4.62E-07,
+            "adpf": 1.87E+02
+        },
+        "consumo": {
+            "total": 2.31E+02,
+            "componentes": [
+                {
+                    "componente": "Concreto",
+                    "consumo_componente": 1.90E+02,
+                    "gwp": 2.62E+01,
+                    "ap": 7.96E-02,
+                    "ep": 1.94E-02,
+                    "pocp": 3.82E-03,
+                    "odp": 1.71E-06,
+                    "adpnf": 3.90E-07,
+                    "adpf": 1.54E+02
+                },
+                {
+                    "componente": "Armadura",
+                    "consumo_componente": 4.06E+01,
+                    "gwp": 3.24E+00,
+                    "ap": 1.22E-02,
+                    "ep": 6.15E-03,
+                    "pocp": 2.11E-03,
+                    "odp": 1.81E-07,
+                    "adpnf": 7.07E-08,
+                    "adpf": 3.35E+01
+                },
+                {
+                    "componente": "Forma",
+                    "consumo_componente": 4.96E-01,
+                    "gwp": 2.50E-02,
+                    "ap": 1.23E-04,
+                    "ep": 3.42E-05,
+                    "pocp": 8.16E-06,
+                    "odp": 1.39E-09,
+                    "adpnf": 1.41E-09,
+                    "adpf": 2.69E-01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 21 - Concreto",
+        "imagem": "assets/systems/sistema21.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 290.3,
+                "espessura": 12
+            },
+            "camadas": [
+                "Concreto maciço"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 4.19,
+        "capacidade_termica": 288,
+        "impactos": {
+            "gwp": 3.47E+01,
+            "ap": 1.08E-01,
+            "ep": 2.95E-02,
+            "pocp": 6.71E-03,
+            "odp": 2.23E-06,
+            "adpnf": 5.40E-07,
+            "adpf": 2.18E+02
+        },
+        "consumo": {
+            "total": 2.69E+02,
+            "componentes": [
+                {
+                    "componente": "Concreto",
+                    "consumo_componente": 2.28E+02,
+                    "gwp": 3.15E+01,
+                    "ap": 9.55E-02,
+                    "ep": 2.33E-02,
+                    "pocp": 4.58E-03,
+                    "odp": 2.05E-06,
+                    "adpnf": 4.68E-07,
+                    "adpf": 1.84E+02
+                },
+                {
+                    "componente": "Armadura",
+                    "consumo_componente": 4.06E+01,
+                    "gwp": 3.24E+00,
+                    "ap": 1.22E-02,
+                    "ep": 6.15E-03,
+                    "pocp": 2.11E-03,
+                    "odp": 1.81E-07,
+                    "adpnf": 7.07E-08,
+                    "adpf": 3.35E+01
+                },
+                {
+                    "componente": "Forma",
+                    "consumo_componente": 4.96E-01,
+                    "gwp": 2.50E-02,
+                    "ap": 1.23E-04,
+                    "ep": 3.42E-05,
+                    "pocp": 8.16E-06,
+                    "odp": 1.39E-09,
+                    "adpnf": 1.41E-09,
+                    "adpf": 2.69E-01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 22 - Cerâmico",
+        "imagem": "assets/systems/sistema22.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 168.4,
+                "espessura": 9
+            },
+            "camadas": [
+                "Tijolo maciço",
+                "Argamassa de assentamento"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 3.8,
+        "capacidade_termica": 142,
+        "impactos": {
+            "gwp": 3.56E+01,
+            "ap": 9.75E-02,
+            "ep": 2.45E-02,
+            "pocp": 6.79E-03,
+            "odp": 2.14E-06,
+            "adpnf": 5.03E-07,
+            "adpf": 2.95E+02
+        },
+        "consumo": {
+            "total": 3.69E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 5.21E+01,
+                    "gwp": 7.46E+00,
+                    "ap": 1.92E-02,
+                    "ep": 5.11E-03,
+                    "pocp": 8.65E-04,
+                    "odp": 3.86E-07,
+                    "adpnf": 6.53E-08,
+                    "adpf": 4.32E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 3.09E+02,
+                    "gwp": 2.75E+01,
+                    "ap": 6.97E-02,
+                    "ep": 1.67E-02,
+                    "pocp": 5.59E-03,
+                    "odp": 1.71E-06,
+                    "adpnf": 2.84E-07,
+                    "adpf": 2.45E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 8.07E+00,
+                    "gwp": 5.91E-01,
+                    "ap": 8.63E-03,
+                    "ep": 2.63E-03,
+                    "pocp": 3.35E-04,
+                    "odp": 4.01E-08,
+                    "adpnf": 1.54E-07,
+                    "adpf": 6.40E+00
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 23 - Cerâmico",
+        "imagem": "assets/systems/sistema23.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 185.1,
+                "espessura": 19
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Alumínio composto"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 0.65,
+        "capacidade_termica": 102,
+        "impactos": {
+            "gwp": 4.66E+01,
+            "ap": 3.24E-01,
+            "ep": 8.54E-02,
+            "pocp": 1.13E-02,
+            "odp": 2.62E-06,
+            "adpnf": 4.95E-06,
+            "adpf": 4.74E+02
+        },
+        "consumo": {
+            "total": 5.99E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.03E+01,
+                    "gwp": 4.35E+00,
+                    "ap": 1.11E-02,
+                    "ep": 2.97E-03,
+                    "pocp": 5.03E-04,
+                    "odp": 2.24E-07,
+                    "adpnf": 3.80E-08,
+                    "adpf": 2.51E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.49E+02,
+                    "gwp": 1.32E+01,
+                    "ap": 3.35E-02,
+                    "ep": 8.06E-03,
+                    "pocp": 2.69E-03,
+                    "odp": 8.23E-07,
+                    "adpnf": 1.37E-07,
+                    "adpf": 1.18E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 1.77E+01,
+                    "gwp": 1.19E+00,
+                    "ap": 3.19E-02,
+                    "ep": 8.73E-03,
+                    "pocp": 5.55E-04,
+                    "odp": 9.64E-08,
+                    "adpnf": 6.32E-07,
+                    "adpf": 1.35E+01
+                },
+                {
+                    "componente": "Aço galvanizado",
+                    "consumo_componente": 8.72E+01,
+                    "gwp": 5.63E+00,
+                    "ap": 1.85E-01,
+                    "ep": 4.91E-02,
+                    "pocp": 2.37E-03,
+                    "odp": 4.93E-07,
+                    "adpnf": 3.72E-06,
+                    "adpf": 6.55E+01
+                },
+                {
+                    "componente": "Alumínio composto",
+                    "consumo_componente": 1.95E+02,
+                    "gwp": 4.93E+00,
+                    "ap": 1.94E-02,
+                    "ep": 4.77E-03,
+                    "pocp": 3.19E-03,
+                    "odp": 9.85E-08,
+                    "adpnf": 2.84E-07,
+                    "adpf": 1.52E+02
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 1.44E+00,
+                    "ap": 8.38E-03,
+                    "ep": 2.87E-03,
+                    "pocp": 8.38E-04,
+                    "odp": 1.09E-07,
+                    "adpnf": 6.50E-07,
+                    "adpf": 1.62E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 24 - Concreto estrutural",
+        "imagem": "assets/systems/sistema24.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 294.3,
+                "espessura": 24
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Alumínio composto"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 0.69,
+        "capacidade_termica": 224,
+        "impactos": {
+            "gwp": 4.53E+01,
+            "ap": 3.37E-01,
+            "ep": 8.88E-02,
+            "pocp": 1.07E-02,
+            "odp": 2.75E-06,
+            "adpnf": 5.00E-06,
+            "adpf": 4.38E+02
+        },
+        "consumo": {
+            "total": 5.58E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.03E+01,
+                    "gwp": 4.35E+00,
+                    "ap": 1.11E-02,
+                    "ep": 2.97E-03,
+                    "pocp": 5.03E-04,
+                    "odp": 2.24E-07,
+                    "adpnf": 3.80E-08,
+                    "adpf": 2.51E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.05E+02,
+                    "gwp": 1.17E+01,
+                    "ap": 4.42E-02,
+                    "ep": 1.06E-02,
+                    "pocp": 1.97E-03,
+                    "odp": 9.32E-07,
+                    "adpnf": 1.42E-07,
+                    "adpf": 7.90E+01
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 1.77E+01,
+                    "gwp": 1.43E+00,
+                    "ap": 3.47E-02,
+                    "ep": 9.62E-03,
+                    "pocp": 6.97E-04,
+                    "odp": 1.12E-07,
+                    "adpnf": 6.77E-07,
+                    "adpf": 1.61E+01
+                },
+                {
+                    "componente": "Aço galvanizado",
+                    "consumo_componente": 8.72E+01,
+                    "gwp": 5.63E+00,
+                    "ap": 1.85E-01,
+                    "ep": 4.91E-02,
+                    "pocp": 2.37E-03,
+                    "odp": 4.93E-07,
+                    "adpnf": 3.72E-06,
+                    "adpf": 6.55E+01
+                },
+                {
+                    "componente": "Alumínio composto",
+                    "consumo_componente": 1.95E+02,
+                    "gwp": 4.93E+00,
+                    "ap": 1.94E-02,
+                    "ep": 4.77E-03,
+                    "pocp": 3.19E-03,
+                    "odp": 9.85E-08,
+                    "adpnf": 2.84E-07,
+                    "adpf": 1.52E+02
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 1.44E+00,
+                    "ap": 8.38E-03,
+                    "ep": 2.87E-03,
+                    "pocp": 8.38E-04,
+                    "odp": 1.09E-07,
+                    "adpnf": 6.50E-07,
+                    "adpf": 1.62E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 25 - Cerâmico",
+        "imagem": "assets/systems/sistema25.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": true,
+                "peso": 188.1,
+                "espessura": 22
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Poliestireno",
+                "Alumínio composto"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 0.31,
+        "capacidade_termica": 106,
+        "impactos": {
+            "gwp": 5.67E+01,
+            "ap": 3.51E-01,
+            "ep": 8.77E-02,
+            "pocp": 1.33E-02,
+            "odp": 2.79E-06,
+            "adpnf": 5.19E-06,
+            "adpf": 7.14E+02
+        },
+        "consumo": {
+            "total": 8.69E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.03E+01,
+                    "gwp": 4.35E+00,
+                    "ap": 1.11E-02,
+                    "ep": 2.97E-03,
+                    "pocp": 5.03E-04,
+                    "odp": 2.24E-07,
+                    "adpnf": 3.80E-08,
+                    "adpf": 2.51E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.49E+02,
+                    "gwp": 1.32E+01,
+                    "ap": 3.35E-02,
+                    "ep": 8.06E-03,
+                    "pocp": 2.69E-03,
+                    "odp": 8.23E-07,
+                    "adpnf": 1.37E-07,
+                    "adpf": 1.18E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 1.51E+01,
+                    "gwp": 1.02E+00,
+                    "ap": 2.58E-02,
+                    "ep": 7.13E-03,
+                    "pocp": 4.92E-04,
+                    "odp": 8.12E-08,
+                    "adpnf": 5.06E-07,
+                    "adpf": 1.16E+01
+                },
+                {
+                    "componente": "Aço galvanizado",
+                    "consumo_componente": 8.72E+01,
+                    "gwp": 5.63E+00,
+                    "ap": 1.85E-01,
+                    "ep": 4.91E-02,
+                    "pocp": 2.37E-03,
+                    "odp": 4.93E-07,
+                    "adpnf": 3.72E-06,
+                    "adpf": 6.55E+01
+                },
+                {
+                    "componente": "Isolante",
+                    "consumo_componente": 2.72E+02,
+                    "gwp": 1.04E+01,
+                    "ap": 3.32E-02,
+                    "ep": 3.92E-03,
+                    "pocp": 2.10E-03,
+                    "odp": 1.79E-07,
+                    "adpnf": 3.62E-07,
+                    "adpf": 2.42E+02
+                },
+                {
+                    "componente": "Alumínio composto",
+                    "consumo_componente": 1.95E+02,
+                    "gwp": 4.93E+00,
+                    "ap": 1.94E-02,
+                    "ep": 4.77E-03,
+                    "pocp": 3.19E-03,
+                    "odp": 9.85E-08,
+                    "adpnf": 2.84E-07,
+                    "adpf": 1.52E+02
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 1.44E+00,
+                    "ap": 8.38E-03,
+                    "ep": 2.87E-03,
+                    "pocp": 8.38E-04,
+                    "odp": 1.09E-07,
+                    "adpnf": 6.50E-07,
+                    "adpf": 1.62E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 26 - Concreto estrutural",
+        "imagem": "assets/systems/sistema26.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": true,
+                "peso": 297.3,
+                "espessura": 27
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Poliestireno",
+                "Alumínio composto"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 0.32,
+        "capacidade_termica": 228,
+        "impactos": {
+            "gwp": 5.57E+01,
+            "ap": 3.71E-01,
+            "ep": 9.27E-02,
+            "pocp": 1.28E-02,
+            "odp": 2.92E-06,
+            "adpnf": 5.37E-06,
+            "adpf": 6.79E+02
+        },
+        "consumo": {
+            "total": 8.31E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.03E+01,
+                    "gwp": 4.35E+00,
+                    "ap": 1.11E-02,
+                    "ep": 2.97E-03,
+                    "pocp": 5.03E-04,
+                    "odp": 2.24E-07,
+                    "adpnf": 3.80E-08,
+                    "adpf": 2.51E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.05E+02,
+                    "gwp": 1.17E+01,
+                    "ap": 4.42E-02,
+                    "ep": 1.06E-02,
+                    "pocp": 1.97E-03,
+                    "odp": 9.32E-07,
+                    "adpnf": 1.42E-07,
+                    "adpf": 7.90E+01
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 2.09E+01,
+                    "gwp": 1.43E+00,
+                    "ap": 3.47E-02,
+                    "ep": 9.62E-03,
+                    "pocp": 6.97E-04,
+                    "odp": 1.12E-07,
+                    "adpnf": 6.77E-07,
+                    "adpf": 1.61E+01
+                },
+                {
+                    "componente": "Aço galvanizado",
+                    "consumo_componente": 8.72E+01,
+                    "gwp": 5.63E+00,
+                    "ap": 1.85E-01,
+                    "ep": 4.91E-02,
+                    "pocp": 2.37E-03,
+                    "odp": 4.93E-07,
+                    "adpnf": 3.72E-06,
+                    "adpf": 6.55E+01
+                },
+                {
+                    "componente": "Isolante",
+                    "consumo_componente": 2.72E+02,
+                    "gwp": 1.04E+01,
+                    "ap": 3.32E-02,
+                    "ep": 3.92E-03,
+                    "pocp": 2.10E-03,
+                    "odp": 1.79E-07,
+                    "adpnf": 3.62E-07,
+                    "adpf": 2.42E+02
+                },
+                {
+                    "componente": "Alumínio composto",
+                    "consumo_componente": 1.95E+02,
+                    "gwp": 4.93E+00,
+                    "ap": 1.94E-02,
+                    "ep": 4.77E-03,
+                    "pocp": 3.19E-03,
+                    "odp": 9.85E-08,
+                    "adpnf": 2.84E-07,
+                    "adpf": 1.52E+02
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 1.44E+00,
+                    "ap": 8.38E-03,
+                    "ep": 2.87E-03,
+                    "pocp": 8.38E-04,
+                    "odp": 1.09E-07,
+                    "adpnf": 6.50E-07,
+                    "adpf": 1.62E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 27 - Cerâmico",
+        "imagem": "assets/systems/sistema27.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 180.0,
+                "espessura": 19
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Placa melamínica"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 1.63,
+        "capacidade_termica": 121,
+        "impactos": {
+            "gwp": 8.25E+00,
+            "ap": 3.67E-01,
+            "ep": 1.07E-01,
+            "pocp": 1.47E-02,
+            "odp": 3.37E-06,
+            "adpnf": 4.86E-06,
+            "adpf": 4.25E+02
+        },
+        "consumo": {
+            "total": 1.29E+03,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.03E+01,
+                    "gwp": 4.35E+00,
+                    "ap": 1.11E-02,
+                    "ep": 2.97E-03,
+                    "pocp": 5.03E-04,
+                    "odp": 2.24E-07,
+                    "adpnf": 3.80E-08,
+                    "adpf": 2.51E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.49E+02,
+                    "gwp": 1.32E+01,
+                    "ap": 3.35E-02,
+                    "ep": 8.06E-03,
+                    "pocp": 2.69E-03,
+                    "odp": 8.23E-07,
+                    "adpnf": 1.37E-07,
+                    "adpf": 1.18E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 1.77E+01,
+                    "gwp": 1.19E+00,
+                    "ap": 3.19E-02,
+                    "ep": 8.73E-03,
+                    "pocp": 5.55E-04,
+                    "odp": 9.64E-08,
+                    "adpnf": 6.32E-07,
+                    "adpf": 1.35E+01
+                },
+                {
+                    "componente": "Aço galvanizado",
+                    "consumo_componente": 8.72E+01,
+                    "gwp": 5.63E+00,
+                    "ap": 1.85E-01,
+                    "ep": 4.91E-02,
+                    "pocp": 2.37E-03,
+                    "odp": 4.93E-07,
+                    "adpnf": 3.72E-06,
+                    "adpf": 6.55E+01
+                },
+                {
+                    "componente": "MDF",
+                    "consumo_componente": 8.91E+02,
+                    "gwp": -3.34E+01,
+                    "ap": 6.29E-02,
+                    "ep": 2.61E-02,
+                    "pocp": 6.63E-03,
+                    "odp": 8.44E-07,
+                    "adpnf": 1.90E-07,
+                    "adpf": 1.04E+02
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 1.44E+00,
+                    "ap": 8.38E-03,
+                    "ep": 2.87E-03,
+                    "pocp": 8.38E-04,
+                    "odp": 1.09E-07,
+                    "adpnf": 6.50E-07,
+                    "adpf": 1.62E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 28 - Concreto estrutural",
+        "imagem": "assets/systems/sistema28.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 289.1,
+                "espessura": 24
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Placa melamínica"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 1.82,
+        "capacidade_termica": 242,
+        "impactos": {
+            "gwp": 7.00E+00,
+            "ap": 3.81E-01,
+            "ep": 1.10E-01,
+            "pocp": 1.42E-02,
+            "odp": 3.49E-06,
+            "adpnf": 4.91E-06,
+            "adpf": 3.89E+02
+        },
+        "consumo": {
+            "total": 1.25E+03,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.03E+01,
+                    "gwp": 4.35E+00,
+                    "ap": 1.11E-02,
+                    "ep": 2.97E-03,
+                    "pocp": 5.03E-04,
+                    "odp": 2.24E-07,
+                    "adpnf": 3.80E-08,
+                    "adpf": 2.51E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.05E+02,
+                    "gwp": 1.17E+01,
+                    "ap": 4.42E-02,
+                    "ep": 1.06E-02,
+                    "pocp": 1.97E-03,
+                    "odp": 9.32E-07,
+                    "adpnf": 1.42E-07,
+                    "adpf": 7.90E+01
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 2.09E+01,
+                    "gwp": 1.43E+00,
+                    "ap": 3.47E-02,
+                    "ep": 9.62E-03,
+                    "pocp": 6.97E-04,
+                    "odp": 1.12E-07,
+                    "adpnf": 6.77E-07,
+                    "adpf": 1.61E+01
+                },
+                {
+                    "componente": "Aço galvanizado",
+                    "consumo_componente": 8.72E+01,
+                    "gwp": 5.63E+00,
+                    "ap": 1.85E-01,
+                    "ep": 4.91E-02,
+                    "pocp": 2.37E-03,
+                    "odp": 4.93E-07,
+                    "adpnf": 3.72E-06,
+                    "adpf": 6.55E+01
+                },
+                {
+                    "componente": "MDF",
+                    "consumo_componente": 8.91E+02,
+                    "gwp": -3.34E+01,
+                    "ap": 6.29E-02,
+                    "ep": 2.61E-02,
+                    "pocp": 6.63E-03,
+                    "odp": 8.44E-07,
+                    "adpnf": 1.90E-07,
+                    "adpf": 1.04E+02
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 1.44E+00,
+                    "ap": 8.38E-03,
+                    "ep": 2.87E-03,
+                    "pocp": 8.38E-04,
+                    "odp": 1.09E-07,
+                    "adpnf": 6.50E-07,
+                    "adpf": 1.62E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 29 - Cerâmico",
+        "imagem": "assets/systems/sistema29.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": true,
+                "peso": 182.9,
+                "espessura": 22
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Poliestireno",
+                "Placa melamínica"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 0.4,
+        "capacidade_termica": 125,
+        "impactos": {
+            "gwp": 1.86E+01,
+            "ap": 4.01E-01,
+            "ep": 1.11E-01,
+            "pocp": 1.68E-02,
+            "odp": 3.55E-06,
+            "adpnf": 5.22E-06,
+            "adpf": 6.67E+02
+        },
+        "consumo": {
+            "total": 1.57E+03,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.03E+01,
+                    "gwp": 4.35E+00,
+                    "ap": 1.11E-02,
+                    "ep": 2.97E-03,
+                    "pocp": 5.03E-04,
+                    "odp": 2.24E-07,
+                    "adpnf": 3.80E-08,
+                    "adpf": 2.51E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.49E+02,
+                    "gwp": 1.32E+01,
+                    "ap": 3.35E-02,
+                    "ep": 8.06E-03,
+                    "pocp": 2.69E-03,
+                    "odp": 8.23E-07,
+                    "adpnf": 1.37E-07,
+                    "adpf": 1.18E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 1.77E+01,
+                    "gwp": 1.19E+00,
+                    "ap": 3.19E-02,
+                    "ep": 8.73E-03,
+                    "pocp": 5.55E-04,
+                    "odp": 9.64E-08,
+                    "adpnf": 6.32E-07,
+                    "adpf": 1.35E+01
+                },
+                {
+                    "componente": "Aço galvanizado",
+                    "consumo_componente": 8.72E+01,
+                    "gwp": 5.63E+00,
+                    "ap": 1.85E-01,
+                    "ep": 4.91E-02,
+                    "pocp": 2.37E-03,
+                    "odp": 4.93E-07,
+                    "adpnf": 3.72E-06,
+                    "adpf": 6.55E+01
+                },
+                {
+                    "componente": "Isolante",
+                    "consumo_componente": 2.72E+02,
+                    "gwp": 1.04E+01,
+                    "ap": 3.32E-02,
+                    "ep": 3.92E-03,
+                    "pocp": 2.10E-03,
+                    "odp": 1.79E-07,
+                    "adpnf": 3.62E-07,
+                    "adpf": 2.42E+02
+                },
+                {
+                    "componente": "MDF",
+                    "consumo_componente": 8.91E+02,
+                    "gwp": -3.34E+01,
+                    "ap": 6.29E-02,
+                    "ep": 2.61E-02,
+                    "pocp": 6.63E-03,
+                    "odp": 8.44E-07,
+                    "adpnf": 1.90E-07,
+                    "adpf": 1.04E+02
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 1.44E+00,
+                    "ap": 8.38E-03,
+                    "ep": 2.87E-03,
+                    "pocp": 8.38E-04,
+                    "odp": 1.09E-07,
+                    "adpnf": 6.50E-07,
+                    "adpf": 1.62E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 30 - Concreto estrutural",
+        "imagem": "assets/systems/sistema30.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": true,
+                "peso": 292.2,
+                "espessura": 27
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Poliestireno",
+                "Placa melamínica"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 0.42,
+        "capacidade_termica": 246,
+        "impactos": {
+            "gwp": 1.74E+01,
+            "ap": 4.14E-01,
+            "ep": 1.14E-01,
+            "pocp": 1.63E-02,
+            "odp": 3.67E-06,
+            "adpnf": 5.27E-06,
+            "adpf": 6.31E+02
+        },
+        "consumo": {
+            "total": 1.53E+03,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.03E+01,
+                    "gwp": 4.35E+00,
+                    "ap": 1.11E-02,
+                    "ep": 2.97E-03,
+                    "pocp": 5.03E-04,
+                    "odp": 2.24E-07,
+                    "adpnf": 3.80E-08,
+                    "adpf": 2.51E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.05E+02,
+                    "gwp": 1.17E+01,
+                    "ap": 4.42E-02,
+                    "ep": 1.06E-02,
+                    "pocp": 1.97E-03,
+                    "odp": 9.32E-07,
+                    "adpnf": 1.42E-07,
+                    "adpf": 7.90E+01
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 2.11E+01,
+                    "gwp": 1.44E+00,
+                    "ap": 3.47E-02,
+                    "ep": 9.65E-03,
+                    "pocp": 7.07E-04,
+                    "odp": 1.13E-07,
+                    "adpnf": 6.77E-07,
+                    "adpf": 1.62E+01
+                },
+                {
+                    "componente": "Aço galvanizado",
+                    "consumo_componente": 8.72E+01,
+                    "gwp": 5.63E+00,
+                    "ap": 1.85E-01,
+                    "ep": 4.91E-02,
+                    "pocp": 2.37E-03,
+                    "odp": 4.93E-07,
+                    "adpnf": 3.72E-06,
+                    "adpf": 6.55E+01
+                },
+                {
+                    "componente": "Isolante",
+                    "consumo_componente": 2.72E+02,
+                    "gwp": 1.04E+01,
+                    "ap": 3.32E-02,
+                    "ep": 3.92E-03,
+                    "pocp": 2.10E-03,
+                    "odp": 1.79E-07,
+                    "adpnf": 3.62E-07,
+                    "adpf": 2.42E+02
+                },
+                {
+                    "componente": "MDF",
+                    "consumo_componente": 8.91E+02,
+                    "gwp": -3.34E+01,
+                    "ap": 6.29E-02,
+                    "ep": 2.61E-02,
+                    "pocp": 6.63E-03,
+                    "odp": 8.44E-07,
+                    "adpnf": 1.90E-07,
+                    "adpf": 1.04E+02
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 1.44E+00,
+                    "ap": 8.38E-03,
+                    "ep": 2.87E-03,
+                    "pocp": 8.38E-04,
+                    "odp": 1.09E-07,
+                    "adpnf": 6.50E-07,
+                    "adpf": 1.62E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 31 - Cerâmico",
+        "imagem": "assets/systems/sistema31.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 244.3,
+                "espessura": 14
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Granito"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.36,
+        "capacidade_termica": 210,
+        "impactos": {
+            "gwp": 9.03E+01,
+            "ap": 3.74E-01,
+            "ep": 1.27E-01,
+            "pocp": 1.54E-02,
+            "odp": 6.04E-06,
+            "adpnf": 9.29E-07,
+            "adpf": 8.82E+02
+        },
+        "consumo": {
+            "total": 1.20E+03,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.03E+01,
+                    "gwp": 4.35E+00,
+                    "ap": 1.11E-02,
+                    "ep": 2.97E-03,
+                    "pocp": 5.03E-04,
+                    "odp": 2.24E-07,
+                    "adpnf": 3.80E-08,
+                    "adpf": 2.51E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.49E+02,
+                    "gwp": 1.32E+01,
+                    "ap": 3.35E-02,
+                    "ep": 8.06E-03,
+                    "pocp": 2.69E-03,
+                    "odp": 8.23E-07,
+                    "adpnf": 1.37E-07,
+                    "adpf": 1.18E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 5.00E+00,
+                    "gwp": 3.54E-01,
+                    "ap": 6.82E-03,
+                    "ep": 1.96E-03,
+                    "pocp": 1.88E-04,
+                    "odp": 2.59E-08,
+                    "adpnf": 1.28E-07,
+                    "adpf": 3.91E+00
+                },
+                {
+                    "componente": "Granito",
+                    "consumo_componente": 9.00E+02,
+                    "gwp": 5.51E+01,
+                    "ap": 2.79E-01,
+                    "ep": 1.02E-01,
+                    "pocp": 1.00E-02,
+                    "odp": 4.08E-06,
+                    "adpnf": 4.75E-07,
+                    "adpf": 6.36E+02
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 1.44E+00,
+                    "ap": 8.38E-03,
+                    "ep": 2.87E-03,
+                    "pocp": 8.38E-04,
+                    "odp": 1.09E-07,
+                    "adpnf": 6.50E-07,
+                    "adpf": 1.62E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 32 - Concreto estrutural",
+        "imagem": "assets/systems/sistema32.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 353.6,
+                "espessura": 19
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Granito"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.63,
+        "capacidade_termica": 329,
+        "impactos": {
+            "gwp": 8.91E+01,
+            "ap": 3.87E-01,
+            "ep": 1.30E-01,
+            "pocp": 1.48E-02,
+            "odp": 6.17E-06,
+            "adpnf": 9.59E-07,
+            "adpf": 8.45E+02
+        },
+        "consumo": {
+            "total": 1.16E+03,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.03E+01,
+                    "gwp": 4.35E+00,
+                    "ap": 1.11E-02,
+                    "ep": 2.97E-03,
+                    "pocp": 5.03E-04,
+                    "odp": 2.24E-07,
+                    "adpnf": 3.80E-08,
+                    "adpf": 2.51E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.05E+02,
+                    "gwp": 1.17E+01,
+                    "ap": 4.42E-02,
+                    "ep": 1.06E-02,
+                    "pocp": 1.97E-03,
+                    "odp": 9.32E-07,
+                    "adpnf": 1.42E-07,
+                    "adpf": 7.90E+01
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 8.07E+00,
+                    "gwp": 5.91E-01,
+                    "ap": 8.63E-03,
+                    "ep": 2.63E-03,
+                    "pocp": 3.35E-04,
+                    "odp": 4.01E-08,
+                    "adpnf": 1.54E-07,
+                    "adpf": 6.40E+00
+                },
+                {
+                    "componente": "Granito",
+                    "consumo_componente": 9.00E+02,
+                    "gwp": 5.51E+01,
+                    "ap": 2.79E-01,
+                    "ep": 1.02E-01,
+                    "pocp": 1.00E-02,
+                    "odp": 4.08E-06,
+                    "adpnf": 4.75E-07,
+                    "adpf": 6.36E+02
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 1.44E+00,
+                    "ap": 8.38E-03,
+                    "ep": 2.87E-03,
+                    "pocp": 8.38E-04,
+                    "odp": 1.09E-07,
+                    "adpnf": 6.50E-07,
+                    "adpf": 1.62E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 33 - Steel frame",
+        "imagem": "assets/systems/sistema33.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": true,
+                "isolante_termico": false,
+                "peso": 12.5,
+                "espessura": 4.25
+            },
+            "camadas": [
+                "Pintura Interna",
+                "Placa de Gesso",
+                "Câmara de Ar",
+                "Placa Cimentícia",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.66,
+        "capacidade_termica": 26.0,
+        "impactos": {
+            "gwp": 1.44E+1,
+            "ap": 2.216E-1,
+            "ep": 5.94E-2,
+            "pocp": 4.26E-3,
+            "odp": 9.33E-7,
+            "adpnf": 4.17E-6,
+            "adpf": 1.53E+2
+        },
+        "consumo": {
+            "total": 2.15E+2,
+            "componentes": [
+                {
+                    "componente": "Placa de Gesso",
+                    "consumo_componente": 4.02E+1,
+                    "gwp": 2.44E+00,
+                    "ap": 1.66E-02,
+                    "ep": 3.94E-03,
+                    "pocp": 7.56E-04,
+                    "odp": 1.32E-07,
+                    "adpnf": 7.27E-08,
+                    "adpf": 2.66E+01
+                },
+                {
+                    "componente": "Perfis de Aço",
+                    "consumo_componente": 8.72E+1,
+                    "gwp": 5.63E+00,
+                    "ap": 1.85E-01,
+                    "ep": 4.91E-02,
+                    "pocp": 2.37E-03,
+                    "odp": 4.93E-07,
+                    "adpnf": 3.72E-06,
+                    "adpf": 6.55E+01
+                },
+                {
+                    "componente": "Placa de Cimentícia",
+                    "consumo_componente": 8.77E+1,
+                    "gwp": 6.33E+00,
+                    "ap": 2.08E-02,
+                    "ep": 6.33E-03,
+                    "pocp": 1.13E-03,
+                    "odp": 3.09E-07,
+                    "adpnf": 3.88E-07,
+                    "adpf": 6.07E+01
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 34 - Steel frame",
+        "imagem": "assets/systems/sistema34.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": true,
+                "isolante_termico": true,
+                "peso": 13.5,
+                "espessura": 11.25
+            },
+            "camadas": [
+                "Pintura Interna",
+                "Placa de Gesso",
+                "Lã de Rocha",
+                "Placa Cimentícia",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 0.45,
+        "capacidade_termica": 33.0,
+        "impactos": {
+            "gwp": 1.82E+1,
+            "ap": 2.54E-1,
+            "ep": 6.55E-2,
+            "pocp": 6.21E-3,
+            "odp": 1.17E-6,
+            "adpnf": 4.28E-6,
+            "adpf": 1.96E+2
+        },
+        "consumo": {
+            "total": 2.68E+2,
+            "componentes": [
+                {
+                    "componente": "Placa de Gesso",
+                    "consumo_componente": 4.02E+1,
+                    "gwp": 2.44E+00,
+                    "ap": 1.66E-02,
+                    "ep": 3.94E-03,
+                    "pocp": 7.56E-04,
+                    "odp": 1.32E-07,
+                    "adpnf": 7.27E-08,
+                    "adpf": 2.66E+01
+                },
+                {
+                    "componente": "Perfis de Aço",
+                    "consumo_componente": 8.72E+1,
+                    "gwp": 5.63E+00,
+                    "ap": 1.85E-01,
+                    "ep": 4.91E-02,
+                    "pocp": 2.37E-03,
+                    "odp": 4.93E-07,
+                    "adpnf": 3.72E-06,
+                    "adpf": 6.55E+01
+                },
+                {
+                    "componente": "Lã de Rocha",
+                    "consumo_componente": 2.33E+1,
+                    "gwp": 3.83E+00,
+                    "ap": 3.23E-02,
+                    "ep": 6.10E-03,
+                    "pocp": 1.95E-03,
+                    "odp": 2.36E-07,
+                    "adpnf": 1.04E-07,
+                    "adpf": 4.28E+01
+                },
+                {
+                    "componente": "Placa de Cimentícia",
+                    "consumo_componente": 8.77E+1,
+                    "gwp": 6.33E+00,
+                    "ap": 2.08E-02,
+                    "ep": 6.33E-03,
+                    "pocp": 1.13E-03,
+                    "odp": 3.09E-07,
+                    "adpnf": 3.88E-07,
+                    "adpf": 6.07E+01
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 35 - Steel frame",
+        "imagem": "assets/systems/sistema36.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": true,
+                "isolante_termico": true,
+                "peso": 13.5,
+                "espessura": 9.25
+            },
+            "camadas": [
+                "Pintura Interna",
+                "Placa de Gesso",
+                "Lã de Rocha",
+                "Placa Cimentícia",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 0.53,
+        "capacidade_termica": 32.0,
+        "impactos": {
+            "gwp": 1.76E+1,
+            "ap": 2.48E-1,
+            "ep": 6.45E-2,
+            "pocp": 5.88E-3,
+            "odp": 1.13E-6,
+            "adpnf": 4.26E-6,
+            "adpf": 1.89E+2
+        },
+        "consumo": {
+            "total": 2.59E+2,
+            "componentes": [
+                {
+                    "componente": "Placa de Gesso",
+                    "consumo_componente": 4.02E+1,
+                    "gwp": 2.44E+00,
+                    "ap": 1.66E-02,
+                    "ep": 3.94E-03,
+                    "pocp": 7.56E-04,
+                    "odp": 1.32E-07,
+                    "adpnf": 7.27E-08,
+                    "adpf": 2.66E+01
+                },
+                {
+                    "componente": "Perfis de Aço",
+                    "consumo_componente": 8.72E+1,
+                    "gwp": 5.63E+00,
+                    "ap": 1.85E-01,
+                    "ep": 4.91E-02,
+                    "pocp": 2.37E-03,
+                    "odp": 4.93E-07,
+                    "adpnf": 3.72E-06,
+                    "adpf": 6.55E+01
+                },
+                {
+                    "componente": "Lã de Rocha",
+                    "consumo_componente": 4.37E+1,
+                    "gwp": 3.19E+00,
+                    "ap": 2.70E-02,
+                    "ep": 5.08E-03,
+                    "pocp": 1.63E-03,
+                    "odp": 1.97E-07,
+                    "adpnf": 8.64E-08,
+                    "adpf": 3.57E+01
+                },
+                {
+                    "componente": "Placa de Cimentícia",
+                    "consumo_componente": 8.77E+1,
+                    "gwp": 6.33E+00,
+                    "ap": 2.08E-02,
+                    "ep": 6.33E-03,
+                    "pocp": 1.13E-03,
+                    "odp": 3.09E-07,
+                    "adpnf": 3.88E-07,
+                    "adpf": 6.07E+01
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 36 - Steel frame",
+        "imagem": "assets/systems/sistema36.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": true,
+                "isolante_termico": true,
+                "peso": 13.5,
+                "espessura": 5.25
+            },
+            "camadas": [
+                "Pintura Interna",
+                "Placa de Gesso",
+                "Lã de Rocha",
+                "Placa Cimentícia",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 0.9,
+        "capacidade_termica": 29.0,
+        "impactos": {
+            "gwp": 1.61E+1,
+            "ap": 2.36E-1,
+            "ep": 6.21E-2,
+            "pocp": 5.12E-3,
+            "odp": 1.04E-6,
+            "adpnf": 4.22E-6,
+            "adpf": 1.72E+2
+        },
+        "consumo": {
+            "total": 2.38E+2,
+            "componentes": [
+                {
+                    "componente": "Placa de Gesso",
+                    "consumo_componente": 4.02E+1,
+                    "gwp": 2.44E+00,
+                    "ap": 1.66E-02,
+                    "ep": 3.94E-03,
+                    "pocp": 7.56E-04,
+                    "odp": 1.32E-07,
+                    "adpnf": 7.27E-08,
+                    "adpf": 2.66E+01
+                },
+                {
+                    "componente": "Perfis de Aço",
+                    "consumo_componente": 8.72E+1,
+                    "gwp": 5.63E+00,
+                    "ap": 1.85E-01,
+                    "ep": 4.91E-02,
+                    "pocp": 2.37E-03,
+                    "odp": 4.93E-07,
+                    "adpnf": 3.72E-06,
+                    "adpf": 6.55E+01
+                },
+                {
+                    "componente": "Lã de Rocha",
+                    "consumo_componente": 2.33E+1,
+                    "gwp": 1.70E+00,
+                    "ap": 1.44E-02,
+                    "ep": 2.71E-03,
+                    "pocp": 8.67E-04,
+                    "odp": 1.05E-07,
+                    "adpnf": 4.61E-08,
+                    "adpf": 1.90E+01
+                },
+                {
+                    "componente": "Placa de Cimentícia",
+                    "consumo_componente": 8.77E+1,
+                    "gwp": 6.33E+00,
+                    "ap": 2.08E-02,
+                    "ep": 6.33E-03,
+                    "pocp": 1.13E-03,
+                    "odp": 3.09E-07,
+                    "adpnf": 3.88E-07,
+                    "adpf": 6.07E+01
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 37 - Cerâmico",
+        "imagem": "assets/systems/sistema37.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": true,
+                "peso": 261.8,
+                "espessura": 27
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Lã de rocha",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 0.63,
+        "capacidade_termica": 199,
+        "impactos": {
+            "gwp": 5.44E+01,
+            "ap": 1.54E-01,
+            "ep": 3.83E-02,
+            "pocp": 9.43E-03,
+            "odp": 3.11E-06,
+            "adpnf": 6.58E-07,
+            "adpf": 4.08E+02
+        },
+        "consumo": {
+            "total": 5.06E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 6.05E+01,
+                    "gwp": 8.69E+00,
+                    "ap": 2.22E-02,
+                    "ep": 5.94E-03,
+                    "pocp": 1.01E-03,
+                    "odp": 4.48E-07,
+                    "adpnf": 7.59E-08,
+                    "adpf": 5.01E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 2.97E+02,
+                    "gwp": 2.65E+01,
+                    "ap": 6.71E-02,
+                    "ep": 1.61E-02,
+                    "pocp": 5.38E-03,
+                    "odp": 1.65E-06,
+                    "adpnf": 2.73E-07,
+                    "adpf": 2.36E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 4.75E+00,
+                    "gwp": 3.40E-01,
+                    "ap": 6.04E-03,
+                    "ep": 1.77E-03,
+                    "pocp": 1.84E-04,
+                    "odp": 2.43E-08,
+                    "adpnf": 1.12E-07,
+                    "adpf": 3.73E+00
+                },
+                {
+                    "componente": "Isolante",
+                    "consumo_componente": 2.33E+01,
+                    "gwp": 1.70E+00,
+                    "ap": 1.44E-02,
+                    "ep": 2.71E-03,
+                    "pocp": 8.67E-04,
+                    "odp": 1.05E-07,
+                    "adpnf": 4.61E-08,
+                    "adpf": 1.90E+01
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 38 - Cerâmico",
+        "imagem": "assets/systems/sistema38.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 260.1,
+                "espessura": 27
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Câmara de ar",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 1.25,
+        "capacidade_termica": 195,
+        "impactos": {
+            "gwp": 5.27E+01,
+            "ap": 1.39E-01,
+            "ep": 3.56E-02,
+            "pocp": 8.56E-03,
+            "odp": 3.01E-06,
+            "adpnf": 6.12E-07,
+            "adpf": 3.89E+02
+        },
+        "consumo": {
+            "total": 4.82E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 6.05E+01,
+                    "gwp": 8.69E+00,
+                    "ap": 2.22E-02,
+                    "ep": 5.94E-03,
+                    "pocp": 1.01E-03,
+                    "odp": 4.48E-07,
+                    "adpnf": 7.59E-08,
+                    "adpf": 5.01E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 2.97E+02,
+                    "gwp": 2.65E+01,
+                    "ap": 6.71E-02,
+                    "ep": 1.61E-02,
+                    "pocp": 5.38E-03,
+                    "odp": 1.65E-06,
+                    "adpnf": 2.73E-07,
+                    "adpf": 2.36E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 4.75E+00,
+                    "gwp": 3.40E-01,
+                    "ap": 6.04E-03,
+                    "ep": 1.77E-03,
+                    "pocp": 1.84E-04,
+                    "odp": 2.43E-08,
+                    "adpnf": 1.12E-07,
+                    "adpf": 3.73E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 39 - Concreto estrutural",
+        "imagem": "assets/systems/sistema39.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": true,
+                "peso": 480.3,
+                "espessura": 37
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Lã de rocha",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 0.9,
+        "capacidade_termica": 441,
+        "impactos": {
+            "gwp": 5.18E+01,
+            "ap": 1.78E-01,
+            "ep": 4.43E-02,
+            "pocp": 8.16E-03,
+            "odp": 3.35E-06,
+            "adpnf": 7.11E-07,
+            "adpf": 3.34E+02
+        },
+        "consumo": {
+            "total": 4.22E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 6.14E+01,
+                    "gwp": 8.81E+00,
+                    "ap": 2.25E-02,
+                    "ep": 6.04E-03,
+                    "pocp": 1.02E-03,
+                    "odp": 4.53E-07,
+                    "adpnf": 7.74E-08,
+                    "adpf": 5.09E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 2.09E+02,
+                    "gwp": 2.35E+01,
+                    "ap": 8.84E-02,
+                    "ep": 2.12E-02,
+                    "pocp": 3.95E-03,
+                    "odp": 1.86E-06,
+                    "adpnf": 2.84E-07,
+                    "adpf": 1.58E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 8.07E+00,
+                    "gwp": 5.91E-01,
+                    "ap": 8.63E-03,
+                    "ep": 2.63E-03,
+                    "pocp": 3.35E-04,
+                    "odp": 4.01E-08,
+                    "adpnf": 1.54E-07,
+                    "adpf": 6.40E+00
+                },
+                {
+                    "componente": "Isolante",
+                    "consumo_componente": 2.33E+01,
+                    "gwp": 1.70E+00,
+                    "ap": 1.44E-02,
+                    "ep": 2.71E-03,
+                    "pocp": 8.67E-04,
+                    "odp": 1.05E-07,
+                    "adpnf": 4.61E-08,
+                    "adpf": 1.90E+01
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 40 - Concreto estrutural",
+        "imagem": "assets/systems/sistema40.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 478.7,
+                "espessura": 37
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco de concreto",
+                "Argamassa de assentamento",
+                "Câmara de ar",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 1.43,
+        "capacidade_termica": 439,
+        "impactos": {
+            "gwp": 5.01E+01,
+            "ap": 1.64E-01,
+            "ep": 4.16E-02,
+            "pocp": 7.29E-03,
+            "odp": 3.24E-06,
+            "adpnf": 6.65E-07,
+            "adpf": 3.15E+02
+        },
+        "consumo": {
+            "total": 3.99E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 6.14E+01,
+                    "gwp": 8.81E+00,
+                    "ap": 2.25E-02,
+                    "ep": 6.04E-03,
+                    "pocp": 1.02E-03,
+                    "odp": 4.53E-07,
+                    "adpnf": 7.74E-08,
+                    "adpf": 5.09E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 2.97E+02,
+                    "gwp": 2.35E+01,
+                    "ap": 8.84E-02,
+                    "ep": 2.12E-02,
+                    "pocp": 3.95E-03,
+                    "odp": 1.86E-06,
+                    "adpnf": 2.84E-07,
+                    "adpf": 1.58E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 8.07E+00,
+                    "gwp": 5.91E-01,
+                    "ap": 8.63E-03,
+                    "ep": 2.63E-03,
+                    "pocp": 3.35E-04,
+                    "odp": 4.01E-08,
+                    "adpnf": 1.54E-07,
+                    "adpf": 6.40E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 41 - Cerâmico",
+        "imagem": "assets/systems/sistema41.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 169.4,
+                "espessura": 14
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.39,
+        "capacidade_termica": 151,
+        "impactos": {
+            "gwp": 3.54E+01,
+            "ap": 1.05E-01,
+            "ep": 2.83E-02,
+            "pocp": 6.21E-03,
+            "odp": 2.00E-06,
+            "adpnf": 1.18E-06,
+            "adpf": 2.55E+02
+        },
+        "consumo": {
+            "total": 3.17E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 2.60E+01,
+                    "gwp": 3.73E+00,
+                    "ap": 9.55E-03,
+                    "ep": 2.55E-03,
+                    "pocp": 4.32E-04,
+                    "odp": 1.92E-07,
+                    "adpnf": 3.26E-08,
+                    "adpf": 2.15E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.37E+02,
+                    "gwp": 1.22E+01,
+                    "ap": 3.09E-02,
+                    "ep": 7.43E-03,
+                    "pocp": 2.48E-03,
+                    "odp": 7.59E-07,
+                    "adpnf": 1.26E-07,
+                    "adpf": 1.09E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 1.12E+01,
+                    "gwp": 8.20E-01,
+                    "ap": 1.22E-02,
+                    "ep": 3.72E-03,
+                    "pocp": 4.62E-04,
+                    "odp": 5.59E-08,
+                    "adpnf": 2.20E-07,
+                    "adpf": 8.89E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    },
+    {
+        "nome": "Sistema 42 - Cerâmico",
+        "imagem": "assets/systems/sistema42.png",
+        "identificacao": {
+            "descricao": {
+                "sistema_leve": false,
+                "isolante_termico": false,
+                "peso": 182.4,
+                "espessura": 17
+            },
+            "camadas": [
+                "Pintura interna",
+                "Argamassa interna",
+                "Bloco cerâmico",
+                "Argamassa de assentamento",
+                "Argamassa externa",
+                "Pintura externa"
+            ],
+            "unidade": "1m²",
+            "fronteira": "Fase de produção (A1-3)",
+            "validade": "2020-2025"
+        },
+        "transmitancia": 2.24,
+        "capacidade_termica": 155,
+        "impactos": {
+            "gwp": 3.80E+01,
+            "ap": 1.12E-01,
+            "ep": 3.00E-02,
+            "pocp": 6.63E-03,
+            "odp": 2.15E-06,
+            "adpnf": 1.20E-06,
+            "adpf": 2.74E+02
+        },
+        "consumo": {
+            "total": 3.41E+02,
+            "componentes": [
+                {
+                    "componente": "Argamassa de revestimento",
+                    "consumo_componente": 1.20E+02,
+                    "gwp": 1.72E+01,
+                    "ap": 4.40E-02,
+                    "ep": 1.18E-02,
+                    "pocp": 2.00E-03,
+                    "odp": 8.87E-07,
+                    "adpnf": 1.50E-07,
+                    "adpf": 9.93E+01
+                },
+                {
+                    "componente": "Argamassa de assentamento",
+                    "consumo_componente": 3.47E+01,
+                    "gwp": 4.99E+00,
+                    "ap": 1.27E-02,
+                    "ep": 3.40E-03,
+                    "pocp": 5.76E-04,
+                    "odp": 2.56E-07,
+                    "adpnf": 4.35E-08,
+                    "adpf": 2.87E+01
+                },
+                {
+                    "componente": "Alvenaria",
+                    "consumo_componente": 1.53E+02,
+                    "gwp": 1.36E+01,
+                    "ap": 3.44E-02,
+                    "ep": 8.27E-03,
+                    "pocp": 2.76E-03,
+                    "odp": 8.45E-07,
+                    "adpnf": 1.40E-07,
+                    "adpf": 1.21E+02
+                },
+                {
+                    "componente": "Aço",
+                    "consumo_componente": 1.12E+01,
+                    "gwp": 8.20E-01,
+                    "ap": 1.22E-02,
+                    "ep": 3.72E-03,
+                    "pocp": 4.62E-04,
+                    "odp": 5.59E-08,
+                    "adpnf": 2.20E-07,
+                    "adpf": 8.89E+00
+                },
+                {
+                    "componente": "Pintura",
+                    "consumo_componente": 2.26E+1,
+                    "gwp": 2.87E+00,
+                    "ap": 1.68E-02,
+                    "ep": 5.73E-03,
+                    "pocp": 1.68E-03,
+                    "odp": 2.18E-07,
+                    "adpnf": 1.30E-06,
+                    "adpf": 3.24E+01
+                }
+            ]
+        }
+    }
+]
