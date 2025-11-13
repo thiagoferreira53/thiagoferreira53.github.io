@@ -54,19 +54,35 @@ class DataManager {
     getSystems(filters = {}) {
         let filtered = [...this.systems];
 
+        // Filtro de busca por nome
+        if (filters.search && filters.search.trim() !== '') {
+            filtered = filtered.filter(s => 
+                s.nome.toLowerCase().includes(filters.search.toLowerCase())
+            );
+        }
+
+        // Filtro de origem (custom ou database)
+        if (filters.origin) {
+            if (filters.origin === 'custom') {
+                filtered = filtered.filter(s => s.custom === true);
+            } else if (filters.origin === 'database') {
+                filtered = filtered.filter(s => !s.custom);
+            }
+        }
+
         if (filters.type) {
             filtered = filtered.filter(s => 
                 s.nome.toLowerCase().includes(filters.type.toLowerCase())
             );
         }
 
-        if (filters.systemLeve !== undefined) {
+        if (filters.systemLeve !== undefined && filters.systemLeve !== '') {
             filtered = filtered.filter(s => 
                 s.identificacao.descricao.sistema_leve === (filters.systemLeve === 'true')
             );
         }
 
-        if (filters.isolante !== undefined) {
+        if (filters.isolante !== undefined && filters.isolante !== '') {
             filtered = filtered.filter(s => 
                 s.identificacao.descricao.isolante_termico === (filters.isolante === 'true')
             );

@@ -79,6 +79,8 @@
                 <li><a href="#home" class="nav-link active">Início</a></li>
                 <li><a href="#systems" class="nav-link">Sistemas</a></li>
                 <li><a href="#compare" class="nav-link">Comparar</a></li>
+                <li><a href="#create" class="nav-link">Criar Sistema</a></li>
+                <li><a href="#mysystems" class="nav-link">Meus Sistemas</a></li>
                 <li><a href="#regulations" class="nav-link">Normas</a></li>
                 <li><a href="#about" class="nav-link">Sobre</a></li>
                 <li><button class="btn btn-secondary btn-logout" id="logoutBtn">Sair</button></li>
@@ -147,6 +149,11 @@
                 <p class="section-description">Navegue e analise sistemas de vedação</p>
             </div>
             
+            <!-- Search Bar -->
+            <div class="search-container">
+                <input type="text" id="searchSystem" class="search-input" placeholder="Buscar sistemas por nome...">
+            </div>
+            
             <!-- Filters -->
             <div class="filters-container">
                 <div class="filter-group">
@@ -172,6 +179,14 @@
                         <option value="">Todos</option>
                         <option value="true">Sim</option>
                         <option value="false">Não</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Origem:</label>
+                    <select id="filterOrigin" class="filter-select">
+                        <option value="">Todos os Sistemas</option>
+                        <option value="custom">Meus Sistemas</option>
+                        <option value="database">Sistema do Banco</option>
                     </select>
                 </div>
                 <button class="btn btn-secondary" id="clearFilters">Limpar Filtros</button>
@@ -206,6 +221,137 @@
 
                 <div class="comparison-results" id="comparisonResults" style="display: none;">
                     <!-- Comparison charts will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Create System Section -->
+    <section class="create-section" id="create">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Criar Sistema Personalizado</h2>
+                <p class="section-description">Projete seu próprio sistema de vedação</p>
+            </div>
+            
+            <div class="create-form-container">
+                <form id="createSystemForm" class="create-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="systemName">Nome do Sistema *</label>
+                            <input type="text" id="systemName" required placeholder="Digite o nome do sistema">
+                        </div>
+                        <div class="form-group">
+                            <label for="systemType">Tipo *</label>
+                            <select id="systemType" required>
+                                <option value="">Selecione o tipo</option>
+                                <option value="Concreto">Concreto</option>
+                                <option value="Cerâmico">Cerâmico</option>
+                                <option value="Drywall">Drywall</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="uValue">Valor U (W/m²K) *</label>
+                            <input type="number" id="uValue" step="0.01" required placeholder="0,00">
+                        </div>
+                        <div class="form-group">
+                            <label for="thermalCapacity">Capacidade Térmica (kJ/m²K) *</label>
+                            <input type="number" id="thermalCapacity" step="1" required placeholder="0">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="weight">Peso (kg/m²) *</label>
+                            <input type="number" id="weight" step="0.1" required placeholder="0,0">
+                        </div>
+                        <div class="form-group">
+                            <label for="thickness">Espessura (cm) *</label>
+                            <input type="number" id="thickness" step="0.1" required placeholder="0,0">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="lightSystem">
+                                Sistema Leve
+                            </label>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="thermalInsulation">
+                                Isolamento Térmico
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section-title">Impactos Ambientais</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="gwp">GWP (kg CO₂ eq) *</label>
+                            <input type="number" id="gwp" step="0.01" required placeholder="0,00">
+                        </div>
+                        <div class="form-group">
+                            <label for="ap">AP (kg SO₂ eq) *</label>
+                            <input type="number" id="ap" step="0.0001" required placeholder="0,0000">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ep">EP (kg PO₄³⁻ eq) *</label>
+                            <input type="number" id="ep" step="0.0001" required placeholder="0,0000">
+                        </div>
+                        <div class="form-group">
+                            <label for="ced">CED (MJ) *</label>
+                            <input type="number" id="ced" step="0.01" required placeholder="0,00">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="layers">Camadas (uma por linha)</label>
+                        <textarea id="layers" rows="4" placeholder="Digite cada camada em uma nova linha"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large">Salvar Sistema</button>
+                        <button type="button" class="btn btn-secondary btn-large" id="clearForm">Limpar Formulário</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- My Systems Section -->
+    <section class="mysystems-section" id="mysystems">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Meus Sistemas</h2>
+                <p class="section-description">Veja seus sistemas criados e histórico de comparações</p>
+            </div>
+            
+            <div class="tabs-container">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="created">Sistemas Criados</button>
+                    <button class="tab-btn" data-tab="comparisons">Histórico de Comparações</button>
+                </div>
+                
+                <div class="tab-content active" id="createdTab">
+                    <div class="systems-grid" id="mySystemsGrid">
+                        <div class="empty-state">Nenhum sistema criado ainda. Crie seu primeiro sistema acima!</div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="comparisonsTab">
+                    <div class="comparisons-list" id="myComparisons">
+                        <div class="empty-state">Nenhuma comparação realizada ainda. Compare sistemas para ver o histórico aqui!</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -355,6 +501,7 @@
     <!-- Scripts -->
     <script src="js/auth.js"></script>
     <script src="js/data.js"></script>
+    <script src="js/userSystems.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

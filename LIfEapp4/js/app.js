@@ -12,6 +12,11 @@ window.addEventListener('load', async () => {
         // Load all data
         await dataManager.loadAll();
         
+        // Load user's custom systems into dataManager
+        if (typeof loadUserSystemsIntoDataManager === 'function' && isLoggedIn()) {
+            loadUserSystemsIntoDataManager();
+        }
+        
         // Update stats in hero
         const stats = dataManager.getStatistics();
         document.getElementById('systemCount').textContent = stats.totalSystems;
@@ -140,14 +145,29 @@ function setupFilters() {
     document.getElementById('filterType').addEventListener('change', applyFilters);
     document.getElementById('filterLight').addEventListener('change', applyFilters);
     document.getElementById('filterInsulation').addEventListener('change', applyFilters);
+    document.getElementById('filterOrigin').addEventListener('change', applyFilters);
     document.getElementById('clearFilters').addEventListener('click', clearFilters);
+    
+    // Setup search input
+    const searchInput = document.getElementById('searchSystem');
+    let searchTimeout;
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            currentFilters.search = e.target.value.toLowerCase();
+            currentPage = 1;
+            renderSystems();
+        }, 300); // 300ms debounce
+    });
 }
 
 function applyFilters() {
     currentFilters = {
         type: document.getElementById('filterType').value,
         systemLeve: document.getElementById('filterLight').value,
-        isolante: document.getElementById('filterInsulation').value
+        isolante: document.getElementById('filterInsulation').value,
+        origin: document.getElementById('filterOrigin').value,
+        search: document.getElementById('searchSystem').value.toLowerCase()
     };
     currentPage = 1;
     renderSystems();
@@ -157,6 +177,8 @@ function clearFilters() {
     document.getElementById('filterType').value = '';
     document.getElementById('filterLight').value = '';
     document.getElementById('filterInsulation').value = '';
+    document.getElementById('filterOrigin').value = '';
+    document.getElementById('searchSystem').value = '';
     currentFilters = {};
     currentPage = 1;
     renderSystems();
@@ -182,30 +204,36 @@ function renderSystems() {
     // Add click handlers
     document.querySelectorAll('.system-card').forEach(card => {
         card.addEventListener('click', () => {
-            const systemId = parseInt(card.dataset.systemId);
-            showSystemDetail(systemId);
+            const systemId = card.dataset.systemId;
+            // For custom systems, use the string ID; for database systems, use the index
+            const id = systemId.includes('custom_') ? systemId : parseInt(systemId);
+            showSystemDetail(id);
         });
     });
     
     document.querySelectorAll('.select-system').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const systemId = parseInt(btn.dataset.systemId);
-            toggleSystemSelection(systemId);
+            const systemId = btn.dataset.systemId;
+            // For custom systems, use the string ID; for database systems, use the index
+            const id = systemId.includes('custom_') ? systemId : parseInt(systemId);
+            toggleSystemSelection(id);
         });
     });
 }
 
 function createSystemCard(system, index) {
-    const isSelected = selectedSystems.includes(index);
+    // Use custom ID for custom systems, otherwise use the index
+    const systemId = system.id || index;
+    const isSelected = selectedSystems.includes(systemId);
     const typeClass = system.nome.includes('Concreto') ? 'concrete' : 
                      system.nome.includes('Cerâmico') ? 'ceramic' : 'other';
     
     return `
-        <div class="system-card ${typeClass}" data-system-id="${index}">
+        <div class="system-card ${typeClass}" data-system-id="${systemId}">
             <div class="system-header">
                 <h3 class="system-name">${system.nome}</h3>
-                <button class="select-system ${isSelected ? 'selected' : ''}" data-system-id="${index}">
+                <button class="select-system ${isSelected ? 'selected' : ''}" data-system-id="${systemId}">
                     ${isSelected ? '✓ Selected' : '+ Select'}
                 </button>
             </div>
@@ -238,6 +266,7 @@ function createSystemCard(system, index) {
                 </div>
             </div>
             <div class="system-tags">
+                ${system.custom ? '<span class="tag tag-custom">Custom</span>' : ''}
                 ${system.identificacao.descricao.sistema_leve ? '<span class="tag">Light System</span>' : ''}
                 ${system.identificacao.descricao.isolante_termico ? '<span class="tag">Insulated</span>' : ''}
             </div>
@@ -284,7 +313,10 @@ function changePage(page) {
 
 // ===== System Detail Modal =====
 function showSystemDetail(systemId) {
-    const system = dataManager.systems[systemId];
+    // Find system by ID (string for custom) or index (number for database)
+    const system = typeof systemId === 'string' 
+        ? dataManager.systems.find(s => s.id === systemId)
+        : dataManager.systems[systemId];
     if (!system) return;
     
     const modalBody = document.getElementById('modalBody');
@@ -433,11 +465,15 @@ function updateSelectedSystems() {
         compareBtn.disabled = true;
     } else {
         container.innerHTML = selectedSystems.map(id => {
-            const system = dataManager.systems[id];
+            // Find system by ID (for custom) or by index (for database systems)
+            const system = typeof id === 'string' 
+                ? dataManager.systems.find(s => s.id === id)
+                : dataManager.systems[id];
+            
             return `
                 <div class="selected-chip">
                     <span>${system.nome}</span>
-                    <button onclick="toggleSystemSelection(${id})" class="remove-chip">×</button>
+                    <button onclick="toggleSystemSelection('${id}')" class="remove-chip">×</button>
                 </div>
             `;
         }).join('');
@@ -448,7 +484,13 @@ function updateSelectedSystems() {
 function showComparison() {
     if (selectedSystems.length < 2) return;
     
-    const systems = selectedSystems.map(id => dataManager.systems[id]);
+    // Get systems correctly by ID (string for custom) or index (number for database)
+    const systems = selectedSystems.map(id => {
+        if (typeof id === 'string') {
+            return dataManager.systems.find(s => s.id === id);
+        }
+        return dataManager.systems[id];
+    });
     const resultsDiv = document.getElementById('comparisonResults');
     
     resultsDiv.innerHTML = `
@@ -463,6 +505,18 @@ function showComparison() {
     
     resultsDiv.style.display = 'block';
     scrollToSection('compare');
+    
+    // Save comparison to user history
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+        const comparison = {
+            systems: systems.map(s => s.nome),
+            systemIds: selectedSystems
+        };
+        saveUserComparison(currentUser, comparison);
+        // Update comparison history display immediately
+        displayUserComparisons();
+    }
 }
 
 function createComparisonTable(systems) {
