@@ -1,0 +1,144 @@
+// Data Manager for LIfE App
+class DataManager {
+    constructor() {
+        this.systems = [];
+        this.components = [];
+        this.regulations = {
+            ashrae_residential: null,
+            ashrae_commercial: null,
+            nbr15575: null,
+            rtqc: null,
+            rtqr: null
+        };
+        this.loaded = false;
+    }
+
+    async loadAll() {
+        try {
+            // Load systems and components
+            const [systemsData, componentsData] = await Promise.all([
+                fetch('assets/sistemas.json').then(r => r.json()),
+                fetch('assets/componentes.json').then(r => r.json())
+            ]);
+
+            this.systems = systemsData;
+            this.components = componentsData;
+
+            // Load regulations (optional)
+            try {
+                const [ashrae_res, ashrae_com, nbr, rtqc, rtqr] = await Promise.all([
+                    fetch('assets/ASHRAE901_residencial.json').then(r => r.json()).catch(() => null),
+                    fetch('assets/ASHRAE901_nao_residencial.json').then(r => r.json()).catch(() => null),
+                    fetch('assets/NBR15575.json').then(r => r.json()).catch(() => null),
+                    fetch('assets/RTQC.json').then(r => r.json()).catch(() => null),
+                    fetch('assets/RTQR.json').then(r => r.json()).catch(() => null)
+                ]);
+
+                this.regulations.ashrae_residential = ashrae_res;
+                this.regulations.ashrae_commercial = ashrae_com;
+                this.regulations.nbr15575 = nbr;
+                this.regulations.rtqc = rtqc;
+                this.regulations.rtqr = rtqr;
+            } catch (e) {
+                console.warn('Some regulations data could not be loaded:', e);
+            }
+
+            this.loaded = true;
+            return true;
+        } catch (error) {
+            console.error('Error loading data:', error);
+            throw error;
+        }
+    }
+
+    getSystems(filters = {}) {
+        let filtered = [...this.systems];
+
+        if (filters.type) {
+            filtered = filtered.filter(s => 
+                s.nome.toLowerCase().includes(filters.type.toLowerCase())
+            );
+        }
+
+        if (filters.systemLeve !== undefined) {
+            filtered = filtered.filter(s => 
+                s.identificacao.descricao.sistema_leve === (filters.systemLeve === 'true')
+            );
+        }
+
+        if (filters.isolante !== undefined) {
+            filtered = filtered.filter(s => 
+                s.identificacao.descricao.isolante_termico === (filters.isolante === 'true')
+            );
+        }
+
+        if (filters.minTransmitancia) {
+            filtered = filtered.filter(s => 
+                s.transmitancia >= parseFloat(filters.minTransmitancia)
+            );
+        }
+
+        if (filters.maxTransmitancia) {
+            filtered = filtered.filter(s => 
+                s.transmitancia <= parseFloat(filters.maxTransmitancia)
+            );
+        }
+
+        return filtered;
+    }
+
+    getSystemById(id) {
+        return this.systems.find((s, index) => index === id) || 
+               this.systems.find(s => s.nome === id);
+    }
+
+    getComponents() {
+        return this.components;
+    }
+
+    getRegulations() {
+        return this.regulations;
+    }
+
+    // Calculate system ranking by environmental impact
+    rankSystems(impactType = 'gwp') {
+        return [...this.systems]
+            .sort((a, b) => {
+                const aImpact = a.impactos[impactType] || 0;
+                const bImpact = b.impactos[impactType] || 0;
+                return aImpact - bImpact;
+            });
+    }
+
+    // Get summary statistics
+    getStatistics() {
+        if (this.systems.length === 0) return null;
+
+        const stats = {
+            totalSystems: this.systems.length,
+            totalComponents: this.components.length,
+            avgTransmitancia: 0,
+            avgCapacidade: 0,
+            avgGWP: 0,
+            lightSystems: 0,
+            insulatedSystems: 0
+        };
+
+        this.systems.forEach(s => {
+            stats.avgTransmitancia += s.transmitancia || 0;
+            stats.avgCapacidade += s.capacidade_termica || 0;
+            stats.avgGWP += s.impactos.gwp || 0;
+            if (s.identificacao.descricao.sistema_leve) stats.lightSystems++;
+            if (s.identificacao.descricao.isolante_termico) stats.insulatedSystems++;
+        });
+
+        stats.avgTransmitancia /= this.systems.length;
+        stats.avgCapacidade /= this.systems.length;
+        stats.avgGWP /= this.systems.length;
+
+        return stats;
+    }
+}
+
+// Global data manager instance
+const dataManager = new DataManager();

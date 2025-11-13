@@ -1,0 +1,33 @@
+{
+    "nome": "ASHRAE 90.1: 2016 - não residencial",
+    "zonas": [
+        {
+            "zona": 0,
+            "transmitancia_maxima": {
+                "wall_mass": 3.290,
+                "steel_frame": 0.704
+            }
+        },
+        {
+            "zona": 1,
+            "transmitancia_maxima": {
+                "wall_mass": 3.290,
+                "steel_frame": 0.700
+            }
+        },
+        {
+            "zona": 2,
+            "transmitancia_maxima": {
+                "wall_mass": 0.870,
+                "steel_frame": 0.477
+            }
+        },
+        {
+            "zona": 3,
+            "transmitancia_maxima": {
+                "wall_mass": 0.698,
+                "steel_frame": 0.435
+            }
+        }
+    ]
+}
