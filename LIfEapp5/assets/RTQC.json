@@ -1,0 +1,181 @@
+{
+    "nome": "RTQ-C:2010",
+    "zonas": [
+        {
+            "zona": 1,
+            "capacitancia_limite": 80,
+            "nota_A": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 1.0,
+                    "superior_limite": 1.0
+                }
+            },
+            "nota_B": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 2.0,
+                    "superior_limite": 2.0
+                }
+            },
+            "nota_CD": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 3.7,
+                    "superior_limite": 3.7
+                }
+            }
+        },
+        {
+            "zona": 2,
+            "capacitancia_limite": 80,
+            "nota_A": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 1.0,
+                    "superior_limite": 1.0
+                }
+            },
+            "nota_B": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 2.0,
+                    "superior_limite": 2.0
+                }
+            },
+            "nota_CD": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 3.7,
+                    "superior_limite": 3.7
+                }
+            }
+        },
+        {
+            "zona": 3,
+            "capacitancia_limite": 80,
+            "nota_A": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 3.7,
+                    "superior_limite": 3.7
+                }
+            },
+            "nota_B": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 3.7,
+                    "superior_limite": 3.7
+                }
+            },
+            "nota_CD": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 3.7,
+                    "superior_limite": 3.7
+                }
+            }
+        },
+        {
+            "zona": 4,
+            "capacitancia_limite": 80,
+            "nota_A": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 3.7,
+                    "superior_limite": 3.7
+                }
+            },
+            "nota_B": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 3.7,
+                    "superior_limite": 3.7
+                }
+            },
+            "nota_CD": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 3.7,
+                    "superior_limite": 3.7
+                }
+            }
+        },
+        {
+            "zona": 5,
+            "capacitancia_limite": 80,
+            "nota_A": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 3.7,
+                    "superior_limite": 3.7
+                }
+            },
+            "nota_B": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 3.7,
+                    "superior_limite": 3.7
+                }
+            },
+            "nota_CD": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 3.7,
+                    "superior_limite": 3.7
+                }
+            }
+        },
+        {
+            "zona": 6,
+            "capacitancia_limite": 80,
+            "nota_A": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 3.7,
+                    "superior_limite": 3.7
+                }
+            },
+            "nota_B": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 3.7,
+                    "superior_limite": 3.7
+                }
+            },
+            "nota_CD": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 3.7,
+                    "superior_limite": 3.7
+                }
+            }
+        },
+        {
+            "zona": 7,
+            "capacitancia_limite": 80,
+            "nota_A": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 2.5,
+                    "superior_limite": 3.7
+                }
+            },
+            "nota_B": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 2.5,
+                    "superior_limite": 3.7
+                }
+            },
+            "nota_CD": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 2.5,
+                    "superior_limite": 3.7
+                }
+            }
+        },
+        {
+            "zona": 7,
+            "capacitancia_limite": 80,
+            "nota_A": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 2.5,
+                    "superior_limite": 3.7
+                }
+            },
+            "nota_B": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 2.5,
+                    "superior_limite": 3.7
+                }
+            },
+            "nota_CD": {
+                "transmitancia_maxima": {
+                    "inferior_limite": 2.5,
+                    "superior_limite": 3.7
+                }
+            }
+        }
+    ]
+}
