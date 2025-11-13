@@ -229,8 +229,12 @@ function createSystemCard(system, index) {
     const typeClass = system.nome.includes('Concreto') ? 'concrete' : 
                      system.nome.includes('Cerâmico') ? 'ceramic' : 'other';
     
+    // Get image path if available
+    const imagePath = system.imagem || '';
+    
     return `
         <div class="system-card ${typeClass}" data-system-id="${systemId}">
+            ${imagePath ? `<div class="system-image"><img src="${imagePath}" alt="${system.nome}" loading="lazy"></div>` : ''}
             <div class="system-header">
                 <h3 class="system-name">${system.nome}</h3>
                 <button class="select-system ${isSelected ? 'selected' : ''}" data-system-id="${systemId}">
@@ -269,6 +273,11 @@ function createSystemCard(system, index) {
                 ${system.custom ? '<span class="tag tag-custom">Custom</span>' : ''}
                 ${system.identificacao.descricao.sistema_leve ? '<span class="tag">Light System</span>' : ''}
                 ${system.identificacao.descricao.isolante_termico ? '<span class="tag">Insulated</span>' : ''}
+            </div>
+            <div class="system-actions" style="margin-top: 15px;">
+                <button class="btn btn-secondary btn-small" onclick="openCartilhaModal('${systemId}')" style="width: 100%;">
+                    📖 View System Guide
+                </button>
             </div>
         </div>
     `;
@@ -632,9 +641,531 @@ function formatScientific(num) {
     return num.toFixed(2);
 }
 
+// ===== Cartilha Modal Functions =====
+function openCartilhaModal(systemIndex) {
+    const system = typeof systemIndex === 'string' && systemIndex.includes('custom_')
+        ? dataManager.systems.find(s => s.id === systemIndex)
+        : dataManager.systems[systemIndex];
+    
+    if (!system) return;
+    
+    const modal = document.getElementById('cartilhaModal');
+    const titulo = document.getElementById('cartilhaTitulo');
+    const content = document.getElementById('cartilhaContent');
+    
+    titulo.textContent = system.nome;
+    
+    // Generate regulations section
+    const nbr = dataManager.regulations.nbr15575;
+    const rtqr = dataManager.regulations.rtqr;
+    const rtqc = dataManager.regulations.rtqc;
+    
+    let regulationsHTML = '';
+    if (nbr || rtqr || rtqc) {
+        regulationsHTML = '<h3>BRAZILIAN STANDARDS AND REGULATIONS</h3>';
+        
+        if (nbr) {
+            regulationsHTML += `
+                <h4>${nbr.nome} - Building Performance Standard</h4>
+                <table class="cartilha-table">
+                    <thead>
+                        <tr>
+                            <th>Zone</th>
+                            <th>Max Transmittance (W/m².K)</th>
+                            <th>Min Thermal Capacity (kJ/m².K)</th>
+                            <th>Absortance Limit</th>
+                            <th>System Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${nbr.zonas.map(zona => {
+                            const uMax = zona.transmitancia_maxima.superior_limite;
+                            const ctMin = zona.capacidade_minima;
+                            const meetsU = system.transmitancia <= uMax;
+                            const meetsCT = system.capacidade_termica >= ctMin;
+                            const meets = meetsU && meetsCT;
+                            return `
+                                <tr style="background-color: ${meets ? '#d1fae5' : '#fee2e2'}">
+                                    <td>Zone ${zona.zona}</td>
+                                    <td>≤ ${uMax}</td>
+                                    <td>≥ ${ctMin}</td>
+                                    <td>≤ ${zona.absortancia_limite}</td>
+                                    <td><strong>${meets ? '✓ Compliant' : '✗ Non-compliant'}</strong></td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        
+        if (rtqr) {
+            regulationsHTML += `
+                <h4>${rtqr.nome} - Residential Building Energy Efficiency</h4>
+                <table class="cartilha-table">
+                    <thead>
+                        <tr>
+                            <th>Zone</th>
+                            <th>Max Transmittance (W/m².K)</th>
+                            <th>Min Thermal Capacity (kJ/m².K)</th>
+                            <th>Absortance Limit</th>
+                            <th>System Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rtqr.zonas.map(zona => {
+                            const uMax = zona.transmitancia_maxima.superior_limite;
+                            const ctMin = zona.capacidade_minima;
+                            const meetsU = system.transmitancia <= uMax;
+                            const meetsCT = system.capacidade_termica >= ctMin;
+                            const meets = meetsU && meetsCT;
+                            return `
+                                <tr style="background-color: ${meets ? '#d1fae5' : '#fee2e2'}">
+                                    <td>Zone ${zona.zona}</td>
+                                    <td>≤ ${uMax}</td>
+                                    <td>≥ ${ctMin}</td>
+                                    <td>≤ ${zona.absortancia_limite}</td>
+                                    <td><strong>${meets ? '✓ Compliant' : '✗ Non-compliant'}</strong></td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        
+        if (rtqc) {
+            regulationsHTML += `
+                <h4>${rtqc.nome} - Commercial Building Energy Efficiency</h4>
+                <table class="cartilha-table">
+                    <thead>
+                        <tr>
+                            <th>Zone</th>
+                            <th>Grade A (≤ W/m².K)</th>
+                            <th>Grade B (≤ W/m².K)</th>
+                            <th>Grade C/D (≤ W/m².K)</th>
+                            <th>Min Capacitance (kJ/m².K)</th>
+                            <th>System Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rtqc.zonas.map(zona => {
+                            const uA = zona.nota_A.transmitancia_maxima.superior_limite;
+                            const uB = zona.nota_B.transmitancia_maxima.superior_limite;
+                            const uCD = zona.nota_CD.transmitancia_maxima.superior_limite;
+                            const ctMin = zona.capacitancia_limite;
+                            
+                            let grade = 'N/A';
+                            let bgColor = '#fee2e2';
+                            if (system.capacidade_termica >= ctMin) {
+                                if (system.transmitancia <= uA) {
+                                    grade = 'A';
+                                    bgColor = '#d1fae5';
+                                } else if (system.transmitancia <= uB) {
+                                    grade = 'B';
+                                    bgColor = '#dbeafe';
+                                } else if (system.transmitancia <= uCD) {
+                                    grade = 'C/D';
+                                    bgColor = '#fef3c7';
+                                } else {
+                                    grade = 'E';
+                                }
+                            }
+                            
+                            return `
+                                <tr style="background-color: ${bgColor}">
+                                    <td>Zone ${zona.zona}</td>
+                                    <td>≤ ${uA}</td>
+                                    <td>≤ ${uB}</td>
+                                    <td>≤ ${uCD}</td>
+                                    <td>≥ ${ctMin}</td>
+                                    <td><strong>${grade}</strong></td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+    }
+    
+    content.innerHTML = `
+        ${system.imagem ? `<img src="${system.imagem}" alt="${system.nome}" class="cartilha-image">` : ''}
+        
+        <h3>IDENTIFICATION</h3>
+        <p><strong>Name:</strong> ${system.nome}</p>
+        <p><strong>Light system:</strong> ${system.identificacao.descricao.sistema_leve ? 'Yes' : 'No'}</p>
+        <p><strong>Thermal insulation:</strong> ${system.identificacao.descricao.isolante_termico ? 'Yes' : 'No'}</p>
+        <p><strong>Weight:</strong> ${system.identificacao.descricao.peso} kg/m²</p>
+        <p><strong>Thickness:</strong> ${system.identificacao.descricao.espessura} cm</p>
+        <p><strong>Unit:</strong> ${system.identificacao.unidade}</p>
+        <p><strong>Boundary:</strong> ${system.identificacao.fronteira}</p>
+        <p><strong>Validity:</strong> ${system.identificacao.validade}</p>
+        
+        <h3>LAYERS</h3>
+        <ol>
+            ${system.identificacao.camadas.map(camada => `<li>${camada}</li>`).join('')}
+        </ol>
+        
+        <h3>THERMAL PERFORMANCE</h3>
+        <p><strong>Thermal transmittance (U):</strong> ${system.transmitancia} W/(m².K)</p>
+        <p><strong>Thermal capacity (CT):</strong> ${system.capacidade_termica} kJ/(m².K)</p>
+        
+        <div style="max-width: 700px; margin: 2rem auto 3rem;">
+            <canvas id="thermalChart" style="height: 280px;"></canvas>
+        </div>
+        
+        ${regulationsHTML}
+        
+        <h3>ENVIRONMENTAL IMPACTS</h3>
+        <table class="cartilha-table">
+            <thead>
+                <tr>
+                    <th>Impact Category</th>
+                    <th>Value</th>
+                    <th>Unit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Global Warming Potential (GWP)</td>
+                    <td>${formatScientific(system.impactos.gwp)}</td>
+                    <td>kg CO₂ eq</td>
+                </tr>
+                <tr>
+                    <td>Acidification Potential (AP)</td>
+                    <td>${formatScientific(system.impactos.ap)}</td>
+                    <td>kg SO₂ eq</td>
+                </tr>
+                <tr>
+                    <td>Eutrophication Potential (EP)</td>
+                    <td>${formatScientific(system.impactos.ep)}</td>
+                    <td>kg PO₄³⁻ eq</td>
+                </tr>
+                <tr>
+                    <td>Photochemical Ozone Creation Potential (POCP)</td>
+                    <td>${formatScientific(system.impactos.pocp)}</td>
+                    <td>kg C₂H₄ eq</td>
+                </tr>
+                <tr>
+                    <td>Ozone Depletion Potential (ODP)</td>
+                    <td>${formatScientific(system.impactos.odp)}</td>
+                    <td>kg CFC-11 eq</td>
+                </tr>
+                <tr>
+                    <td>Abiotic Depletion Potential - non fossil (ADPnf)</td>
+                    <td>${formatScientific(system.impactos.adpnf)}</td>
+                    <td>kg Sb eq</td>
+                </tr>
+                <tr>
+                    <td>Abiotic Depletion Potential - fossil (ADPf)</td>
+                    <td>${formatScientific(system.impactos.adpf)}</td>
+                    <td>MJ</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div style="max-width: 700px; margin: 2rem auto;">
+            <canvas id="impactsChart" style="height: 280px;"></canvas>
+        </div>
+        
+        <h3>COMPONENT CONSUMPTION & IMPACTS</h3>
+        <p><strong>Total consumption:</strong> ${formatScientific(system.consumo.total)} kg</p>
+        
+        <div style="max-width: 700px; margin: 2rem auto;">
+            <canvas id="componentGWPChart" style="height: 280px;"></canvas>
+        </div>
+        
+        <table class="cartilha-table">
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Consumption (kg)</th>
+                    <th>GWP (kg CO₂ eq)</th>
+                    <th>AP (kg SO₂ eq)</th>
+                    <th>EP (kg PO₄³⁻ eq)</th>
+                    <th>POCP (kg C₂H₄ eq)</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${system.consumo.componentes.map(comp => `
+                    <tr>
+                        <td>${comp.componente}</td>
+                        <td>${formatScientific(comp.consumo_componente)}</td>
+                        <td>${formatScientific(comp.gwp)}</td>
+                        <td>${formatScientific(comp.ap)}</td>
+                        <td>${formatScientific(comp.ep)}</td>
+                        <td>${formatScientific(comp.pocp)}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Create charts after modal is visible
+    setTimeout(() => {
+        createCartilhaCharts(system);
+    }, 100);
+}
+
+function createCartilhaCharts(system) {
+    // Destroy existing charts if they exist
+    if (window.cartilhaCharts) {
+        window.cartilhaCharts.forEach(chart => chart.destroy());
+    }
+    window.cartilhaCharts = [];
+    
+    // 1. Thermal Performance Comparison Chart
+    const thermalCanvas = document.getElementById('thermalChart');
+    if (thermalCanvas) {
+        const thermalChart = new Chart(thermalCanvas, {
+            type: 'bar',
+            data: {
+                labels: [
+                    `U = ${system.transmitancia} W/(m².K)`,
+                    `CT = ${system.capacidade_termica} kJ/(m².K)`
+                ],
+                datasets: [{
+                    data: [system.transmitancia, system.capacidade_termica / 50], // Scale CT for visualization
+                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                    borderColor: 'rgb(102, 126, 234)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                if (context.dataIndex === 0) {
+                                    return `Transmittance: ${system.transmitancia} W/(m².K)`;
+                                } else {
+                                    return `Thermal Capacity: ${system.capacidade_termica} kJ/(m².K)`;
+                                }
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { display: false, beginAtZero: true },
+                    y: { ticks: { font: { size: 11 } } }
+                }
+            }
+        });
+        window.cartilhaCharts.push(thermalChart);
+    }
+    
+    // 2. Environmental Impacts Bar Chart (Horizontal)
+    const impactsCanvas = document.getElementById('impactsChart');
+    if (impactsCanvas) {
+        const impactsChart = new Chart(impactsCanvas, {
+            type: 'bar',
+            data: {
+                labels: [
+                    'GWP (kg CO₂ eq)',
+                    'AP (kg SO₂ eq)',
+                    'EP (kg PO₄³⁻ eq)',
+                    'POCP (kg C₂H₄ eq)',
+                    'ODP (kg CFC-11 eq)',
+                    'ADPnf (kg Sb eq)',
+                    'ADPf (MJ)'
+                ],
+                datasets: [{
+                    data: [
+                        system.impactos.gwp,
+                        system.impactos.ap * 300,
+                        system.impactos.ep * 1000,
+                        system.impactos.pocp * 5000,
+                        system.impactos.odp * 10000000,
+                        system.impactos.adpnf * 20000000,
+                        system.impactos.adpf / 5
+                    ],
+                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                    borderColor: 'rgb(102, 126, 234)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const realValues = [
+                                    system.impactos.gwp.toExponential(2),
+                                    system.impactos.ap.toExponential(2),
+                                    system.impactos.ep.toExponential(2),
+                                    system.impactos.pocp.toExponential(2),
+                                    system.impactos.odp.toExponential(2),
+                                    system.impactos.adpnf.toExponential(2),
+                                    system.impactos.adpf.toExponential(2)
+                                ];
+                                return realValues[context.dataIndex];
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false,
+                        beginAtZero: true
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        window.cartilhaCharts.push(impactsChart);
+    }
+    
+    // 3. Component GWP Contribution Bar Chart (Horizontal)
+    const gwpCanvas = document.getElementById('componentGWPChart');
+    if (gwpCanvas) {
+        const gwpChart = new Chart(gwpCanvas, {
+            type: 'bar',
+            data: {
+                labels: system.consumo.componentes.map(c => c.componente),
+                datasets: [{
+                    data: system.consumo.componentes.map(c => c.gwp),
+                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                    borderColor: 'rgb(102, 126, 234)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const percentage = ((context.parsed.x / system.impactos.gwp) * 100).toFixed(1);
+                                return `${context.parsed.x.toExponential(2)} kg CO₂ eq (${percentage}%)`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false,
+                        beginAtZero: true
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        window.cartilhaCharts.push(gwpChart);
+    }
+}
+
+function closeCartilhaModal() {
+    const modal = document.getElementById('cartilhaModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+    
+    // Destroy charts when closing modal
+    if (window.cartilhaCharts && window.cartilhaCharts.length > 0) {
+        window.cartilhaCharts.forEach(chart => {
+            if (chart) {
+                chart.destroy();
+            }
+        });
+        window.cartilhaCharts = [];
+    }
+}
+
+// Close modal when clicking outside
+window.addEventListener('click', (e) => {
+    const modal = document.getElementById('cartilhaModal');
+    if (e.target === modal) {
+        closeCartilhaModal();
+    }
+});
+
+function exportCartilhaToPDF() {
+    const element = document.getElementById('cartilhaContent');
+    const titulo = document.getElementById('cartilhaTitulo').textContent;
+    const exportBtn = document.querySelector('.cartilha-actions button[onclick="exportCartilhaToPDF()"]');
+    const originalLabel = exportBtn ? exportBtn.innerHTML : null;
+    if (exportBtn) {
+        exportBtn.disabled = true;
+        exportBtn.innerHTML = '⏳ Generating PDF…';
+    }
+    // Safety: ensure pointer events remain available after export
+    const cleanup = () => {
+        if (exportBtn) {
+            exportBtn.disabled = false;
+            exportBtn.innerHTML = originalLabel;
+        }
+        // Remove any html2pdf overlays or containers that might block clicks
+        document.querySelectorAll('.html2pdf__overlay, .html2pdf__progress, [id^="html2pdf__"], [class^="html2pdf__"]').forEach(el => {
+            try { el.remove(); } catch (_) { /* noop */ }
+        });
+        document.body.style.pointerEvents = '';
+    };
+    
+    const opt = {
+        margin: 10,
+        filename: `${titulo.replace(/\s+/g, '_')}_Guide.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    
+    // Generate and save PDF, then cleanup UI regardless of outcome
+    try {
+        const worker = html2pdf().set(opt).from(element).save();
+        if (worker && typeof worker.then === 'function') {
+            worker.then(() => cleanup()).catch(() => cleanup());
+        } else {
+            // Fallback cleanup if no promise is returned
+            setTimeout(cleanup, 500);
+        }
+    } catch (e) {
+        cleanup();
+    }
+}
+
 // Make functions globally accessible
 window.changePage = changePage;
 window.toggleSystemSelection = toggleSystemSelection;
+window.openCartilhaModal = openCartilhaModal;
+window.closeCartilhaModal = closeCartilhaModal;
+window.exportCartilhaToPDF = exportCartilhaToPDF;
 
 // Log welcome message
 console.log('%c🏗️ LIfE App v4.0', 'font-size: 24px; font-weight: bold; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;');

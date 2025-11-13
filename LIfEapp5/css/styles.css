@@ -968,12 +968,32 @@ section {
     padding: var(--space-lg);
     transition: all var(--transition-base);
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
 }
 
 .system-card:hover {
     border-color: var(--primary-500);
     transform: translateY(-5px);
     box-shadow: var(--shadow-xl);
+}
+
+.system-image {
+    width: 100%;
+    height: 120px;
+    margin: calc(-1 * var(--space-lg)) calc(-1 * var(--space-lg)) var(--space-md);
+    overflow: hidden;
+    background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.system-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .system-card.concrete {
@@ -1642,6 +1662,10 @@ section {
         padding: var(--space-2xl);
     }
     
+    .login-modal {
+        padding: var(--space-md);
+    }
+    
     .btn-logout {
         margin-left: 0;
         margin-top: var(--space-sm);
@@ -1966,4 +1990,318 @@ section {
         gap: 10px;
         align-items: flex-start;
     }
+}
+
+/* ===== Login Modal ===== */
+.login-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20000;
+}
+
+.login-modal.hidden {
+    display: none;
+}
+
+.login-container {
+    background: white;
+    border-radius: 24px;
+    padding: var(--space-3xl);
+    max-width: 450px;
+    width: 90%;
+    box-shadow: var(--shadow-xl);
+    animation: loginSlideIn 0.5s ease-out;
+}
+
+@keyframes loginSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+}
+
+.login-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.login-brand .brand-icon {
+    font-size: 3rem;
+}
+
+.login-brand h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+}
+
+.login-subtitle {
+    color: var(--gray-600);
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--gray-700);
+    font-size: 0.875rem;
+}
+
+.form-group input {
+    padding: var(--space-md);
+    border: 2px solid var(--gray-300);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all var(--transition-fast);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.login-help {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    margin-top: var(--space-md);
+}
+
+.btn-logout {
+    margin-left: var(--space-md);
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        padding: var(--space-2xl);
+    }
+    
+    .btn-logout {
+        margin-left: 0;
+        margin-top: var(--space-sm);
+        width: 100%;
+    }
+}
+
+/* ===== Modal Cartilha ===== */
+.cartilha-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 10000;
+    overflow-y: auto;
+    padding: var(--space-xl);
+}
+
+.cartilha-modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.cartilha-container {
+    background: white;
+    border-radius: 16px;
+    max-width: 1200px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-xl);
+    margin: auto;
+}
+
+.cartilha-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-xl);
+    border-bottom: 1px solid var(--gray-200);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px 16px 0 0;
+}
+
+.cartilha-header h2 {
+    margin: 0;
+    color: white;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.cartilha-actions {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+}
+
+.cartilha-content {
+    padding: var(--space-2xl);
+    overflow-y: auto;
+    flex: 1;
+}
+
+.cartilha-content h3 {
+    color: var(--primary-700);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-sm);
+    border-bottom: 3px solid var(--primary-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cartilha-content h3:first-of-type {
+    margin-top: 0;
+}
+
+.cartilha-content h4 {
+    color: var(--primary-600);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+}
+
+.cartilha-content p {
+    margin-bottom: var(--space-md);
+    line-height: 1.8;
+    color: var(--gray-800);
+}
+
+.cartilha-content p strong {
+    color: var(--gray-900);
+    font-weight: 600;
+}
+
+.cartilha-content ol {
+    margin: var(--space-md) 0 var(--space-xl) var(--space-2xl);
+    padding: 0;
+}
+
+.cartilha-content li {
+    margin-bottom: var(--space-sm);
+    line-height: 1.8;
+    color: var(--gray-700);
+}
+
+.cartilha-image {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto var(--space-2xl) auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+}
+
+.cartilha-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--space-lg) 0 var(--space-2xl) 0;
+    box-shadow: var(--shadow-sm);
+    font-size: 0.9rem;
+}
+
+.cartilha-table thead {
+    background: var(--primary-600);
+    color: white;
+}
+
+.cartilha-table th,
+.cartilha-table td {
+    padding: var(--space-md) var(--space-lg);
+    text-align: left;
+    border: 1px solid var(--gray-300);
+}
+
+.cartilha-table th {
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.3px;
+}
+
+.cartilha-table tbody tr:nth-child(even) {
+    background-color: var(--gray-50);
+}
+
+.cartilha-table tbody tr:hover {
+    background-color: var(--gray-100);
+    transition: background-color var(--transition-fast);
+}
+
+.cartilha-table td {
+    color: var(--gray-800);
+}
+
+/* Chart containers */
+.cartilha-content canvas {
+    background: white;
+    border-radius: 8px;
+    padding: var(--space-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-close {
+    background: white;
+    color: var(--gray-800);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.25rem;
+    transition: all var(--transition-fast);
+}
+
+.btn-close:hover {
+    background: var(--gray-100);
+    transform: rotate(90deg);
 }
