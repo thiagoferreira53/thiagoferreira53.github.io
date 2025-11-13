@@ -5,8 +5,7 @@ const users = {
     'demo': 'demo123',
     'admin': 'admin123',
     'usuario': 'usuario123',
-    'ecowallcheck': 'sistemamelhornaoha',
-
+    'ecowallcheck': 'sistemamelhornaoha'
 };
 
 // Verificar se o usuário está logado
