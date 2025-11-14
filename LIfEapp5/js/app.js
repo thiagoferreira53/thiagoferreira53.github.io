@@ -59,7 +59,10 @@ function initializeApp() {
     document.querySelector('.modal-overlay').addEventListener('click', closeModal);
     
     // Compare button
-    document.getElementById('compareBtn').addEventListener('click', showComparison);
+    document.getElementById('compareBtn').addEventListener('click', onCompareClick);
+
+    // Comparison mode controls
+    setupCompareControls();
 }
 
 // ===== Navigation =====
@@ -471,7 +474,7 @@ function updateSelectedSystems() {
     
     if (selectedSystems.length === 0) {
         container.innerHTML = '<div class="empty-state">Nenhum sistema selecionado</div>';
-        compareBtn.disabled = true;
+        updateCompareButtonState();
     } else {
         container.innerHTML = selectedSystems.map(id => {
             // Find system by ID (for custom) or by index (for database systems)
@@ -486,7 +489,7 @@ function updateSelectedSystems() {
                 </div>
             `;
         }).join('');
-        compareBtn.disabled = selectedSystems.length < 2;
+        updateCompareButtonState();
     }
 }
 
@@ -526,6 +529,268 @@ function showComparison() {
         // Atualizar a exibição do histórico imediatamente
         displayUserComparisons();
     }
+}
+
+// ===== Novos: Controles e lógica da seção de comparação =====
+function setupCompareControls() {
+    const modeStandardsBtn = document.getElementById('modeStandardsBtn');
+    const modeGroupsBtn = document.getElementById('modeGroupsBtn');
+    const standardsControls = document.getElementById('standardsControls');
+    const groupsControls = document.getElementById('groupsControls');
+
+    // Modo padrão
+    window.currentCompareMode = 'standards'; // 'standards' | 'groups'
+    window.currentGroupMode = 'select'; // 'select' | 'all'
+
+    const setMode = (mode) => {
+        window.currentCompareMode = mode;
+        // Alternar ativo
+        modeStandardsBtn.classList.toggle('active', mode === 'standards');
+        modeGroupsBtn.classList.toggle('active', mode === 'groups');
+        // Exibir/ocultar controles
+        standardsControls.style.display = mode === 'standards' ? 'block' : 'none';
+        groupsControls.style.display = mode === 'groups' ? 'block' : 'none';
+        // Atualizar botão
+        updateCompareButtonState();
+        // Limpar resultados anteriores
+        const resultsDiv = document.getElementById('comparisonResults');
+        resultsDiv.style.display = 'none';
+        resultsDiv.innerHTML = '';
+    };
+
+    modeStandardsBtn.addEventListener('click', () => setMode('standards'));
+    modeGroupsBtn.addEventListener('click', () => setMode('groups'));
+
+    // Radios de grupo
+    document.querySelectorAll('input[name="groupMode"]').forEach(r => {
+        r.addEventListener('change', (e) => {
+            window.currentGroupMode = e.target.value;
+            updateCompareButtonState();
+        });
+    });
+
+    // Checkboxes de normas
+    document.querySelectorAll('#standardsControls .std-opt').forEach(cb => {
+        cb.addEventListener('change', () => updateCompareButtonState());
+    });
+}
+
+function updateCompareButtonState() {
+    const compareBtn = document.getElementById('compareBtn');
+    const mode = window.currentCompareMode || 'standards';
+    if (mode === 'standards') {
+        // Precisa >=1 sistema e >=1 norma
+        const anyStd = Array.from(document.querySelectorAll('#standardsControls .std-opt'))
+            .some(cb => cb.checked);
+        compareBtn.disabled = !(selectedSystems.length >= 1 && anyStd);
+        compareBtn.textContent = 'Comparar';
+    } else {
+        const groupMode = window.currentGroupMode || 'select';
+        if (groupMode === 'select') {
+            compareBtn.disabled = selectedSystems.length < 2;
+            compareBtn.textContent = 'Comparar selecionados';
+        } else {
+            compareBtn.disabled = false;
+            compareBtn.textContent = 'Comparar todos os grupos';
+        }
+    }
+}
+
+function onCompareClick() {
+    const mode = window.currentCompareMode || 'standards';
+    if (mode === 'standards') {
+        const systems = getSelectedSystemsObjects();
+        const standards = getSelectedStandards();
+        if (systems.length === 0 || standards.length === 0) return;
+        renderStandardsComparison(systems, standards);
+    } else {
+        const groupMode = window.currentGroupMode || 'select';
+        if (groupMode === 'select') {
+            showComparison();
+        } else {
+            renderGroupComparison();
+        }
+    }
+}
+
+function getSelectedSystemsObjects() {
+    return selectedSystems.map(id => (typeof id === 'string')
+        ? dataManager.systems.find(s => s.id === id)
+        : dataManager.systems[id]
+    ).filter(Boolean);
+}
+
+function getSelectedStandards() {
+    return Array.from(document.querySelectorAll('#standardsControls .std-opt'))
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+}
+
+function renderStandardsComparison(systems, standards) {
+    const regs = dataManager.getRegulations();
+    const resultsDiv = document.getElementById('comparisonResults');
+
+    const header = `<h3>Conformidade com normas térmicas</h3>`;
+
+    // Cabeçalho
+    const thead = `
+        <div class=\"comparison-row header\">\n            <div class=\"comparison-cell\">Sistema</div>\n            ${standards.map(std => `<div class=\"comparison-cell\">${formatStandardLabel(std)}</div>`).join('')}\n        </div>`;
+
+    const rows = systems.map(sys => {
+        const cells = standards.map(std => {
+            const res = evaluateStandard(std, sys, regs);
+            return `<div class=\"comparison-cell ${res.ok ? 'best' : ''}\">${res.label}</div>`;
+        }).join('');
+        return `
+            <div class=\"comparison-row\">\n                <div class=\"comparison-cell\"><strong>${sys.nome}</strong></div>\n                ${cells}\n            </div>`;
+    }).join('');
+
+    const table = `<div class=\"comparison-table\">${thead}${rows}</div>`;
+
+    resultsDiv.innerHTML = `${header}${table}`;
+    resultsDiv.style.display = 'block';
+    scrollToSection('compare');
+}
+
+function formatStandardLabel(std) {
+    switch (std) {
+        case 'INI-C': return 'INI-C';
+        case 'INI-R': return 'INI-R';
+        case 'NBR15575': return 'NBR 15575';
+        case 'ASHRAE_R': return 'ASHRAE 90.1 (R)';
+        case 'ASHRAE_NR': return 'ASHRAE 90.1 (NR)';
+        default: return std;
+    }
+}
+
+function evaluateStandard(std, system, regs) {
+    try {
+        if (std === 'NBR15575' && regs.nbr15575) {
+            const zonas = regs.nbr15575.zonas || [];
+            let pass = 0;
+            zonas.forEach(z => {
+                const uMax = z.transmitancia_maxima.superior_limite;
+                const ctMin = z.capacidade_minima || 0;
+                const ok = (system.transmitancia <= uMax) && (system.capacidade_termica >= ctMin);
+                if (ok) pass++;
+            });
+            return { ok: pass > 0, label: `${pass}/${zonas.length} zonas` };
+        }
+        if (std === 'INI-R') {
+            // INI-R (prescritivo da envoltória) mapeia para limiares da NBR 15575 (ou RTQ-R como fallback)
+            const base = regs.nbr15575 || regs.rtqr;
+            if (!base) return { ok: false, label: 'N/A' };
+            const zonas = base.zonas || [];
+            let pass = 0;
+            zonas.forEach(z => {
+                const uMax = z.transmitancia_maxima?.superior_limite;
+                const ctMin = (z.capacidade_minima ?? z.capacitancia_limite) || 0;
+                const ok = (uMax == null ? true : system.transmitancia <= uMax) && (system.capacidade_termica >= ctMin);
+                if (ok) pass++;
+            });
+            return { ok: pass > 0, label: `${pass}/${zonas.length} zonas` };
+        }
+        if (std === 'INI-C' && regs.rtqc) {
+            // Usar a lógica de notas do RTQ-C para inferir aceitação da INI-C para envoltória
+            const zonas = regs.rtqc.zonas || [];
+            const ct = system.capacidade_termica;
+            let grade = 'E';
+            zonas.forEach(z => {
+                const ctMin = z.capacitancia_limite ?? z.capacidade_minima ?? 0;
+                if (ct >= ctMin) {
+                    const uA = z.nota_A?.transmitancia_maxima?.superior_limite;
+                    const uB = z.nota_B?.transmitancia_maxima?.superior_limite;
+                    const uCD = z.nota_CD?.transmitancia_maxima?.superior_limite;
+                    if (uA != null && system.transmitancia <= uA) grade = 'A';
+                    else if ((grade === 'E' || grade === 'C/D' || grade === 'B') && uB != null && system.transmitancia <= uB) grade = maxGrade(grade, 'B');
+                    else if ((grade === 'E' || grade === 'C/D') && uCD != null && system.transmitancia <= uCD) grade = maxGrade(grade, 'C/D');
+                }
+            });
+            return { ok: grade !== 'E', label: grade };
+        }
+        if (std === 'ASHRAE_R' && regs.ashrae_residential) {
+            const zonas = regs.ashrae_residential.zonas || [];
+            const isLight = !!system.identificacao?.descricao?.sistema_leve;
+            let pass = 0;
+            zonas.forEach(z => {
+                const limit = isLight ? z.transmitancia_maxima.steel_frame : z.transmitancia_maxima.wall_mass;
+                if (limit != null && system.transmitancia <= limit) pass++;
+            });
+            return { ok: pass > 0, label: `${pass}/${zonas.length} zonas` };
+        }
+        if (std === 'ASHRAE_NR' && regs.ashrae_commercial) {
+            const zonas = regs.ashrae_commercial.zonas || [];
+            const isLight = !!system.identificacao?.descricao?.sistema_leve;
+            let pass = 0;
+            zonas.forEach(z => {
+                const limit = isLight ? z.transmitancia_maxima.steel_frame : z.transmitancia_maxima.wall_mass;
+                if (limit != null && system.transmitancia <= limit) pass++;
+            });
+            return { ok: pass > 0, label: `${pass}/${zonas.length} zonas` };
+        }
+        return { ok: false, label: 'N/A' };
+    } catch (e) {
+        return { ok: false, label: 'N/A' };
+    }
+}
+
+function maxGrade(current, next) {
+    const order = ['E', 'C/D', 'B', 'A'];
+    return order.indexOf(next) > order.indexOf(current) ? next : current;
+}
+
+function renderGroupComparison() {
+    const resultsDiv = document.getElementById('comparisonResults');
+    const systems = dataManager.getSystems({});
+
+    const groups = {
+        Concreto: [],
+        Cerâmico: [],
+        Drywall: [],
+        Outros: []
+    };
+
+    systems.forEach(s => {
+        const name = (s.nome || '').toLowerCase();
+        if (name.includes('concreto')) groups.Concreto.push(s);
+        else if (name.includes('cerâmico') || name.includes('ceramico')) groups.Cerâmico.push(s);
+        else if (name.includes('drywall')) groups.Drywall.push(s);
+        else groups.Outros.push(s);
+    });
+
+    const impacts = ['gwp', 'ap', 'ep', 'pocp'];
+    const impactLabels = { gwp: 'GWP', ap: 'AP', ep: 'EP', pocp: 'POCP' };
+
+    const avg = (arr) => arr.reduce((a, b) => a + b, 0) / (arr.length || 1);
+
+    const groupStats = Object.keys(groups).map(g => {
+        const list = groups[g];
+        const vals = {
+            gwp: avg(list.map(s => s.impactos.gwp || 0)),
+            ap: avg(list.map(s => s.impactos.ap || 0)),
+            ep: avg(list.map(s => s.impactos.ep || 0)),
+            pocp: avg(list.map(s => s.impactos.pocp || 0))
+        };
+        return { group: g, ...vals };
+    });
+
+    const charts = impacts.map(impact => {
+        const maxVal = Math.max(...groupStats.map(gs => gs[impact]));
+        return `
+            <div class=\"chart-group\">\n                <div class=\"chart-label\">${impactLabels[impact]}</div>\n                <div class=\"chart-bars\">\n                    ${groupStats.map((gs, i) => {
+                        const pct = maxVal > 0 ? (gs[impact] / maxVal) * 100 : 0;
+                        const color = ['#3b82f6', '#8b5cf6', '#06b6d4', '#10b981'][i % 4];
+                        return `
+                            <div class=\\"bar-item\\">\n                                <div class=\\"bar-fill\\" style=\\"width: ${pct}%; background: ${color}\\"></div>\n                                <span class=\\"bar-value\\">${gs.group}: ${formatScientific(gs[impact])}</span>\n                            </div>\n                        `;
+                    }).join('')}\n                </div>\n            </div>\n        `;
+    }).join('');
+
+    resultsDiv.innerHTML = `
+        <h3>Comparação por grupos (média dos impactos)</h3>
+        <div class=\"comparison-charts\">\n            ${charts}\n        </div>
+    `;
+    resultsDiv.style.display = 'block';
+    scrollToSection('compare');
 }
 
 function createComparisonTable(systems) {
@@ -1162,6 +1427,7 @@ window.toggleSystemSelection = toggleSystemSelection;
 window.openCartilhaModal = openCartilhaModal;
 window.closeCartilhaModal = closeCartilhaModal;
 window.exportCartilhaToPDF = exportCartilhaToPDF;
+window.onCompareClick = onCompareClick;
 
 // Log welcome message
 console.log('%c🏗️ LIfE App v4.0', 'font-size: 24px; font-weight: bold; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;');

@@ -211,11 +211,38 @@
 
             <div class="compare-container">
                 <div class="compare-instructions">
+                    <!-- Novos controles de modo de comparação -->
+                    <div class="compare-modes" id="compareModes">
+                        <button type="button" class="btn btn-secondary active" data-mode="standards" id="modeStandardsBtn">Normas térmicas</button>
+                        <button type="button" class="btn btn-secondary" data-mode="groups" id="modeGroupsBtn">Grupos de sistemas</button>
+                    </div>
+
+                    <!-- Opções de normas -->
+                    <div class="standards-controls" id="standardsControls">
+                        <div class="controls-row">
+                            <label class="control-check"><input type="checkbox" value="INI-C" class="std-opt"> INI-C</label>
+                            <label class="control-check"><input type="checkbox" value="INI-R" class="std-opt"> INI-R</label>
+                            <label class="control-check"><input type="checkbox" value="NBR15575" class="std-opt" checked> NBR 15575</label>
+                            <label class="control-check"><input type="checkbox" value="ASHRAE_R" class="std-opt"> ASHRAE 90.1 (R)</label>
+                            <label class="control-check"><input type="checkbox" value="ASHRAE_NR" class="std-opt"> ASHRAE 90.1 (NR)</label>
+                        </div>
+                        <p class="hint">Dica: Selecione 1–3 sistemas abaixo e clique em "Comparar" para ver a conformidade por norma.</p>
+                    </div>
+
+                    <!-- Opções de grupos -->
+                    <div class="groups-controls" id="groupsControls" style="display:none;">
+                        <div class="controls-row">
+                            <label class="control-radio"><input type="radio" name="groupMode" value="select" checked> Selecionar individualmente</label>
+                            <label class="control-radio"><input type="radio" name="groupMode" value="all"> Comparar todos</label>
+                        </div>
+                        <p class="hint">Em "Comparar todos", agregamos por tipo (Concreto, Cerâmico, Drywall, Outros).</p>
+                    </div>
+
                     <p>Clique nos sistemas do catálogo acima para adicionar à comparação (máximo 3 sistemas)</p>
                     <div class="selected-systems" id="selectedSystems">
                         <div class="empty-state">Nenhum sistema selecionado</div>
                     </div>
-                    <button class="btn btn-primary" id="compareBtn" disabled>Comparar Selecionados</button>
+                    <button class="btn btn-primary" id="compareBtn" disabled>Comparar</button>
                 </div>
 
                 <div class="comparison-results" id="comparisonResults" style="display: none;">
