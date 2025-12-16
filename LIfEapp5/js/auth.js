@@ -2,10 +2,25 @@
 
 // Banco de dados simples em memória (em produção, use autenticação backend apropriada)
 const users = {
-    'demo': 'demo123',
-    'admin': 'admin123',
-    'ecowallcheck': 'sistemamelhornaoha'
+    'ecowallcheck': {
+        password: 'sistemamelhornaoha',
+        fullName: 'EcoWallCheck Admin',
+        email: 'admin@ecowallcheck.com'
+    },
+    'admin': {
+        password: 'admin123',
+        fullName: 'Administrador',
+        email: 'admin@example.com'
+    },
+    'demo': {
+        password: 'demo123',
+        fullName: 'Usuário Demo',
+        email: 'demo@example.com'
+    }
 };
+
+// Armazenamento de usuários registrados (simula banco de dados)
+const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
 
 // Verificar se o usuário está logado
 function isLoggedIn() {
@@ -19,12 +34,47 @@ function getCurrentUser() {
 
 // Função de login
 function login(username, password) {
-    if (users[username] && users[username] === password) {
+    // Verificar usuários padrão
+    if (users[username] && users[username].password === password) {
         sessionStorage.setItem('isAuthenticated', 'true');
         sessionStorage.setItem('currentUser', username);
         return true;
     }
+    
+    // Verificar usuários registrados
+    if (registeredUsers[username] && registeredUsers[username].password === password) {
+        sessionStorage.setItem('isAuthenticated', 'true');
+        sessionStorage.setItem('currentUser', username);
+        return true;
+    }
+    
     return false;
+}
+
+// Função de registro
+function register(userData) {
+    const username = userData.email.split('@')[0]; // Usar prefixo do email como username
+    
+    // Verificar se usuário já existe
+    if (users[username] || registeredUsers[username]) {
+        return { success: false, message: 'Usuário já existe' };
+    }
+    
+    // Armazenar dados do usuário
+    registeredUsers[username] = {
+        password: userData.password,
+        fullName: userData.fullName,
+        email: userData.email,
+        usage: userData.usage,
+        education: userData.education,
+        field: userData.field,
+        registeredAt: new Date().toISOString()
+    };
+    
+    // Salvar no localStorage
+    localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+    
+    return { success: true, username: username };
 }
 
 // Função de logout
@@ -37,7 +87,11 @@ function logout() {
 // Inicializar autenticação ao carregar a página
 window.addEventListener('DOMContentLoaded', () => {
     const loginModal = document.getElementById('loginModal');
+    const registerModal = document.getElementById('registerModal');
     const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const showRegisterBtn = document.getElementById('showRegisterBtn');
+    const backToLoginBtn = document.getElementById('backToLoginBtn');
     const logoutBtn = document.getElementById('logoutBtn');
     
     // Verificar se o usuário está logado
@@ -47,6 +101,23 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
         loginModal.classList.add('hidden');
         document.body.style.overflow = 'auto';
+    }
+    
+    // Mostrar modal de registro
+    if (showRegisterBtn) {
+        showRegisterBtn.addEventListener('click', () => {
+            loginModal.classList.add('hidden');
+            registerModal.classList.remove('hidden');
+        });
+    }
+    
+    // Voltar para login
+    if (backToLoginBtn) {
+        backToLoginBtn.addEventListener('click', () => {
+            registerModal.classList.add('hidden');
+            loginModal.classList.remove('hidden');
+            registerForm.reset();
+        });
     }
     
     // Lidar com envio do formulário de login
@@ -87,6 +158,58 @@ window.addEventListener('DOMContentLoaded', () => {
                 
                 // Limpar campo de senha
                 document.getElementById('password').value = '';
+            }
+        });
+    }
+    
+    // Lidar com envio do formulário de registro
+    if (registerForm) {
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const userData = {
+                fullName: document.getElementById('regFullName').value,
+                email: document.getElementById('regEmail').value,
+                password: document.getElementById('regPassword').value,
+                usage: document.getElementById('regUsage').value,
+                education: document.getElementById('regEducation').value,
+                field: document.getElementById('regField').value
+            };
+            
+            const result = register(userData);
+            
+            if (result.success) {
+                // Auto-login após registro
+                login(result.username, userData.password);
+                
+                registerModal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                
+                // Mostrar mensagem de sucesso
+                const successMsg = document.createElement('div');
+                successMsg.className = 'alert alert-success';
+                successMsg.textContent = `Conta criada com sucesso! Bem-vindo, ${userData.fullName}!`;
+                successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 10001; animation: slideInRight 0.3s ease-out;';
+                document.body.appendChild(successMsg);
+                
+                setTimeout(() => {
+                    successMsg.style.animation = 'slideOutRight 0.3s ease-out';
+                    setTimeout(() => successMsg.remove(), 300);
+                }, 3000);
+                
+                registerForm.reset();
+            } else {
+                // Mostrar mensagem de erro
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'alert alert-error';
+                errorMsg.textContent = result.message || 'Falha no registro. Tente novamente.';
+                errorMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ef4444; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 10001; animation: slideInRight 0.3s ease-out;';
+                document.body.appendChild(errorMsg);
+                
+                setTimeout(() => {
+                    errorMsg.style.animation = 'slideOutRight 0.3s ease-out';
+                    setTimeout(() => errorMsg.remove(), 300);
+                }, 3000);
             }
         });
     }

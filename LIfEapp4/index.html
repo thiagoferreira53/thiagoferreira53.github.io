@@ -30,26 +30,115 @@
 <body>
     <!-- Login Modal -->
     <div class="login-modal" id="loginModal">
-        <div class="login-container">
-            <div class="login-header">
-                <div class="login-brand">
+        <div class="login-wrapper">
+            <div class="login-presentation">
+                <div class="presentation-logo">
                     <span class="brand-icon">🏢</span>
-                    <h1>EcoWallCheck</h1>
                 </div>
-                <p class="login-subtitle">Building Systems Analysis Platform</p>
+                <div class="presentation-text">
+                    <h2>Hello, welcome to EcoWallCheck!</h2>
+                    <p>The application has different functionalities so that you can incorporate environmental and thermal performance into the project with the appropriate specification for Opaque External Vertical Sealing Systems.</p>
+                    <p class="compliance-text">In compliance with ASHRAE 90.1, NBR 15575, INI-C and INI-R.</p>
+                    <div class="stats-display">
+                        <div class="stat-item">
+                            <span class="stat-number">42</span>
+                            <span class="stat-label">Sistemas Construtivos</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">46</span>
+                            <span class="stat-label">Componentes</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">4</span>
+                            <span class="stat-label">Normas</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <form class="login-form" id="loginForm">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required placeholder="Enter your username">
+            <div class="login-container">
+                <div class="login-header">
+                    <h1>EcoWallCheck</h1>
+                    <p class="login-subtitle">Building Systems Analysis Platform</p>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required placeholder="Enter your username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-large btn-block">Sign In</button>
+                    <button type="button" class="btn btn-secondary btn-large btn-block" id="showRegisterBtn">Create Account</button>
+                    <p class="login-help">Login: username: <strong>ecowallcheck</strong> | password: <strong>sistemamelhornaoha</strong></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="register-modal hidden" id="registerModal">
+        <div class="login-wrapper">
+            <div class="login-presentation">
+                <div class="presentation-logo">
+                    <span class="brand-icon">🏢</span>
                 </div>
-                <button type="submit" class="btn btn-primary btn-large btn-block">Sign In</button>
-                <p class="login-help">Login: username: <strong>ecowallcheck</strong> | password: <strong>sistemamelhornaoha</strong></p>
-            </form>
+                <div class="presentation-text">
+                    <h2>Join EcoWallCheck!</h2>
+                    <p>Create your account to access all features and start analyzing building systems with environmental and thermal performance data.</p>
+                    <p class="compliance-text">Trusted by professionals worldwide.</p>
+                </div>
+            </div>
+            <div class="login-container">
+                <div class="login-header">
+                    <h1>Create Account</h1>
+                    <p class="login-subtitle">Fill in your details to get started</p>
+                </div>
+                <form class="login-form" id="registerForm">
+                    <div class="form-group">
+                        <label for="regFullName">Full Name</label>
+                        <input type="text" id="regFullName" name="fullName" required placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email</label>
+                        <input type="email" id="regEmail" name="email" required placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" name="password" required placeholder="Create a password">
+                    </div>
+                    <div class="form-group">
+                        <label for="regUsage">What will you use it for?</label>
+                        <select id="regUsage" name="usage" required>
+                            <option value="">Select an option</option>
+                            <option value="academic">Academic Research</option>
+                            <option value="professional">Professional Work</option>
+                            <option value="education">Education/Teaching</option>
+                            <option value="personal">Personal Projects</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEducation">Education Level</label>
+                        <select id="regEducation" name="education" required>
+                            <option value="">Select your education level</option>
+                            <option value="undergraduate">Undergraduate Student</option>
+                            <option value="graduate">Graduate Student</option>
+                            <option value="bachelor">Bachelor's Degree</option>
+                            <option value="master">Master's Degree</option>
+                            <option value="phd">PhD/Doctorate</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="regField">Field of Study/Work</label>
+                        <input type="text" id="regField" name="field" required placeholder="e.g., Architecture, Civil Engineering">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-large btn-block">Create Account</button>
+                    <button type="button" class="btn btn-secondary btn-large btn-block" id="backToLoginBtn">Back to Login</button>
+                </form>
+            </div>
         </div>
     </div>
 
