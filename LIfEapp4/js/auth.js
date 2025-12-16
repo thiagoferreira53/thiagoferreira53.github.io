@@ -53,11 +53,22 @@ function login(username, password) {
 
 // Register function
 function register(userData) {
-    const username = userData.email.split('@')[0]; // Use email prefix as username
+    const username = userData.username;
+    
+    // Validate passwords match
+    if (userData.password !== userData.confirmPassword) {
+        return { success: false, message: 'Passwords do not match' };
+    }
     
     // Check if user already exists
     if (users[username] || registeredUsers[username]) {
-        return { success: false, message: 'User already exists' };
+        return { success: false, message: 'Username already exists. Please choose another one.' };
+    }
+    
+    // Check if email already exists
+    const emailExists = Object.values(registeredUsers).some(user => user.email === userData.email);
+    if (emailExists) {
+        return { success: false, message: 'Email already registered' };
     }
     
     // Store user data
@@ -87,11 +98,12 @@ function logout() {
 // Initialize authentication on page load
 window.addEventListener('DOMContentLoaded', () => {
     const loginModal = document.getElementById('loginModal');
-    const registerModal = document.getElementById('registerModal');
+    const registerPopup = document.getElementById('registerPopup');
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
     const showRegisterBtn = document.getElementById('showRegisterBtn');
-    const backToLoginBtn = document.getElementById('backToLoginBtn');
+    const closeRegisterPopup = document.getElementById('closeRegisterPopup');
+    const cancelRegisterBtn = document.getElementById('cancelRegisterBtn');
     const logoutBtn = document.getElementById('logoutBtn');
     
     // Check if user is logged in
@@ -103,20 +115,34 @@ window.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = 'auto';
     }
     
-    // Show register modal
+    // Show register popup
     if (showRegisterBtn) {
-        showRegisterBtn.addEventListener('click', () => {
-            loginModal.classList.add('hidden');
-            registerModal.classList.remove('hidden');
+        showRegisterBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerPopup.style.display = 'flex';
         });
     }
     
-    // Back to login
-    if (backToLoginBtn) {
-        backToLoginBtn.addEventListener('click', () => {
-            registerModal.classList.add('hidden');
-            loginModal.classList.remove('hidden');
-            registerForm.reset();
+    // Close register popup
+    const closePopup = () => {
+        registerPopup.style.display = 'none';
+        registerForm.reset();
+    };
+    
+    if (closeRegisterPopup) {
+        closeRegisterPopup.addEventListener('click', closePopup);
+    }
+    
+    if (cancelRegisterBtn) {
+        cancelRegisterBtn.addEventListener('click', closePopup);
+    }
+    
+    // Close on overlay click
+    if (registerPopup) {
+        registerPopup.addEventListener('click', (e) => {
+            if (e.target === registerPopup) {
+                closePopup();
+            }
         });
     }
     
@@ -170,7 +196,9 @@ window.addEventListener('DOMContentLoaded', () => {
             const userData = {
                 fullName: document.getElementById('regFullName').value,
                 email: document.getElementById('regEmail').value,
+                username: document.getElementById('regUsername').value,
                 password: document.getElementById('regPassword').value,
+                confirmPassword: document.getElementById('regConfirmPassword').value,
                 usage: document.getElementById('regUsage').value,
                 education: document.getElementById('regEducation').value,
                 field: document.getElementById('regField').value
@@ -182,14 +210,18 @@ window.addEventListener('DOMContentLoaded', () => {
                 // Auto-login after registration
                 login(result.username, userData.password);
                 
-                registerModal.classList.add('hidden');
+                // Close popup
+                registerPopup.style.display = 'none';
+                
+                // Hide login modal
+                loginModal.classList.add('hidden');
                 document.body.style.overflow = 'auto';
                 
                 // Show success message
                 const successMsg = document.createElement('div');
                 successMsg.className = 'alert alert-success';
                 successMsg.textContent = `Account created successfully! Welcome, ${userData.fullName}!`;
-                successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 10001; animation: slideInRight 0.3s ease-out;';
+                successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 40000; animation: slideInRight 0.3s ease-out;';
                 document.body.appendChild(successMsg);
                 
                 setTimeout(() => {
@@ -203,7 +235,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'alert alert-error';
                 errorMsg.textContent = result.message || 'Registration failed. Please try again.';
-                errorMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ef4444; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 10001; animation: slideInRight 0.3s ease-out;';
+                errorMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ef4444; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 40000; animation: slideInRight 0.3s ease-out;';
                 document.body.appendChild(errorMsg);
                 
                 setTimeout(() => {

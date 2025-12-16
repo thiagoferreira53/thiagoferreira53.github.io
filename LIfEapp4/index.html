@@ -77,68 +77,67 @@
         </div>
     </div>
 
-    <!-- Register Modal -->
-    <div class="register-modal hidden" id="registerModal">
-        <div class="login-wrapper">
-            <div class="login-presentation">
-                <div class="presentation-logo">
-                    <span class="brand-icon">🏢</span>
-                </div>
-                <div class="presentation-text">
-                    <h2>Join EcoWallCheck!</h2>
-                    <p>Create your account to access all features and start analyzing building systems with environmental and thermal performance data.</p>
-                    <p class="compliance-text">Trusted by professionals worldwide.</p>
-                </div>
+    <!-- Register Popup Overlay -->
+    <div class="popup-overlay" id="registerPopup" style="display: none;">
+        <div class="popup-container">
+            <div class="popup-header">
+                <h2>Create New Account</h2>
+                <button type="button" class="popup-close" id="closeRegisterPopup">&times;</button>
             </div>
-            <div class="login-container">
-                <div class="login-header">
-                    <h1>Create Account</h1>
-                    <p class="login-subtitle">Fill in your details to get started</p>
+            <form class="popup-form" id="registerForm">
+                <div class="form-group">
+                    <label for="regFullName">Full Name *</label>
+                    <input type="text" id="regFullName" name="fullName" required placeholder="Enter your full name">
                 </div>
-                <form class="login-form" id="registerForm">
-                    <div class="form-group">
-                        <label for="regFullName">Full Name</label>
-                        <input type="text" id="regFullName" name="fullName" required placeholder="Enter your full name">
-                    </div>
-                    <div class="form-group">
-                        <label for="regEmail">Email</label>
-                        <input type="email" id="regEmail" name="email" required placeholder="Enter your email">
-                    </div>
-                    <div class="form-group">
-                        <label for="regPassword">Password</label>
-                        <input type="password" id="regPassword" name="password" required placeholder="Create a password">
-                    </div>
-                    <div class="form-group">
-                        <label for="regUsage">What will you use it for?</label>
-                        <select id="regUsage" name="usage" required>
-                            <option value="">Select an option</option>
-                            <option value="academic">Academic Research</option>
-                            <option value="professional">Professional Work</option>
-                            <option value="education">Education/Teaching</option>
-                            <option value="personal">Personal Projects</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="regEducation">Education Level</label>
-                        <select id="regEducation" name="education" required>
-                            <option value="">Select your education level</option>
-                            <option value="undergraduate">Undergraduate Student</option>
-                            <option value="graduate">Graduate Student</option>
-                            <option value="bachelor">Bachelor's Degree</option>
-                            <option value="master">Master's Degree</option>
-                            <option value="phd">PhD/Doctorate</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="regField">Field of Study/Work</label>
-                        <input type="text" id="regField" name="field" required placeholder="e.g., Architecture, Civil Engineering">
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-large btn-block">Create Account</button>
-                    <button type="button" class="btn btn-secondary btn-large btn-block" id="backToLoginBtn">Back to Login</button>
-                </form>
-            </div>
+                <div class="form-group">
+                    <label for="regEmail">Email *</label>
+                    <input type="email" id="regEmail" name="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="regUsername">Username *</label>
+                    <input type="text" id="regUsername" name="username" required placeholder="Choose a username" minlength="3" pattern="[a-zA-Z0-9_]+" title="Only letters, numbers and underscores">
+                    <small style="color: var(--gray-600); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Only letters, numbers and underscores (min. 3 characters)</small>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password *</label>
+                    <input type="password" id="regPassword" name="password" required placeholder="Create a password" minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="regConfirmPassword">Confirm Password *</label>
+                    <input type="password" id="regConfirmPassword" name="confirmPassword" required placeholder="Confirm your password" minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="regUsage">What will you use it for? *</label>
+                    <select id="regUsage" name="usage" required>
+                        <option value="">Select an option</option>
+                        <option value="academic">Academic Research</option>
+                        <option value="professional">Professional Work</option>
+                        <option value="education">Education/Teaching</option>
+                        <option value="personal">Personal Projects</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="regEducation">Education Level *</label>
+                    <select id="regEducation" name="education" required>
+                        <option value="">Select your education level</option>
+                        <option value="undergraduate">Undergraduate Student</option>
+                        <option value="graduate">Graduate Student</option>
+                        <option value="bachelor">Bachelor's Degree</option>
+                        <option value="master">Master's Degree</option>
+                        <option value="phd">PhD/Doctorate</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="regField">Field of Study/Work *</label>
+                    <input type="text" id="regField" name="field" required placeholder="e.g., Architecture, Civil Engineering">
+                </div>
+                <div class="popup-actions">
+                    <button type="submit" class="btn btn-primary btn-large">Create Account</button>
+                    <button type="button" class="btn btn-secondary btn-large" id="cancelRegisterBtn">Cancel</button>
+                </div>
+            </form>
         </div>
     </div>
 

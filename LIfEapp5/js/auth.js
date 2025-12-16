@@ -53,11 +53,22 @@ function login(username, password) {
 
 // Função de registro
 function register(userData) {
-    const username = userData.email.split('@')[0]; // Usar prefixo do email como username
+    const username = userData.username;
+    
+    // Validar se as senhas coincidem
+    if (userData.password !== userData.confirmPassword) {
+        return { success: false, message: 'As senhas não coincidem' };
+    }
     
     // Verificar se usuário já existe
     if (users[username] || registeredUsers[username]) {
-        return { success: false, message: 'Usuário já existe' };
+        return { success: false, message: 'Nome de usuário já existe. Por favor, escolha outro.' };
+    }
+    
+    // Verificar se email já existe
+    const emailExists = Object.values(registeredUsers).some(user => user.email === userData.email);
+    if (emailExists) {
+        return { success: false, message: 'E-mail já cadastrado' };
     }
     
     // Armazenar dados do usuário
@@ -87,11 +98,12 @@ function logout() {
 // Inicializar autenticação ao carregar a página
 window.addEventListener('DOMContentLoaded', () => {
     const loginModal = document.getElementById('loginModal');
-    const registerModal = document.getElementById('registerModal');
+    const registerPopup = document.getElementById('registerPopup');
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
     const showRegisterBtn = document.getElementById('showRegisterBtn');
-    const backToLoginBtn = document.getElementById('backToLoginBtn');
+    const closeRegisterPopup = document.getElementById('closeRegisterPopup');
+    const cancelRegisterBtn = document.getElementById('cancelRegisterBtn');
     const logoutBtn = document.getElementById('logoutBtn');
     
     // Verificar se o usuário está logado
@@ -103,20 +115,34 @@ window.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = 'auto';
     }
     
-    // Mostrar modal de registro
+    // Mostrar popup de registro
     if (showRegisterBtn) {
-        showRegisterBtn.addEventListener('click', () => {
-            loginModal.classList.add('hidden');
-            registerModal.classList.remove('hidden');
+        showRegisterBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerPopup.style.display = 'flex';
         });
     }
     
-    // Voltar para login
-    if (backToLoginBtn) {
-        backToLoginBtn.addEventListener('click', () => {
-            registerModal.classList.add('hidden');
-            loginModal.classList.remove('hidden');
-            registerForm.reset();
+    // Fechar popup de registro
+    const closePopup = () => {
+        registerPopup.style.display = 'none';
+        registerForm.reset();
+    };
+    
+    if (closeRegisterPopup) {
+        closeRegisterPopup.addEventListener('click', closePopup);
+    }
+    
+    if (cancelRegisterBtn) {
+        cancelRegisterBtn.addEventListener('click', closePopup);
+    }
+    
+    // Fechar ao clicar no overlay
+    if (registerPopup) {
+        registerPopup.addEventListener('click', (e) => {
+            if (e.target === registerPopup) {
+                closePopup();
+            }
         });
     }
     
@@ -170,7 +196,9 @@ window.addEventListener('DOMContentLoaded', () => {
             const userData = {
                 fullName: document.getElementById('regFullName').value,
                 email: document.getElementById('regEmail').value,
+                username: document.getElementById('regUsername').value,
                 password: document.getElementById('regPassword').value,
+                confirmPassword: document.getElementById('regConfirmPassword').value,
                 usage: document.getElementById('regUsage').value,
                 education: document.getElementById('regEducation').value,
                 field: document.getElementById('regField').value
@@ -182,14 +210,18 @@ window.addEventListener('DOMContentLoaded', () => {
                 // Auto-login após registro
                 login(result.username, userData.password);
                 
-                registerModal.classList.add('hidden');
+                // Fechar popup
+                registerPopup.style.display = 'none';
+                
+                // Esconder modal de login
+                loginModal.classList.add('hidden');
                 document.body.style.overflow = 'auto';
                 
                 // Mostrar mensagem de sucesso
                 const successMsg = document.createElement('div');
                 successMsg.className = 'alert alert-success';
                 successMsg.textContent = `Conta criada com sucesso! Bem-vindo, ${userData.fullName}!`;
-                successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 10001; animation: slideInRight 0.3s ease-out;';
+                successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 40000; animation: slideInRight 0.3s ease-out;';
                 document.body.appendChild(successMsg);
                 
                 setTimeout(() => {
@@ -203,7 +235,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'alert alert-error';
                 errorMsg.textContent = result.message || 'Falha no registro. Tente novamente.';
-                errorMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ef4444; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 10001; animation: slideInRight 0.3s ease-out;';
+                errorMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ef4444; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 40000; animation: slideInRight 0.3s ease-out;';
                 document.body.appendChild(errorMsg);
                 
                 setTimeout(() => {
