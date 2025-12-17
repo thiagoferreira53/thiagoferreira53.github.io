@@ -490,10 +490,22 @@ function updateSelectedSystems() {
             return `
                 <div class="selected-chip">
                     <span>${system.nome}</span>
-                    <button onclick="toggleSystemSelection('${id}')" class="remove-chip">×</button>
+                    <button class="remove-chip" data-system-id="${id}">×</button>
                 </div>
             `;
         }).join('');
+        
+        // Add event listeners to remove buttons
+        container.querySelectorAll('.remove-chip').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const systemId = e.target.dataset.systemId;
+                // Convert back to number if it's a numeric string
+                const id = /^\d+$/.test(systemId) ? parseInt(systemId) : systemId;
+                toggleSystemSelection(id);
+            });
+        });
+        
         updateCompareButtonState();
     }
 }
