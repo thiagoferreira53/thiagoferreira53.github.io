@@ -154,7 +154,7 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
-                <span class="brand-icon">🏢</span>
+                <span class="brand-icon">🌱</span>
                 <span class="brand-text">EcoWallCheck</span>
             </div>
             <button class="nav-toggle" id="navToggle">
@@ -166,10 +166,9 @@
                 <li><a href="#home" class="nav-link active">Início</a></li>
                 <li><a href="#systems" class="nav-link">Sistemas</a></li>
                 <li><a href="#compare" class="nav-link">Comparar</a></li>
-                <li><a href="#create" class="nav-link">Criar Sistema</a></li>
-                <li><a href="#mysystems" class="nav-link">Meus Sistemas</a></li>
-                <li><a href="#regulations" class="nav-link">Normas</a></li>
-                <li><a href="#about" class="nav-link">Sobre</a></li>
+                <li><a href="#create" class="nav-link">Crie e calcule</a></li>
+                <li><a href="#mysystems" class="nav-link">Histórico</a></li>
+                <li><a href="#about" class="nav-link">Saiba mais</a></li>
                 <li><button class="btn btn-secondary btn-logout" id="logoutBtn">Sair</button></li>
             </ul>
         </div>
@@ -177,16 +176,10 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="hero-background">
-            <div class="gradient-orb orb-1"></div>
-            <div class="gradient-orb orb-2"></div>
-            <div class="gradient-orb orb-3"></div>
-        </div>
         <div class="container hero-content">
             <div class="hero-text">
                 <h1 class="hero-title">
-                    Sistemas Construtivos
-                    <span class="gradient-text">Análise Ambiental</span>
+                    <span class="gradient-text">Desempenho ambiental de sistemas construtivos de Vedação Vertical Externa Opaca</span>
                 </h1>
                 <p class="hero-description">
                     Avalie impactos ambientais e desempenho energético de sistemas de vedação. 
@@ -472,61 +465,6 @@
     </section>
 
     <!-- Regulations Section -->
-    <section class="regulations-section" id="regulations">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Normas Suportadas</h2>
-                <p class="section-description">Conformidade completa com padrões nacionais e internacionais</p>
-            </div>
-            <div class="regulations-grid">
-                <div class="regulation-card">
-                    <div class="regulation-header">
-                        <h3>ASHRAE 90.1</h3>
-                        <span class="regulation-badge">Internacional</span>
-                    </div>
-                    <p>Padrão de Energia para Edifícios Exceto Residenciais de Baixo Gabarito</p>
-                    <div class="regulation-tags">
-                        <span class="tag">Residencial</span>
-                        <span class="tag">Não-Residencial</span>
-                    </div>
-                </div>
-                <div class="regulation-card">
-                    <div class="regulation-header">
-                        <h3>NBR 15575</h3>
-                        <span class="regulation-badge">Brasil</span>
-                    </div>
-                    <p>Norma Brasileira de Desempenho para Edificações Habitacionais</p>
-                    <div class="regulation-tags">
-                        <span class="tag">Desempenho</span>
-                        <span class="tag">Residencial</span>
-                    </div>
-                </div>
-                <div class="regulation-card">
-                    <div class="regulation-header">
-                        <h3>RTQ-C</h3>
-                        <span class="regulation-badge">Brasil</span>
-                    </div>
-                    <p>Requisitos Técnicos da Qualidade para Edifícios Comerciais</p>
-                    <div class="regulation-tags">
-                        <span class="tag">Comercial</span>
-                        <span class="tag">Energia</span>
-                    </div>
-                </div>
-                <div class="regulation-card">
-                    <div class="regulation-header">
-                        <h3>RTQ-R</h3>
-                        <span class="regulation-badge">Brasil</span>
-                    </div>
-                    <p>Requisitos Técnicos da Qualidade para Edifícios Residenciais</p>
-                    <div class="regulation-tags">
-                        <span class="tag">Residencial</span>
-                        <span class="tag">Qualidade</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- About Section -->
     <section class="about-section" id="about">
         <div class="container">
@@ -577,9 +515,62 @@
                         <p>Alinhado com regulamentações brasileiras e internacionais</p>
                     </div>
                     <div class="about-card">
-                        <div class="about-card-icon">�</div>
+                        <div class="about-card-icon">🔬</div>
                         <h4>Orientado por Pesquisa</h4>
                         <p>Desenvolvido na UFRGS para uso acadêmico e profissional</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Normas Suportadas --><div class="container" style="margin-top: var(--space-3xl);">
+                <div class="section-header">
+                    <h2 class="section-title">Normas Suportadas</h2>
+                    <p class="section-description">Conformidade completa com padrões nacionais e internacionais</p>
+                </div>
+                <div class="regulations-grid">
+                    <div class="regulation-card">
+                        <div class="regulation-header">
+                            <h3>ASHRAE 90.1</h3>
+                            <span class="regulation-badge">Internacional</span>
+                        </div>
+                        <p>Padrão de Energia para Edifícios Exceto Residenciais de Baixo Gabarito</p>
+                        <div class="regulation-tags">
+                            <span class="tag">Residencial</span>
+                            <span class="tag">Não-Residencial</span>
+                        </div>
+                    </div>
+                    <div class="regulation-card">
+                        <div class="regulation-header">
+                            <h3>NBR 15575</h3>
+                            <span class="regulation-badge">Brasil</span>
+                        </div>
+                        <p>Norma Brasileira de Desempenho para Edificações Habitacionais</p>
+                        <div class="regulation-tags">
+                            <span class="tag">Desempenho</span>
+                            <span class="tag">Residencial</span>
+                        </div>
+                    </div>
+                    <div class="regulation-card">
+                        <div class="regulation-header">
+                            <h3>RTQ-C</h3>
+                            <span class="regulation-badge">Brasil</span>
+                        </div>
+                        <p>Requisitos Técnicos da Qualidade para Edifícios Comerciais</p>
+                        <div class="regulation-tags">
+                            <span class="tag">Comercial</span>
+                            <span class="tag">Energia</span>
+                        </div>
+                    </div>
+                    <div class="regulation-card">
+                        <div class="regulation-header">
+                            <h3>RTQ-R</h3>
+                            <span class="regulation-badge">Brasil</span>
+                        </div>
+                        <p>Requisitos Técnicos da Qualidade para Edifícios Residenciais</p>
+                        <div class="regulation-tags">
+                            <span class="tag">Residencial</span>
+                            <span class="tag">Qualidade</span>
+                        </div>
                     </div>
                 </div>
             </div>

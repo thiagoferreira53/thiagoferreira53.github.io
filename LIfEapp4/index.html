@@ -154,7 +154,7 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
-                <span class="brand-icon">🏢</span>
+                <span class="brand-icon">🌱</span>
                 <span class="brand-text">EcoWallCheck</span>
             </div>
             <button class="nav-toggle" id="navToggle">
@@ -166,10 +166,9 @@
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#systems" class="nav-link">Systems</a></li>
                 <li><a href="#compare" class="nav-link">Compare</a></li>
-                <li><a href="#create" class="nav-link">Create System</a></li>
-                <li><a href="#mysystems" class="nav-link">My Systems</a></li>
-                <li><a href="#regulations" class="nav-link">Regulations</a></li>
-                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#create" class="nav-link">Create & Calculate</a></li>
+                <li><a href="#mysystems" class="nav-link">History</a></li>
+                <li><a href="#about" class="nav-link">Learn More</a></li>
                 <li><button class="btn btn-secondary btn-logout" id="logoutBtn">Logout</button></li>
             </ul>
         </div>
@@ -177,20 +176,14 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="hero-background">
-            <div class="gradient-orb orb-1"></div>
-            <div class="gradient-orb orb-2"></div>
-            <div class="gradient-orb orb-3"></div>
-        </div>
         <div class="container hero-content">
             <div class="hero-text">
                 <h1 class="hero-title">
-                    Building Systems
-                    <span class="gradient-text">Environmental Analysis</span>
+                    <span class="gradient-text">Environmental Performance of Opaque External Vertical Sealing Building Systems</span>
                 </h1>
                 <p class="hero-description">
                     Evaluate environmental impacts and energy performance of building envelope systems. 
-                    Compliant with ASHRAE 90.1, NBR 15575, RTQ-C, and RTQ-R standards.
+                    Compliant with ASHRAE 90.1, NBR 15575, RTQ-C and RTQ-R.
                 </p>
                 <div class="hero-stats">
                     <div class="stat-item">
@@ -472,61 +465,6 @@
     </section>
 
     <!-- Regulations Section -->
-    <section class="regulations-section" id="regulations">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Supported Regulations</h2>
-                <p class="section-description">Comprehensive compliance with international standards</p>
-            </div>
-            <div class="regulations-grid">
-                <div class="regulation-card">
-                    <div class="regulation-header">
-                        <h3>ASHRAE 90.1</h3>
-                        <span class="regulation-badge">International</span>
-                    </div>
-                    <p>Energy Standard for Buildings Except Low-Rise Residential Buildings</p>
-                    <div class="regulation-tags">
-                        <span class="tag">Residential</span>
-                        <span class="tag">Non-Residential</span>
-                    </div>
-                </div>
-                <div class="regulation-card">
-                    <div class="regulation-header">
-                        <h3>NBR 15575</h3>
-                        <span class="regulation-badge">Brazil</span>
-                    </div>
-                    <p>Brazilian Performance Standard for Residential Buildings</p>
-                    <div class="regulation-tags">
-                        <span class="tag">Performance</span>
-                        <span class="tag">Residential</span>
-                    </div>
-                </div>
-                <div class="regulation-card">
-                    <div class="regulation-header">
-                        <h3>RTQ-C</h3>
-                        <span class="regulation-badge">Brazil</span>
-                    </div>
-                    <p>Technical Quality Requirements for Commercial Buildings</p>
-                    <div class="regulation-tags">
-                        <span class="tag">Commercial</span>
-                        <span class="tag">Energy</span>
-                    </div>
-                </div>
-                <div class="regulation-card">
-                    <div class="regulation-header">
-                        <h3>RTQ-R</h3>
-                        <span class="regulation-badge">Brazil</span>
-                    </div>
-                    <p>Technical Quality Requirements for Residential Buildings</p>
-                    <div class="regulation-tags">
-                        <span class="tag">Residential</span>
-                        <span class="tag">Quality</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- About Section -->
     <section class="about-section" id="about">
         <div class="container">
@@ -577,9 +515,63 @@
                         <p>Aligned with international and Brazilian regulations</p>
                     </div>
                     <div class="about-card">
-                        <div class="about-card-icon">�</div>
+                        <div class="about-card-icon">🔬</div>
                         <h4>Research-Driven</h4>
                         <p>Developed at UFRGS for academic and professional use</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Supported Standards -->
+            <div class="container" style="margin-top: var(--space-3xl);">
+                <div class="section-header">
+                    <h2 class="section-title">Supported Standards</h2>
+                    <p class="section-description">Full compliance with national and international standards</p>
+                </div>
+                <div class="regulations-grid">
+                    <div class="regulation-card">
+                        <div class="regulation-header">
+                            <h3>ASHRAE 90.1</h3>
+                            <span class="regulation-badge">International</span>
+                        </div>
+                        <p>Energy Standard for Buildings Except Low-Rise Residential Buildings</p>
+                        <div class="regulation-tags">
+                            <span class="tag">Residential</span>
+                            <span class="tag">Non-Residential</span>
+                        </div>
+                    </div>
+                    <div class="regulation-card">
+                        <div class="regulation-header">
+                            <h3>NBR 15575</h3>
+                            <span class="regulation-badge">Brazil</span>
+                        </div>
+                        <p>Brazilian Performance Standard for Residential Buildings</p>
+                        <div class="regulation-tags">
+                            <span class="tag">Performance</span>
+                            <span class="tag">Residential</span>
+                        </div>
+                    </div>
+                    <div class="regulation-card">
+                        <div class="regulation-header">
+                            <h3>RTQ-C</h3>
+                            <span class="regulation-badge">Brazil</span>
+                        </div>
+                        <p>Technical Quality Requirements for Commercial Buildings</p>
+                        <div class="regulation-tags">
+                            <span class="tag">Commercial</span>
+                            <span class="tag">Energy</span>
+                        </div>
+                    </div>
+                    <div class="regulation-card">
+                        <div class="regulation-header">
+                            <h3>RTQ-R</h3>
+                            <span class="regulation-badge">Brazil</span>
+                        </div>
+                        <p>Technical Quality Requirements for Residential Buildings</p>
+                        <div class="regulation-tags">
+                            <span class="tag">Residential</span>
+                            <span class="tag">Quality</span>
+                        </div>
                     </div>
                 </div>
             </div>
