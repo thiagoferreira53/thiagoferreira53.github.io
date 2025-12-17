@@ -60,9 +60,6 @@ function initializeApp() {
     
     // Compare button
     document.getElementById('compareBtn').addEventListener('click', onCompareClick);
-
-    // Comparison mode controls
-    setupCompareControls();
 }
 
 // ===== Navigation =====
@@ -530,6 +527,10 @@ function showComparison() {
         <div class="comparison-charts">
             ${createComparisonCharts(systems)}
         </div>
+        <h3 style="margin-top: var(--space-2xl);">Conformidade com Normas Térmicas</h3>
+        <div class="comparison-grid">
+            ${createStandardsComplianceTable(systems)}
+        </div>
     `;
     
     resultsDiv.style.display = 'block';
@@ -549,85 +550,14 @@ function showComparison() {
 }
 
 // ===== Novos: Controles e lógica da seção de comparação =====
-function setupCompareControls() {
-    const modeStandardsBtn = document.getElementById('modeStandardsBtn');
-    const modeGroupsBtn = document.getElementById('modeGroupsBtn');
-    const standardsControls = document.getElementById('standardsControls');
-    const groupsControls = document.getElementById('groupsControls');
-
-    // Modo padrão
-    window.currentCompareMode = 'standards'; // 'standards' | 'groups'
-    window.currentGroupMode = 'select'; // 'select' | 'all'
-
-    const setMode = (mode) => {
-        window.currentCompareMode = mode;
-        // Alternar ativo
-        modeStandardsBtn.classList.toggle('active', mode === 'standards');
-        modeGroupsBtn.classList.toggle('active', mode === 'groups');
-        // Exibir/ocultar controles
-        standardsControls.style.display = mode === 'standards' ? 'block' : 'none';
-        groupsControls.style.display = mode === 'groups' ? 'block' : 'none';
-        // Atualizar botão
-        updateCompareButtonState();
-        // Limpar resultados anteriores
-        const resultsDiv = document.getElementById('comparisonResults');
-        resultsDiv.style.display = 'none';
-        resultsDiv.innerHTML = '';
-    };
-
-    modeStandardsBtn.addEventListener('click', () => setMode('standards'));
-    modeGroupsBtn.addEventListener('click', () => setMode('groups'));
-
-    // Radios de grupo
-    document.querySelectorAll('input[name="groupMode"]').forEach(r => {
-        r.addEventListener('change', (e) => {
-            window.currentGroupMode = e.target.value;
-            updateCompareButtonState();
-        });
-    });
-
-    // Checkboxes de normas
-    document.querySelectorAll('#standardsControls .std-opt').forEach(cb => {
-        cb.addEventListener('change', () => updateCompareButtonState());
-    });
-}
-
 function updateCompareButtonState() {
     const compareBtn = document.getElementById('compareBtn');
-    const mode = window.currentCompareMode || 'standards';
-    if (mode === 'standards') {
-        // Precisa >=1 sistema e >=1 norma
-        const anyStd = Array.from(document.querySelectorAll('#standardsControls .std-opt'))
-            .some(cb => cb.checked);
-        compareBtn.disabled = !(selectedSystems.length >= 1 && anyStd);
-        compareBtn.textContent = 'Comparar';
-    } else {
-        const groupMode = window.currentGroupMode || 'select';
-        if (groupMode === 'select') {
-            compareBtn.disabled = selectedSystems.length < 2;
-            compareBtn.textContent = 'Comparar selecionados';
-        } else {
-            compareBtn.disabled = false;
-            compareBtn.textContent = 'Comparar todos os grupos';
-        }
-    }
+    compareBtn.disabled = selectedSystems.length < 2;
+    compareBtn.textContent = 'Comparar';
 }
 
 function onCompareClick() {
-    const mode = window.currentCompareMode || 'standards';
-    if (mode === 'standards') {
-        const systems = getSelectedSystemsObjects();
-        const standards = getSelectedStandards();
-        if (systems.length === 0 || standards.length === 0) return;
-        renderStandardsComparison(systems, standards);
-    } else {
-        const groupMode = window.currentGroupMode || 'select';
-        if (groupMode === 'select') {
-            showComparison();
-        } else {
-            renderGroupComparison();
-        }
-    }
+    showComparison();
 }
 
 function getSelectedSystemsObjects() {
@@ -815,11 +745,18 @@ function createComparisonTable(systems) {
         <div class="comparison-table">
             <div class="comparison-row header">
                 <div class="comparison-cell">Propriedade</div>
-                ${systems.map((s, i) => `<div class="comparison-cell">Sistema ${i + 1}</div>`).join('')}
+                ${systems.map((s, i) => `<div class="comparison-cell">Sistema construtivo ${i + 1}</div>`).join('')}
             </div>
             <div class="comparison-row">
                 <div class="comparison-cell"><strong>Nome</strong></div>
-                ${systems.map(s => `<div class="comparison-cell">${s.nome}</div>`).join('')}
+                ${systems.map(s => {
+                    const systemId = s.id || dataManager.systems.indexOf(s);
+                    const description = s.identificacao?.camadas?.join(', ') || 'Sem descrição';
+                    return `<div class="comparison-cell">
+                        <strong><a href="#" onclick="openCartilhaModal(${JSON.stringify(systemId).replace(/"/g, '&quot;')}); return false;" style="color: var(--primary-600); text-decoration: none; cursor: pointer;">${s.nome}</a></strong>
+                        <div style="font-size: 0.875rem; color: var(--gray-600); margin-top: 0.25rem;">${description}</div>
+                    </div>`;
+                }).join('')}
             </div>
             <div class="comparison-row">
                 <div class="comparison-cell"><strong>Valor U (W/m²K)</strong></div>
@@ -910,6 +847,38 @@ function createComparisonCharts(systems) {
                     `;
                 }).join('')}
             </div>
+        </div>
+    `;
+}
+
+function createStandardsComplianceTable(systems) {
+    const regs = dataManager.getRegulations();
+    const standards = [
+        { key: 'NBR15575', label: 'NBR 15575' },
+        { key: 'INI-R', label: 'INI-R' },
+        { key: 'INI-C', label: 'INI-C' },
+        { key: 'ASHRAE_R', label: 'ASHRAE 90.1 (R)' },
+        { key: 'ASHRAE_NR', label: 'ASHRAE 90.1 (NR)' }
+    ];
+    
+    return `
+        <div class="comparison-table">
+            <div class="comparison-row header">
+                <div class="comparison-cell">Norma</div>
+                ${systems.map((s, i) => `<div class="comparison-cell">Sistema construtivo ${i + 1}</div>`).join('')}
+            </div>
+            ${standards.map(std => {
+                const cells = systems.map(sys => {
+                    const res = evaluateStandard(std.key, sys, regs);
+                    return `<div class="comparison-cell ${res.ok ? 'best' : ''}">${res.label}</div>`;
+                }).join('');
+                return `
+                    <div class="comparison-row">
+                        <div class="comparison-cell"><strong>${std.label}</strong></div>
+                        ${cells}
+                    </div>
+                `;
+            }).join('')}
         </div>
     `;
 }
