@@ -146,10 +146,11 @@ function scrollToSection(sectionId) {
 // ===== Filters =====
 function setupFilters() {
     document.getElementById('filterType').addEventListener('change', applyFilters);
-    document.getElementById('filterLight').addEventListener('change', applyFilters);
+    document.getElementById('filterLight')?.addEventListener('change', applyFilters);
     document.getElementById('filterInsulation').addEventListener('change', applyFilters);
     document.getElementById('filterOrigin').addEventListener('change', applyFilters);
     document.getElementById('clearFilters').addEventListener('click', clearFilters);
+    document.getElementById('printCatalog').addEventListener('click', printCatalog);
     
     // Setup search input
     const searchInput = document.getElementById('searchSystem');
@@ -167,7 +168,6 @@ function setupFilters() {
 function applyFilters() {
     currentFilters = {
         type: document.getElementById('filterType').value,
-        systemLeve: document.getElementById('filterLight').value,
         isolante: document.getElementById('filterInsulation').value,
         origin: document.getElementById('filterOrigin').value,
         search: document.getElementById('searchSystem').value.toLowerCase()
@@ -178,13 +178,18 @@ function applyFilters() {
 
 function clearFilters() {
     document.getElementById('filterType').value = '';
-    document.getElementById('filterLight').value = '';
+    const filterLight = document.getElementById('filterLight');
+    if (filterLight) filterLight.value = '';
     document.getElementById('filterInsulation').value = '';
     document.getElementById('filterOrigin').value = '';
     document.getElementById('searchSystem').value = '';
     currentFilters = {};
     currentPage = 1;
     renderSystems();
+}
+
+function printCatalog() {
+    window.print();
 }
 
 // ===== Systems Rendering =====

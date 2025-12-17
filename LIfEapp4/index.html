@@ -225,8 +225,33 @@
     <section class="systems-section" id="systems">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Building Systems Catalog</h2>
-                <p class="section-description">Browse and analyze envelope construction systems</p>
+                <h2 class="section-title">Library of opaque external vertical sealing building systems</h2>
+                <p class="section-description" style="font-size: 1rem; margin-bottom: var(--space-md); color: var(--gray-700); line-height: 1.6;">
+                    External Vertical Sealing Systems are parts of the residential building that vertically limit the building and its environments, such as facades and walls.
+                </p>
+                <p class="section-description" style="font-weight: 600; color: var(--primary-600);">
+                    Check the thermal performance information and environmental impacts of the building system.
+                </p>
+                
+                <!-- Color Legend -->
+                <div class="color-legend" style="display: flex; gap: var(--space-lg); justify-content: center; margin-top: var(--space-lg); flex-wrap: wrap;">
+                    <div class="legend-item" style="display: flex; align-items: center; gap: var(--space-xs);">
+                        <span class="legend-color" style="width: 24px; height: 24px; border-radius: 4px; background: linear-gradient(135deg, #3b82f6, #2563eb);"></span>
+                        <span style="font-size: 0.875rem; color: var(--gray-700);">Concrete</span>
+                    </div>
+                    <div class="legend-item" style="display: flex; align-items: center; gap: var(--space-xs);">
+                        <span class="legend-color" style="width: 24px; height: 24px; border-radius: 4px; background: linear-gradient(135deg, #ef4444, #dc2626);"></span>
+                        <span style="font-size: 0.875rem; color: var(--gray-700);">Ceramic</span>
+                    </div>
+                    <div class="legend-item" style="display: flex; align-items: center; gap: var(--space-xs);">
+                        <span class="legend-color" style="width: 24px; height: 24px; border-radius: 4px; background: linear-gradient(135deg, #10b981, #059669);"></span>
+                        <span style="font-size: 0.875rem; color: var(--gray-700);">Drywall</span>
+                    </div>
+                    <div class="legend-item" style="display: flex; align-items: center; gap: var(--space-xs);">
+                        <span class="legend-color" style="width: 24px; height: 24px; border-radius: 4px; background: linear-gradient(135deg, #8b5cf6, #7c3aed);"></span>
+                        <span style="font-size: 0.875rem; color: var(--gray-700);">Others</span>
+                    </div>
+                </div>
             </div>
             
             <!-- Search Bar -->
@@ -240,17 +265,10 @@
                     <label>Type:</label>
                     <select id="filterType" class="filter-select">
                         <option value="">All Types</option>
-                        <option value="Concreto">Concrete</option>
-                        <option value="Cerâmico">Ceramic</option>
-                        <option value="Drywall">Drywall</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Light System:</label>
-                    <select id="filterLight" class="filter-select">
-                        <option value="">All</option>
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
+                        <option value="Bloco de concreto">Concrete block</option>
+                        <option value="Parede de concreto">Concrete wall</option>
+                        <option value="Bloco cerâmico">Ceramic block</option>
+                        <option value="Drywall (leve)">Drywall (lightweight)</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -266,10 +284,18 @@
                     <select id="filterOrigin" class="filter-select">
                         <option value="">All Systems</option>
                         <option value="custom">My Systems</option>
-                        <option value="database">Database Systems</option>
+                        <option value="database">Library Systems</option>
                     </select>
                 </div>
                 <button class="btn btn-secondary" id="clearFilters">Clear Filters</button>
+                <button class="btn btn-secondary" id="printCatalog" style="margin-left: auto;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    Print
+                </button>
             </div>
 
             <!-- Systems Grid -->

@@ -71,15 +71,15 @@ class DataManager {
         }
 
         if (filters.type) {
-            filtered = filtered.filter(s => 
-                s.nome.toLowerCase().includes(filters.type.toLowerCase())
-            );
-        }
-
-        if (filters.systemLeve !== undefined && filters.systemLeve !== '') {
-            filtered = filtered.filter(s => 
-                s.identificacao.descricao.sistema_leve === (filters.systemLeve === 'true')
-            );
+            filtered = filtered.filter(s => {
+                // Check if any layer includes the filter type
+                const hasLayer = s.identificacao?.camadas?.some(camada => 
+                    camada.toLowerCase().includes(filters.type.toLowerCase())
+                );
+                // Also check in the name as fallback
+                const hasInName = s.nome.toLowerCase().includes(filters.type.toLowerCase());
+                return hasLayer || hasInName;
+            });
         }
 
         if (filters.isolante !== undefined && filters.isolante !== '') {

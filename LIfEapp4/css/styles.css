@@ -934,7 +934,7 @@ section {
 
 .system-image {
     width: 100%;
-    height: 120px;
+    height: 180px;
     margin: calc(-1 * var(--space-lg)) calc(-1 * var(--space-lg)) var(--space-md);
     overflow: hidden;
     background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
@@ -946,7 +946,7 @@ section {
 .system-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center;
 }
 
@@ -2351,5 +2351,42 @@ section {
 
     .cartilha-impacts {
         grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Print Styles ===== */
+@media print {
+    /* Hide UI elements */
+    .navbar,
+    .filters-container,
+    .pagination,
+    .btn,
+    .search-container {
+        display: none !important;
+    }
+    
+    /* Optimize page layout */
+    body {
+        background: white;
+    }
+    
+    .systems-section {
+        padding: 20px 0;
+    }
+    
+    .section-header {
+        page-break-after: avoid;
+    }
+    
+    .systems-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .system-card {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid var(--gray-300);
     }
 }
