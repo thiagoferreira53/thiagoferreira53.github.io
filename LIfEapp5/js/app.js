@@ -904,7 +904,15 @@ function openCartilhaModal(systemIndex) {
     const titulo = document.getElementById('cartilhaTitulo');
     const content = document.getElementById('cartilhaContent');
     
-    titulo.textContent = system.nome;
+    titulo.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <span>${system.nome}</span>
+            <div style="display: flex; gap: var(--space-md); align-items: center;">
+                <img src="assets/logo_ufrgs.png" alt="UFRGS" style="height: 40px;">
+                <img src="assets/logo_life.png" alt="LIfE" style="height: 40px;">
+            </div>
+        </div>
+    `;
     
     // Generate regulations section
     const nbr = dataManager.regulations.nbr15575;
