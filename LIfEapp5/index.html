@@ -394,33 +394,26 @@
                         </div>
                     </div>
                     
-                    <div class="form-section-title">Impactos Ambientais</div>
+                    <div class="form-section-title">Componentes do Sistema</div>
+                    <p style="color: var(--gray-600); margin-bottom: var(--space-md); font-size: 0.875rem;">Selecione os componentes que compõem o sistema de vedação. O software calculará automaticamente a transmitância térmica e os impactos ambientais.</p>
                     
-                    <div class="form-row">
+                    <div class="components-selector" id="componentsSelector">
                         <div class="form-group">
-                            <label for="gwp">GWP (kg CO₂ eq) *</label>
-                            <input type="number" id="gwp" step="0.01" required placeholder="0,00">
+                            <label>Componentes Disponíveis</label>
+                            <div class="components-search">
+                                <input type="text" id="componentSearch" placeholder="Buscar componente..." class="search-input">
+                            </div>
+                            <div class="components-list" id="componentsList">
+                                <!-- Lista de componentes será carregada aqui -->
+                            </div>
                         </div>
+                        
                         <div class="form-group">
-                            <label for="ap">AP (kg SO₂ eq) *</label>
-                            <input type="number" id="ap" step="0.0001" required placeholder="0,0000">
+                            <label>Camadas Selecionadas (arraste para reordenar)</label>
+                            <div class="selected-layers" id="selectedLayers">
+                                <div class="empty-state" style="padding: var(--space-lg); text-align: center; color: var(--gray-500);">Nenhuma camada selecionada</div>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="ep">EP (kg PO₄³⁻ eq) *</label>
-                            <input type="number" id="ep" step="0.0001" required placeholder="0,0000">
-                        </div>
-                        <div class="form-group">
-                            <label for="ced">CED (MJ) *</label>
-                            <input type="number" id="ced" step="0.01" required placeholder="0,00">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="layers">Camadas (uma por linha)</label>
-                        <textarea id="layers" rows="4" placeholder="Digite cada camada em uma nova linha"></textarea>
                     </div>
                     
                     <div class="form-actions">
@@ -436,8 +429,8 @@
     <section class="mysystems-section" id="mysystems">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Meus Sistemas</h2>
-                <p class="section-description">Veja seus sistemas criados e histórico de comparações</p>
+                <h2 class="section-title">Histórico</h2>
+                <p class="section-description">Acesse os sistemas que você criou e o seu histórico de comparações.</p>
             </div>
             
             <div class="tabs-container">

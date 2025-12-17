@@ -396,33 +396,26 @@
                         </div>
                     </div>
                     
-                    <div class="form-section-title">Environmental Impacts</div>
+                    <div class="form-section-title">System Components</div>
+                    <p style="color: var(--gray-600); margin-bottom: var(--space-md); font-size: 0.875rem;">Select the components that make up the sealing system. The software will automatically calculate thermal transmittance and environmental impacts.</p>
                     
-                    <div class="form-row">
+                    <div class="components-selector" id="componentsSelector">
                         <div class="form-group">
-                            <label for="gwp">GWP (kg CO₂ eq) *</label>
-                            <input type="number" id="gwp" step="0.01" required placeholder="0.00">
+                            <label>Available Components</label>
+                            <div class="components-search">
+                                <input type="text" id="componentSearch" placeholder="Search component..." class="search-input">
+                            </div>
+                            <div class="components-list" id="componentsList">
+                                <!-- Component list will be loaded here -->
+                            </div>
                         </div>
+                        
                         <div class="form-group">
-                            <label for="ap">AP (kg SO₂ eq) *</label>
-                            <input type="number" id="ap" step="0.0001" required placeholder="0.0000">
+                            <label>Selected Layers (drag to reorder)</label>
+                            <div class="selected-layers" id="selectedLayers">
+                                <div class="empty-state" style="padding: var(--space-lg); text-align: center; color: var(--gray-500);">No layers selected</div>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="ep">EP (kg PO₄³⁻ eq) *</label>
-                            <input type="number" id="ep" step="0.0001" required placeholder="0.0000">
-                        </div>
-                        <div class="form-group">
-                            <label for="ced">CED (MJ) *</label>
-                            <input type="number" id="ced" step="0.01" required placeholder="0.00">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="layers">Layers (one per line)</label>
-                        <textarea id="layers" rows="4" placeholder="Enter each layer on a new line"></textarea>
                     </div>
                     
                     <div class="form-actions">
@@ -438,8 +431,8 @@
     <section class="mysystems-section" id="mysystems">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">My Systems</h2>
-                <p class="section-description">View your created systems and comparison history</p>
+                <h2 class="section-title">History</h2>
+                <p class="section-description">Access the systems you created and your comparison history.</p>
             </div>
             
             <div class="tabs-container">
