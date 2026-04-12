@@ -71,13 +71,29 @@ class DataManager {
         }
 
         if (filters.type) {
+            const ft = filters.type.toLowerCase();
             filtered = filtered.filter(s => {
-                // Check if any layer includes the filter type
-                const hasLayer = s.identificacao?.camadas?.some(camada => 
-                    camada.toLowerCase().includes(filters.type.toLowerCase())
-                );
-                // Also check in the name as fallback
-                const hasInName = s.nome.toLowerCase().includes(filters.type.toLowerCase());
+                const nome = (s.nome || '').toLowerCase();
+                const layers = (s.identificacao?.camadas || []).map(c => c.toLowerCase());
+                const allLayers = layers.join(' ');
+
+                // Special mapping for filter types
+                if (ft === 'bloco de concreto') {
+                    return layers.some(l => l.includes('bloco de concreto'));
+                }
+                if (ft === 'parede de concreto') {
+                    return layers.some(l => l.includes('concreto maciço') || l.includes('concreto macico'));
+                }
+                if (ft === 'bloco cerâmico' || ft === 'bloco ceramico') {
+                    return layers.some(l => l.includes('bloco cerâmico') || l.includes('bloco ceramico') || l.includes('tijolo'));
+                }
+                if (ft === 'steel frame (leve)' || ft === 'drywall (leve)') {
+                    return nome.includes('steel frame') || nome.includes('drywall') || allLayers.includes('placa cimentícia') || allLayers.includes('placa de gesso');
+                }
+
+                // Default: check layers and name
+                const hasLayer = layers.some(l => l.includes(ft));
+                const hasInName = nome.includes(ft);
                 return hasLayer || hasInName;
             });
         }

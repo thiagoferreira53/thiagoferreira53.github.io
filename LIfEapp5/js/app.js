@@ -1,1428 +1,890 @@
-// ===== Global State =====
-let selectedSystems = [];
-let currentPage = 1;
-const systemsPerPage = 12;
-let currentFilters = {};
+// ===== E³ Build – Main Application =====
+// SPA router, system rendering, comparison, cartilha, charts, PDF export
 
-// ===== Initialization =====
-window.addEventListener('load', async () => {
-    const loadingScreen = document.getElementById('loadingScreen');
-    
-    try {
-        // Load all data
-        await dataManager.loadAll();
-        
-        // Load user's custom systems into dataManager
-        if (typeof loadUserSystemsIntoDataManager === 'function' && isLoggedIn()) {
-            loadUserSystemsIntoDataManager();
+(function () {
+    'use strict';
+
+    // ===== State =====
+    let currentPage = 'home';
+    let selectedSystems = [];          // array of system indices / ids
+    const ITEMS_PER_PAGE = 12;
+    let currentSystemPage = 1;
+    let filteredSystems = [];
+    let selectedLayers = [];           // for create-system form
+
+    // Chart colour palette
+    const chartColors = [
+        'rgba(61, 122, 84, 0.85)',
+        'rgba(196, 154, 92, 0.85)',
+        'rgba(90, 138, 106, 0.85)',
+        'rgba(140, 122, 102, 0.85)',
+        'rgba(143, 170, 181, 0.85)'
+    ];
+
+    // ===================================================================
+    //  SPA Navigation
+    // ===================================================================
+    function navigateTo(pageName) {
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(p => p.classList.remove('active'));
+
+        const target = document.getElementById(`page-${pageName}`);
+        if (target) target.classList.add('active');
+
+        // Update nav active link
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`.nav-link[data-nav="${pageName}"]`);
+        if (link) link.classList.add('active');
+
+        currentPage = pageName;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Page-specific init
+        if (pageName === 'systems' && dataManager.loaded) renderSystems();
+        if (pageName === 'compare') renderSelectedChips();
+        if (pageName === 'create' && dataManager.loaded) renderComponentsList();
+        if (pageName === 'history' && isLoggedIn()) {
+            displayUserSystems();
+            displayUserComparisons();
         }
-        
-        // Update stats in hero
-        const stats = dataManager.getStatistics();
-        document.getElementById('systemCount').textContent = stats.totalSystems;
-        document.getElementById('componentCount').textContent = stats.totalComponents;
-        
-        // Initialize app
-        initializeApp();
-        renderSystems();
-        
-        // Hide loading screen
-        setTimeout(() => {
-            loadingScreen.classList.add('hidden');
-        }, 1000);
-        
-    } catch (error) {
-        console.error('Falha ao carregar dados:', error);
-        loadingScreen.querySelector('.loader-text').textContent = 'Erro ao carregar dados';
-        loadingScreen.querySelector('.loader-subtitle').textContent = 'Por favor, recarregue a página';
+
+        // Update i18n for dynamically-rendered content
+        i18n.updatePage();
+
+        // Close mobile menu
+        document.getElementById('navMenu')?.classList.remove('active');
     }
-});
+    // expose globally
+    window.navigateTo = navigateTo;
 
-function initializeApp() {
-    // Navigation
-    setupNavigation();
-    
-    // Filters
-    setupFilters();
-    
-    // Buttons
-    document.getElementById('startAnalysis').addEventListener('click', () => {
-        scrollToSection('systems');
-    });
-    
-    document.getElementById('learnMore').addEventListener('click', () => {
-        scrollToSection('about');
-    });
-    
-    // Modal
-    document.getElementById('modalClose').addEventListener('click', closeModal);
-    document.querySelector('.modal-overlay').addEventListener('click', closeModal);
-    
-    // Compare button
-    document.getElementById('compareBtn').addEventListener('click', onCompareClick);
-}
-
-// ===== Navigation =====
-function setupNavigation() {
-    const navbar = document.querySelector('.navbar');
-    const navToggle = document.getElementById('navToggle');
-    const navMenu = document.getElementById('navMenu');
-    const navLinks = document.querySelectorAll('.nav-link');
-
-    // Navbar scroll effect
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-        updateActiveLink();
-    });
-
-    // Mobile menu toggle
-    navToggle.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        const spans = navToggle.querySelectorAll('span');
-        if (navMenu.classList.contains('active')) {
-            spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-            spans[1].style.opacity = '0';
-            spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
-        } else {
-            spans[0].style.transform = 'none';
-            spans[1].style.opacity = '1';
-            spans[2].style.transform = 'none';
-        }
-    });
-
-    // Smooth scroll for nav links
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = link.getAttribute('href').substring(1);
-            scrollToSection(targetId);
-            navMenu.classList.remove('active');
-            const spans = navToggle.querySelectorAll('span');
-            spans.forEach(span => span.style.transform = 'none');
-            spans[1].style.opacity = '1';
+    // ===================================================================
+    //  Initialisation
+    // ===================================================================
+    document.addEventListener('DOMContentLoaded', async () => {
+        // --- Language Switcher ---
+        document.querySelectorAll('.lang-flag').forEach(btn => {
+            btn.addEventListener('click', () => i18n.setLanguage(btn.dataset.lang));
         });
-    });
-}
+        // Set initial flag state from i18n
+        document.querySelectorAll('.lang-flag').forEach(f => f.classList.remove('active'));
+        const initFlag = document.querySelector(`.lang-flag[data-lang="${i18n.getLang()}"]`);
+        if (initFlag) initFlag.classList.add('active');
 
-function updateActiveLink() {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-    const scrollY = window.pageYOffset;
-    
-    sections.forEach(section => {
-        const sectionHeight = section.offsetHeight;
-        const sectionTop = section.offsetTop - 100;
-        const sectionId = section.getAttribute('id');
-        
-        if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${sectionId}`) {
-                    link.classList.add('active');
+        // --- Nav scroll effect ---
+        window.addEventListener('scroll', () => {
+            document.querySelector('.navbar')?.classList.toggle('scrolled', window.scrollY > 30);
+        });
+
+        // --- Mobile toggle ---
+        document.getElementById('navToggle')?.addEventListener('click', () => {
+            document.getElementById('navMenu')?.classList.toggle('active');
+        });
+
+        // --- Navigation clicks (nav links + feature cards + any data-nav) ---
+        document.addEventListener('click', (e) => {
+            const navEl = e.target.closest('[data-nav]');
+            if (navEl) {
+                e.preventDefault();
+                const page = navEl.dataset.nav;
+                // Protected pages
+                if (['compare', 'create', 'history'].includes(page)) {
+                    requireLogin(() => navigateTo(page));
+                } else {
+                    navigateTo(page);
                 }
-            });
+            }
+        });
+
+        // --- Hero CTA buttons ---
+        document.getElementById('startAnalysis')?.addEventListener('click', () => navigateTo('systems'));
+        document.getElementById('learnMore')?.addEventListener('click', () => navigateTo('about'));
+
+        // --- Load Data ---
+        try {
+            await dataManager.loadAll();
+            // Load user systems into data manager
+            if (isLoggedIn()) loadUserSystemsIntoDataManager();
+
+            // Update stats on hero
+            const stats = dataManager.getStatistics();
+            if (stats) {
+                document.getElementById('systemCount').textContent = stats.totalSystems;
+                document.getElementById('componentCount').textContent = stats.totalComponents;
+            }
+        } catch (err) {
+            console.error('Error loading data:', err);
         }
-    });
-}
 
-function scrollToSection(sectionId) {
-    const section = document.getElementById(sectionId);
-    if (section) {
-        const offsetTop = section.offsetTop - 70;
-        window.scrollTo({
-            top: offsetTop,
-            behavior: 'smooth'
+        // Hide loading screen
+        const ls = document.getElementById('loadingScreen');
+        if (ls) { ls.classList.add('hidden'); setTimeout(() => ls.remove(), 600); }
+
+        // i18n initial update
+        i18n.updatePage();
+
+        // --- Filters ---
+        document.getElementById('searchSystem')?.addEventListener('input', () => { currentSystemPage = 1; renderSystems(); });
+        document.getElementById('filterType')?.addEventListener('change', () => { currentSystemPage = 1; renderSystems(); });
+        document.getElementById('filterInsulation')?.addEventListener('change', () => { currentSystemPage = 1; renderSystems(); });
+        document.getElementById('filterOrigin')?.addEventListener('change', () => { currentSystemPage = 1; renderSystems(); });
+        document.getElementById('clearFilters')?.addEventListener('click', clearFilters);
+        document.getElementById('printCatalog')?.addEventListener('click', () => window.print());
+
+        // --- Compare ---
+        document.getElementById('compareBtn')?.addEventListener('click', () => {
+            requireLogin(() => showComparison());
         });
+
+        // --- System detail modal ---
+        document.getElementById('modalClose')?.addEventListener('click', closeSystemModal);
+        document.querySelector('#systemModal .modal-overlay')?.addEventListener('click', closeSystemModal);
+
+        // --- Create form: override default submit to require login ---
+        const createForm = document.getElementById('createSystemForm');
+        if (createForm) {
+            // Remove existing listener from userSystems.js (it fires on DOMContentLoaded too)
+            // We'll add our own wrapper here:
+            createForm.addEventListener('submit', handleCreateSystem, true);
+        }
+        document.getElementById('componentSearch')?.addEventListener('input', renderComponentsList);
+    });
+
+    // ===================================================================
+    //  Render Systems (Grid + Pagination)
+    // ===================================================================
+    function renderSystems() {
+        const grid = document.getElementById('systemsGrid');
+        if (!grid || !dataManager.loaded) return;
+
+        const search = document.getElementById('searchSystem')?.value || '';
+        const type = document.getElementById('filterType')?.value || '';
+        const insulation = document.getElementById('filterInsulation')?.value || '';
+        const origin = document.getElementById('filterOrigin')?.value || '';
+
+        filteredSystems = dataManager.getSystems({ search, type, isolante: insulation, origin });
+
+        if (filteredSystems.length === 0) {
+            grid.innerHTML = `<div class="empty-state">${i18n.t('systems.noResults')}</div>`;
+            document.getElementById('pagination').innerHTML = '';
+            return;
+        }
+
+        const totalPages = Math.ceil(filteredSystems.length / ITEMS_PER_PAGE);
+        if (currentSystemPage > totalPages) currentSystemPage = totalPages;
+        const start = (currentSystemPage - 1) * ITEMS_PER_PAGE;
+        const pageItems = filteredSystems.slice(start, start + ITEMS_PER_PAGE);
+
+        grid.innerHTML = pageItems.map(system => createSystemCard(system)).join('');
+        renderPagination(totalPages);
     }
-}
+    window.renderSystems = renderSystems;
 
-// ===== Filters =====
-function setupFilters() {
-    document.getElementById('filterType').addEventListener('change', applyFilters);
-    document.getElementById('filterLight')?.addEventListener('change', applyFilters);
-    document.getElementById('filterInsulation').addEventListener('change', applyFilters);
-    document.getElementById('filterOrigin').addEventListener('change', applyFilters);
-    document.getElementById('clearFilters').addEventListener('click', clearFilters);
-    document.getElementById('printCatalog').addEventListener('click', printCatalog);
-    
-    // Setup search input
-    const searchInput = document.getElementById('searchSystem');
-    let searchTimeout;
-    searchInput.addEventListener('input', (e) => {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            currentFilters.search = e.target.value.toLowerCase();
-            currentPage = 1;
-            renderSystems();
-        }, 300); // Debounce de 300ms
-    });
-}
+    function createSystemCard(system) {
+        const idx = dataManager.systems.indexOf(system);
+        const isCustom = system.custom === true;
+        const isSelected = selectedSystems.includes(idx);
+        const typeClass = getTypeClass(system);
 
-function applyFilters() {
-    currentFilters = {
-        type: document.getElementById('filterType').value,
-        isolante: document.getElementById('filterInsulation').value,
-        origin: document.getElementById('filterOrigin').value,
-        search: document.getElementById('searchSystem').value.toLowerCase()
-    };
-    currentPage = 1;
-    renderSystems();
-}
+        const imageSrc = system.imagem || '';
+        const imageHtml = imageSrc
+            ? `<div class="system-image"><img src="${imageSrc}" alt="${system.nome}" loading="lazy"></div>`
+            : '';
 
-function clearFilters() {
-    document.getElementById('filterType').value = '';
-    const filterLight = document.getElementById('filterLight');
-    if (filterLight) filterLight.value = '';
-    document.getElementById('filterInsulation').value = '';
-    document.getElementById('filterOrigin').value = '';
-    document.getElementById('searchSystem').value = '';
-    currentFilters = {};
-    currentPage = 1;
-    renderSystems();
-}
-
-function printCatalog() {
-    window.print();
-}
-
-// ===== Systems Rendering =====
-function renderSystems() {
-    const grid = document.getElementById('systemsGrid');
-    const systems = dataManager.getSystems(currentFilters);
-    
-    if (systems.length === 0) {
-        grid.innerHTML = '<div class="empty-state">No systems found matching your criteria</div>';
-        return;
-    }
-    
-    const start = (currentPage - 1) * systemsPerPage;
-    const end = start + systemsPerPage;
-    const pageSystems = systems.slice(start, end);
-    
-    grid.innerHTML = pageSystems.map((system, index) => createSystemCard(system, start + index)).join('');
-    renderPagination(systems.length);
-    
-    // Add click handlers
-    document.querySelectorAll('.system-card').forEach(card => {
-        card.addEventListener('click', () => {
-            const systemId = card.dataset.systemId;
-            // For custom systems, use the string ID; for database systems, use the index
-            const id = systemId.includes('custom_') ? systemId : parseInt(systemId);
-            showSystemDetail(id);
-        });
-    });
-    
-    document.querySelectorAll('.select-system').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const systemId = btn.dataset.systemId;
-            // For custom systems, use the string ID; for database systems, use the index
-            const id = systemId.includes('custom_') ? systemId : parseInt(systemId);
-            toggleSystemSelection(id);
-        });
-    });
-}
-
-function createSystemCard(system, index) {
-    // Use custom ID for custom systems, otherwise use the index
-    const systemId = system.id || index;
-    const isSelected = selectedSystems.includes(systemId);
-    const typeClass = system.nome.includes('Concreto') ? 'concrete' : 
-                     system.nome.includes('Cerâmico') ? 'ceramic' : 'other';
-    
-    // Get image path if available
-    const imagePath = system.imagem || '';
-    
-    return `
-        <div class="system-card ${typeClass}" data-system-id="${systemId}">
-            ${imagePath ? `<div class="system-image"><img src="${imagePath}" alt="${system.nome}" loading="lazy"></div>` : ''}
+        return `
+        <div class="system-card ${typeClass}" onclick="showSystemDetail(${idx})">
+            ${isCustom ? `<span class="badge-custom">Custom</span>` : ''}
+            ${imageHtml}
             <div class="system-header">
                 <h3 class="system-name">${system.nome}</h3>
-                <button class="select-system ${isSelected ? 'selected' : ''}" data-system-id="${systemId}">
-                    ${isSelected ? '✓ Selecionado' : '+ Selecionar'}
+                <button class="select-system ${isSelected ? 'selected' : ''}" onclick="event.stopPropagation(); toggleSelectSystem(${idx})">
+                    ${isSelected ? i18n.t('systems.selected') : i18n.t('systems.select')}
                 </button>
             </div>
             <div class="system-specs">
-                <div class="spec-item">
-                    <span class="spec-label">Valor U:</span>
-                    <span class="spec-value">${system.transmitancia.toFixed(2)} W/m²K</span>
-                </div>
-                <div class="spec-item">
-                    <span class="spec-label">Cap. Térmica:</span>
-                    <span class="spec-value">${system.capacidade_termica.toFixed(0)} kJ/m²K</span>
-                </div>
-                <div class="spec-item">
-                    <span class="spec-label">Peso:</span>
-                    <span class="spec-value">${system.identificacao.descricao.peso.toFixed(1)} kg/m²</span>
-                </div>
-                <div class="spec-item">
-                    <span class="spec-label">Espessura:</span>
-                    <span class="spec-value">${system.identificacao.descricao.espessura} cm</span>
-                </div>
+                <div class="spec-item"><span class="spec-label">U:</span><span class="spec-value">${system.transmitancia?.toFixed(2) || '—'} W/m²K</span></div>
+                <div class="spec-item"><span class="spec-label">CT:</span><span class="spec-value">${system.capacidade_termica?.toFixed(0) || '—'} kJ/m²K</span></div>
+                <div class="spec-item"><span class="spec-label">Peso:</span><span class="spec-value">${system.identificacao?.descricao?.peso?.toFixed(1) || '—'} kg/m²</span></div>
+                <div class="spec-item"><span class="spec-label">Esp.:</span><span class="spec-value">${system.identificacao?.descricao?.espessura || '—'} cm</span></div>
             </div>
             <div class="system-impacts">
-                <div class="impact-item">
-                    <span class="impact-label">GWP:</span>
-                    <span class="impact-value">${formatScientific(system.impactos.gwp)} kg CO₂ eq</span>
-                </div>
-                <div class="impact-item">
-                    <span class="impact-label">CED:</span>
-                    <span class="impact-value">${formatScientific(system.consumo.total)} MJ</span>
-                </div>
+                <div class="impact-item"><span class="impact-label">GWP:</span><span class="impact-value">${formatScientific(system.impactos?.gwp)} kg CO₂ eq</span></div>
+                <div class="impact-item"><span class="impact-label">CED:</span><span class="impact-value">${formatScientific(system.consumo?.total)} MJ</span></div>
             </div>
             <div class="system-tags">
-                ${system.custom ? '<span class="tag tag-custom">Personalizado</span>' : ''}
-                ${system.identificacao.descricao.sistema_leve ? '<span class="tag">Sistema Leve</span>' : ''}
-                ${system.identificacao.descricao.isolante_termico ? '<span class="tag">Isolado</span>' : ''}
+                ${system.identificacao?.descricao?.isolante_termico ? `<span class="tag">🛡️ Isolamento</span>` : ''}
+                ${system.identificacao?.descricao?.sistema_leve ? `<span class="tag">⚡ Leve</span>` : ''}
             </div>
-            <div class="system-actions" style="margin-top: 15px;">
-                <button class="btn btn-secondary btn-small" onclick="openCartilhaModal('${systemId}')" style="width: 100%;">
-                    📖 Ver Cartilha do Sistema
-                </button>
-            </div>
-        </div>
-    `;
-}
-
-function renderPagination(totalSystems) {
-    const totalPages = Math.ceil(totalSystems / systemsPerPage);
-    const pagination = document.getElementById('pagination');
-    
-    if (totalPages <= 1) {
-        pagination.innerHTML = '';
-        return;
+        </div>`;
     }
-    
-    let html = '<button class="page-btn" onclick="changePage(' + (currentPage - 1) + ')" ' + 
-               (currentPage === 1 ? 'disabled' : '') + '>‹ Anterior</button>';
-    
-    for (let i = 1; i <= totalPages; i++) {
-        if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
-            html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
-        } else if (i === currentPage - 3 || i === currentPage + 3) {
-            html += '<span class="page-ellipsis">...</span>';
+
+    function getTypeClass(system) {
+        const name = (system.nome || '').toLowerCase();
+        const layers = (system.identificacao?.camadas || []).join(' ').toLowerCase();
+        if (name.includes('concreto') || layers.includes('bloco de concreto') || layers.includes('concreto maciço')) return 'concrete';
+        if (name.includes('cerâm') || layers.includes('cerâm') || layers.includes('tijolo')) return 'ceramic';
+        if (name.includes('steel frame') || name.includes('drywall') || layers.includes('placa cimentícia')) return 'steelframe';
+        return 'other';
+    }
+
+    // ===================================================================
+    //  Pagination
+    // ===================================================================
+    function renderPagination(totalPages) {
+        const container = document.getElementById('pagination');
+        if (!container) return;
+        if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+        let html = `<button class="page-btn" onclick="changePage(${currentSystemPage - 1})" ${currentSystemPage === 1 ? 'disabled' : ''}>${i18n.t('systems.prev')}</button>`;
+
+        for (let p = 1; p <= totalPages; p++) {
+            if (totalPages > 7 && p > 2 && p < totalPages - 1 && Math.abs(p - currentSystemPage) > 1) {
+                if (p === 3 || p === totalPages - 2) html += '<span class="page-ellipsis">…</span>';
+                continue;
+            }
+            html += `<button class="page-btn ${p === currentSystemPage ? 'active' : ''}" onclick="changePage(${p})">${p}</button>`;
         }
+        html += `<button class="page-btn" onclick="changePage(${currentSystemPage + 1})" ${currentSystemPage === totalPages ? 'disabled' : ''}>${i18n.t('systems.next')}</button>`;
+        container.innerHTML = html;
     }
-    
-    html += '<button class="page-btn" onclick="changePage(' + (currentPage + 1) + ')" ' + 
-            (currentPage === totalPages ? 'disabled' : '') + '>Próxima ›</button>';
-    
-    pagination.innerHTML = html;
-}
+    window.changePage = function (p) {
+        const totalPages = Math.ceil(filteredSystems.length / ITEMS_PER_PAGE);
+        if (p < 1 || p > totalPages) return;
+        currentSystemPage = p;
+        renderSystems();
+        document.getElementById('page-systems')?.scrollIntoView({ behavior: 'smooth' });
+    };
 
-function changePage(page) {
-    const systems = dataManager.getSystems(currentFilters);
-    const totalPages = Math.ceil(systems.length / systemsPerPage);
-    
-    if (page < 1 || page > totalPages) return;
-    
-    currentPage = page;
-    renderSystems();
-    scrollToSection('systems');
-}
+    function clearFilters() {
+        document.getElementById('searchSystem').value = '';
+        document.getElementById('filterType').value = '';
+        document.getElementById('filterInsulation').value = '';
+        document.getElementById('filterOrigin').value = '';
+        currentSystemPage = 1;
+        renderSystems();
+    }
 
-// ===== System Detail Modal =====
-function showSystemDetail(systemId) {
-    // Find system by ID (string for custom) or index (number for database)
-    const system = typeof systemId === 'string' 
-        ? dataManager.systems.find(s => s.id === systemId)
-        : dataManager.systems[systemId];
-    if (!system) return;
-    
-    const modalBody = document.getElementById('modalBody');
-    modalBody.innerHTML = `
-        <h2 class="modal-title">${system.nome}</h2>
-        
-        <div class="detail-section">
-            <h3>Informações do Sistema</h3>
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <strong>Unidade:</strong> ${system.identificacao.unidade}
-                </div>
-                <div class="detail-item">
-                    <strong>Fronteira:</strong> ${system.identificacao.fronteira}
-                </div>
-                <div class="detail-item">
-                    <strong>Validade:</strong> ${system.identificacao.validade}
-                </div>
-            </div>
-        </div>
+    // ===================================================================
+    //  System Selection (for compare)
+    // ===================================================================
+    window.toggleSelectSystem = function (idx) {
+        const pos = selectedSystems.indexOf(idx);
+        if (pos > -1) {
+            selectedSystems.splice(pos, 1);
+        } else {
+            if (selectedSystems.length >= 3) {
+                showAlert('error', i18n.t('alert.maxSystems'));
+                return;
+            }
+            selectedSystems.push(idx);
+        }
+        renderSystems();
+        renderSelectedChips();
+    };
 
-        <div class="detail-section">
-            <h3>Propriedades Físicas</h3>
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <strong>Peso:</strong> ${system.identificacao.descricao.peso.toFixed(1)} kg/m²
-                </div>
-                <div class="detail-item">
-                    <strong>Espessura:</strong> ${system.identificacao.descricao.espessura} cm
-                </div>
-                <div class="detail-item">
-                    <strong>Sistema Leve:</strong> ${system.identificacao.descricao.sistema_leve ? 'Sim' : 'Não'}
-                </div>
-                <div class="detail-item">
-                    <strong>Isolamento Térmico:</strong> ${system.identificacao.descricao.isolante_termico ? 'Sim' : 'Não'}
-                </div>
-            </div>
-        </div>
+    function renderSelectedChips() {
+        const container = document.getElementById('selectedSystems');
+        const compareBtn = document.getElementById('compareBtn');
+        if (!container) return;
 
-        <div class="detail-section">
-            <h3>Desempenho Térmico</h3>
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <strong>Valor U (Transmitância):</strong> ${system.transmitancia.toFixed(2)} W/m²K
-                </div>
-                <div class="detail-item">
-                    <strong>Capacidade Térmica:</strong> ${system.capacidade_termica.toFixed(0)} kJ/m²K
-                </div>
-            </div>
-        </div>
-
-        <div class="detail-section">
-            <h3>Camadas</h3>
-            <ol class="layers-list">
-                ${system.identificacao.camadas.map(layer => `<li>${layer}</li>`).join('')}
-            </ol>
-        </div>
-
-        <div class="detail-section">
-            <h3>Impactos Ambientais</h3>
-            <div class="impacts-table">
-                <div class="impact-row">
-                    <span class="impact-name">GWP - Potencial de Aquecimento Global</span>
-                    <span class="impact-value">${formatScientific(system.impactos.gwp)} kg CO₂ eq</span>
-                </div>
-                <div class="impact-row">
-                    <span class="impact-name">AP - Potencial de Acidificação</span>
-                    <span class="impact-value">${formatScientific(system.impactos.ap)} kg SO₂ eq</span>
-                </div>
-                <div class="impact-row">
-                    <span class="impact-name">EP - Potencial de Eutrofização</span>
-                    <span class="impact-value">${formatScientific(system.impactos.ep)} kg PO₄³⁻ eq</span>
-                </div>
-                <div class="impact-row">
-                    <span class="impact-name">POCP - Criação de Ozônio Fotoquímico</span>
-                    <span class="impact-value">${formatScientific(system.impactos.pocp)} kg C₂H₄ eq</span>
-                </div>
-                <div class="impact-row">
-                    <span class="impact-name">ODP - Depleção da Camada de Ozônio</span>
-                    <span class="impact-value">${formatScientific(system.impactos.odp)} kg CFC-11 eq</span>
-                </div>
-                <div class="impact-row">
-                    <span class="impact-name">ADPNF - Depleção Abiótica (não-fóssil)</span>
-                    <span class="impact-value">${formatScientific(system.impactos.adpnf)} kg Sb eq</span>
-                </div>
-                <div class="impact-row">
-                    <span class="impact-name">ADPF - Depleção Abiótica (fóssil)</span>
-                    <span class="impact-value">${formatScientific(system.impactos.adpf)} MJ</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="detail-section">
-            <h3>Consumo de Componentes</h3>
-            <div class="components-table">
-                <div class="component-header">
-                    <span>Componente</span>
-                    <span>Consumo</span>
-                    <span>GWP</span>
-                </div>
-                ${system.consumo.componentes.map(comp => `
-                    <div class="component-row">
-                        <span class="component-name">${comp.componente}</span>
-                        <span>${formatScientific(comp.consumo_componente)}</span>
-                        <span>${formatScientific(comp.gwp)}</span>
-                    </div>
-                `).join('')}
-            </div>
-            <div class="total-row">
-                <strong>Consumo Total:</strong> ${formatScientific(system.consumo.total)} MJ
-            </div>
-        </div>
-    `;
-    
-    document.getElementById('systemModal').classList.add('active');
-}
-
-function closeModal() {
-    document.getElementById('systemModal').classList.remove('active');
-}
-
-// ===== System Selection & Comparison =====
-function toggleSystemSelection(systemId) {
-    const index = selectedSystems.indexOf(systemId);
-    
-    if (index > -1) {
-        selectedSystems.splice(index, 1);
-    } else {
-        if (selectedSystems.length >= 3) {
-            alert('Máximo de 3 sistemas podem ser comparados de cada vez');
+        if (selectedSystems.length === 0) {
+            container.innerHTML = `<div class="empty-state">${i18n.t('compare.empty')}</div>`;
+            if (compareBtn) compareBtn.disabled = true;
             return;
         }
-        selectedSystems.push(systemId);
-    }
-    
-    updateSelectedSystems();
-    renderSystems(); // Re-render to update button states
-}
+        if (compareBtn) compareBtn.disabled = selectedSystems.length < 2;
 
-function updateSelectedSystems() {
-    const container = document.getElementById('selectedSystems');
-    const compareBtn = document.getElementById('compareBtn');
-    
-    if (selectedSystems.length === 0) {
-        container.innerHTML = '<div class="empty-state">Nenhum sistema selecionado</div>';
-        updateCompareButtonState();
-    } else {
-        container.innerHTML = selectedSystems.map(id => {
-            // Find system by ID (for custom) or by index (for database systems)
-            const system = typeof id === 'string' 
-                ? dataManager.systems.find(s => s.id === id)
-                : dataManager.systems[id];
-            
-            return `
-                <div class="selected-chip">
-                    <span>${system.nome}</span>
-                    <button class="remove-chip" data-system-id="${id}">×</button>
-                </div>
-            `;
+        container.innerHTML = selectedSystems.map((idx) => {
+            const sys = dataManager.systems[idx];
+            return `<span class="selected-chip">${sys?.nome || idx}<button class="remove-chip" onclick="toggleSelectSystem(${idx})">×</button></span>`;
         }).join('');
-        
-        // Add event listeners to remove buttons
-        container.querySelectorAll('.remove-chip').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const systemId = e.target.dataset.systemId;
-                // Convert back to number if it's a numeric string
-                const id = /^\d+$/.test(systemId) ? parseInt(systemId) : systemId;
-                toggleSystemSelection(id);
-            });
-        });
-        
-        updateCompareButtonState();
     }
-}
+    window.updateSelectedSystems = renderSelectedChips;
 
-function showComparison() {
-    if (selectedSystems.length < 2) return;
-    
-    // Get systems correctly by ID (string for custom) or index (number for database)
-    const systems = selectedSystems.map(id => {
-        if (typeof id === 'string') {
-            return dataManager.systems.find(s => s.id === id);
+    // ===================================================================
+    //  System Detail Modal
+    // ===================================================================
+    window.showSystemDetail = function (idx) {
+        const system = dataManager.systems[idx];
+        if (!system) return;
+
+        const modal = document.getElementById('systemModal');
+        const body = document.getElementById('modalBody');
+        if (!modal || !body) return;
+
+        // Apply type-based color to modal
+        const typeClass = getTypeClass(system);
+        modal.className = `modal ${typeClass}-modal`;
+
+        body.innerHTML = buildDetailHTML(system, idx);
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+
+    function closeSystemModal() {
+        document.getElementById('systemModal')?.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function buildDetailHTML(system, idx) {
+        const desc = system.identificacao?.descricao || {};
+        const layers = system.identificacao?.camadas || [];
+        const imp = system.impactos || {};
+        const comps = system.consumo?.componentes || [];
+
+        let html = `<h2 class="modal-title">${system.nome}</h2>`;
+
+        // Identification
+        html += `<div class="detail-section"><h3>Identificação</h3><div class="detail-grid">`;
+        html += `<div class="detail-item"><strong>Fronteira:</strong> ${system.identificacao?.fronteira || '—'}</div>`;
+        html += `<div class="detail-item"><strong>Unidade:</strong> ${system.identificacao?.unidade || '—'}</div>`;
+        html += `<div class="detail-item"><strong>Peso:</strong> ${desc.peso?.toFixed(1) || '—'} kg/m²</div>`;
+        html += `<div class="detail-item"><strong>Espessura:</strong> ${desc.espessura || '—'} cm</div>`;
+        html += `<div class="detail-item"><strong>Sistema Leve:</strong> ${desc.sistema_leve ? 'Sim' : 'Não'}</div>`;
+        html += `<div class="detail-item"><strong>Isolante Térmico:</strong> ${desc.isolante_termico ? 'Sim' : 'Não'}</div>`;
+        html += `</div></div>`;
+
+        // Layers
+        if (layers.length) {
+            html += `<div class="detail-section"><h3>Camadas (interior → exterior)</h3><ol class="layers-list">${layers.map(l => `<li>${l}</li>`).join('')}</ol></div>`;
         }
-        return dataManager.systems[id];
-    });
-    const resultsDiv = document.getElementById('comparisonResults');
-    
-    resultsDiv.innerHTML = `
-        <h3>Resultados da Comparação</h3>
-        <div class="comparison-grid">
-            ${createComparisonTable(systems)}
-        </div>
-        <div class="comparison-charts">
-            ${createComparisonCharts(systems)}
-        </div>
-        <h3 style="margin-top: var(--space-2xl);">Conformidade com Normas Térmicas</h3>
-        <div class="comparison-grid">
-            ${createStandardsComplianceTable(systems)}
-        </div>
-    `;
-    
-    resultsDiv.style.display = 'block';
-    scrollToSection('compare');
-    
-    // Salvar comparação no histórico do usuário
-    const currentUser = getCurrentUser();
-    if (currentUser) {
-        const comparison = {
-            systems: systems.map(s => s.nome),
-            systemIds: selectedSystems
-        };
-        saveUserComparison(currentUser, comparison);
-        // Atualizar a exibição do histórico imediatamente
-        displayUserComparisons();
+
+        // Thermal properties
+        html += `<div class="detail-section"><h3>Propriedades Térmicas</h3><div class="detail-grid">`;
+        html += `<div class="detail-item"><strong>Transmitância Térmica (U):</strong> ${system.transmitancia?.toFixed(2) || '—'} W/m²K</div>`;
+        html += `<div class="detail-item"><strong>Capacidade Térmica (CT):</strong> ${system.capacidade_termica?.toFixed(0) || '—'} kJ/m²K</div>`;
+        html += `</div></div>`;
+
+        // Environmental impacts
+        html += `<div class="detail-section"><h3>Impactos Ambientais (A1-A3)</h3><div class="impacts-table">`;
+        const impactLabels = { gwp: 'GWP (kg CO₂ eq)', ap: 'AP (kg SO₂ eq)', ep: 'EP (kg PO₄ eq)', pocp: 'POCP (kg C₂H₄ eq)', odp: 'ODP (kg CFC-11 eq)', adpf: 'ADP-f (MJ)', adpnf: 'ADP-nf (kg Sb eq)' };
+        for (const [key, label] of Object.entries(impactLabels)) {
+            html += `<div class="impact-row"><span>${label}</span><span>${formatScientific(imp[key])}</span></div>`;
+        }
+        html += `</div></div>`;
+
+        // Energy consumption
+        html += `<div class="detail-section"><h3>Consumo Energético (CED)</h3>`;
+        html += `<div class="total-row"><strong>Total: ${formatScientific(system.consumo?.total)} MJ</strong></div>`;
+        if (comps.length) {
+            html += `<div class="components-table"><div class="component-header"><span>Componente</span><span>CED (MJ)</span><span>GWP (kg CO₂ eq)</span></div>`;
+            comps.forEach(c => {
+                html += `<div class="component-row"><span>${c.componente}</span><span>${formatScientific(c.consumo_componente)}</span><span>${formatScientific(c.gwp)}</span></div>`;
+            });
+            html += `</div>`;
+        }
+        html += `</div>`;
+
+        // View Cartilha button
+        html += `<div style="text-align:center;margin-top:24px"><button class="btn btn-primary" onclick="openCartilhaModal(${idx})">${i18n.t('systems.viewCard')}</button></div>`;
+
+        return html;
     }
-}
 
-// ===== Novos: Controles e lógica da seção de comparação =====
-function updateCompareButtonState() {
-    const compareBtn = document.getElementById('compareBtn');
-    compareBtn.disabled = selectedSystems.length < 2;
-    compareBtn.textContent = 'Comparar';
-}
+    // ===================================================================
+    //  Comparison
+    // ===================================================================
+    function showComparison() {
+        if (selectedSystems.length < 2) return;
 
-function onCompareClick() {
-    showComparison();
-}
+        const systems = selectedSystems.map(i => dataManager.systems[i]).filter(Boolean);
+        const resultsDiv = document.getElementById('comparisonResults');
+        if (!resultsDiv) return;
+        resultsDiv.style.display = 'block';
 
-function getSelectedSystemsObjects() {
-    return selectedSystems.map(id => (typeof id === 'string')
-        ? dataManager.systems.find(s => s.id === id)
-        : dataManager.systems[id]
-    ).filter(Boolean);
-}
+        let html = `<h3>${i18n.t('compare.results')}</h3>`;
+        html += createComparisonTable(systems);
+        html += `<div class="comparison-charts">${createComparisonCharts(systems)}</div>`;
+        html += createStandardsComplianceTable(systems);
+        resultsDiv.innerHTML = html;
 
-function getSelectedStandards() {
-    return Array.from(document.querySelectorAll('#standardsControls .std-opt'))
-        .filter(cb => cb.checked)
-        .map(cb => cb.value);
-}
+        // Render charts after DOM is ready
+        setTimeout(() => {
+            renderBarCharts(systems);
+        }, 100);
 
-function renderStandardsComparison(systems, standards) {
-    const regs = dataManager.getRegulations();
-    const resultsDiv = document.getElementById('comparisonResults');
+        // Save comparison to history
+        if (isLoggedIn()) {
+            saveUserComparison(getCurrentUser(), { systems: systems.map(s => s.nome) });
+            displayUserComparisons();
+        }
+    }
 
-    const header = `<h3>Conformidade com normas térmicas</h3>`;
+    function createComparisonTable(systems) {
+        const props = [
+            { key: 'transmitancia', label: 'Transmitância Térmica (U)', unit: 'W/m²K', lower: true },
+            { key: 'capacidade_termica', label: 'Capacidade Térmica (CT)', unit: 'kJ/m²K', lower: false },
+            { key: 'peso', label: 'Peso', unit: 'kg/m²', lower: true, path: 'identificacao.descricao.peso' },
+            { key: 'espessura', label: 'Espessura', unit: 'cm', lower: true, path: 'identificacao.descricao.espessura' },
+            { key: 'gwp', label: 'GWP (kg CO₂ eq)', unit: '', lower: true, path: 'impactos.gwp' },
+            { key: 'ap', label: 'AP (kg SO₂ eq)', unit: '', lower: true, path: 'impactos.ap' },
+            { key: 'ep', label: 'EP (kg PO₄ eq)', unit: '', lower: true, path: 'impactos.ep' },
+            { key: 'pocp', label: 'POCP (kg C₂H₄ eq)', unit: '', lower: true, path: 'impactos.pocp' },
+            { key: 'odp', label: 'ODP (kg CFC-11 eq)', unit: '', lower: true, path: 'impactos.odp' },
+            { key: 'ced', label: 'CED (MJ)', unit: '', lower: true, path: 'consumo.total' }
+        ];
 
-    // Cabeçalho
-    const thead = `
-        <div class=\"comparison-row header\">\n            <div class=\"comparison-cell\">Sistema</div>\n            ${standards.map(std => `<div class=\"comparison-cell\">${formatStandardLabel(std)}</div>`).join('')}\n        </div>`;
+        let html = `<div class="comparison-table">`;
+        // Header with clickable system names and descriptions
+        html += `<div class="comparison-row header"><div class="comparison-cell">${i18n.t('compare.property')}</div>`;
+        systems.forEach(s => {
+            const idx = dataManager.systems.indexOf(s);
+            const typeClass = getTypeClass(s);
+            const desc = s.identificacao?.descricao || {};
+            const layers = (s.identificacao?.camadas || []).join(', ');
+            html += `<div class="comparison-cell system-header-cell ${typeClass}-header">
+                <a href="#" class="system-name-link" onclick="event.preventDefault(); showSystemDetail(${idx})">${s.nome}</a>
+                <span class="system-desc-sub">${layers || ''}</span>
+            </div>`;
+        });
+        html += `</div>`;
 
-    const rows = systems.map(sys => {
-        const cells = standards.map(std => {
-            const res = evaluateStandard(std, sys, regs);
-            return `<div class=\"comparison-cell ${res.ok ? 'best' : ''}\">${res.label}</div>`;
+        props.forEach(prop => {
+            const values = systems.map(s => {
+                if (prop.path) return prop.path.split('.').reduce((o, k) => o?.[k], s);
+                return s[prop.key];
+            });
+            const best = prop.lower ? Math.min(...values.filter(v => v != null)) : Math.max(...values.filter(v => v != null));
+
+            html += `<div class="comparison-row"><div class="comparison-cell">${prop.label}</div>`;
+            values.forEach(v => {
+                const isBest = v === best;
+                const display = v != null ? (prop.unit ? `${typeof v === 'number' && Math.abs(v) < 0.01 ? formatScientific(v) : (typeof v === 'number' ? v.toFixed(2) : v)} ${prop.unit}` : formatScientific(v)) : '—';
+                html += `<div class="comparison-cell ${isBest ? 'best' : ''}">${display}</div>`;
+            });
+            html += `</div>`;
+        });
+        html += `</div>`;
+        return html;
+    }
+
+    function createComparisonCharts(systems) {
+        // Placeholder canvases – will be rendered in renderBarCharts
+        return `
+            <h4>Impactos Ambientais</h4>
+            <canvas id="chartGWP" height="200"></canvas>
+            <canvas id="chartEnergy" height="200"></canvas>
+            <canvas id="chartAP" height="200"></canvas>
+        `;
+    }
+
+    function renderBarCharts(systems) {
+        const labels = systems.map(s => s.nome);
+
+        // GWP Chart
+        const ctxGWP = document.getElementById('chartGWP');
+        if (ctxGWP) {
+            new Chart(ctxGWP, {
+                type: 'bar',
+                data: { labels, datasets: [{ label: 'GWP (kg CO₂ eq)', data: systems.map(s => s.impactos?.gwp || 0), backgroundColor: chartColors }] },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+        }
+
+        // CED Chart
+        const ctxCED = document.getElementById('chartEnergy');
+        if (ctxCED) {
+            new Chart(ctxCED, {
+                type: 'bar',
+                data: { labels, datasets: [{ label: 'CED (MJ)', data: systems.map(s => s.consumo?.total || 0), backgroundColor: chartColors }] },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+        }
+
+        // AP Chart
+        const ctxAP = document.getElementById('chartAP');
+        if (ctxAP) {
+            new Chart(ctxAP, {
+                type: 'bar',
+                data: { labels, datasets: [{ label: 'AP (kg SO₂ eq)', data: systems.map(s => s.impactos?.ap || 0), backgroundColor: chartColors }] },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+        }
+    }
+
+    // ===================================================================
+    //  Standards Compliance
+    // ===================================================================
+    function createStandardsComplianceTable(systems) {
+        const regs = dataManager.getRegulations();
+        if (!regs) return '';
+
+        let html = `<h3 style="text-align:center;margin-top:2rem;">${i18n.t('compare.standardsTitle')}</h3>`;
+        html += `<div class="comparison-table"><div class="comparison-row header"><div class="comparison-cell">${i18n.t('compare.standard')}</div>`;
+        systems.forEach(s => { html += `<div class="comparison-cell">${s.nome}</div>`; });
+        html += `</div>`;
+
+        // NBR 15575 – zones 1-8
+        if (regs.nbr15575) {
+            for (let z = 1; z <= 8; z++) {
+                html += `<div class="comparison-row"><div class="comparison-cell">NBR 15575 – Zona ${z}</div>`;
+                systems.forEach(s => {
+                    const result = evaluateNBR(s, regs.nbr15575, z);
+                    html += `<div class="comparison-cell" style="color:${result ? 'var(--success-500)' : 'var(--error-500)'}">${result ? '✓' : '✗'}</div>`;
+                });
+                html += `</div>`;
+            }
+        }
+
+        // ASHRAE residential
+        if (regs.ashrae_residential) {
+            regs.ashrae_residential.zonas?.forEach(zona => {
+                html += `<div class="comparison-row"><div class="comparison-cell">ASHRAE Res. – Zona ${zona.zona}</div>`;
+                systems.forEach(s => {
+                    const maxU = zona.transmitancia_maxima?.wall_mass || 999;
+                    const pass = s.transmitancia <= maxU;
+                    html += `<div class="comparison-cell" style="color:${pass ? 'var(--success-500)' : 'var(--error-500)'}">${pass ? '✓' : '✗'}</div>`;
+                });
+                html += `</div>`;
+            });
+        }
+
+        // ASHRAE commercial
+        if (regs.ashrae_commercial) {
+            regs.ashrae_commercial.zonas?.forEach(zona => {
+                html += `<div class="comparison-row"><div class="comparison-cell">ASHRAE Com. – Zona ${zona.zona}</div>`;
+                systems.forEach(s => {
+                    const maxU = zona.transmitancia_maxima?.wall_mass || 999;
+                    const pass = s.transmitancia <= maxU;
+                    html += `<div class="comparison-cell" style="color:${pass ? 'var(--success-500)' : 'var(--error-500)'}">${pass ? '✓' : '✗'}</div>`;
+                });
+                html += `</div>`;
+            });
+        }
+
+        html += `</div>`;
+        return html;
+    }
+
+    function evaluateNBR(system, nbr, zone) {
+        const zona = nbr.zonas?.find(z => z.zona === zone);
+        if (!zona) return false;
+        const maxU = zona.transmitancia_maxima?.inferior_limite || 999;
+        const minCT = zona.capacidade_minima || 0;
+        return system.transmitancia <= maxU && system.capacidade_termica >= minCT;
+    }
+
+    // ===================================================================
+    //  Cartilha Modal
+    // ===================================================================
+    window.openCartilhaModal = function (idx) {
+        const system = dataManager.systems[idx];
+        if (!system) return;
+
+        // Close detail modal first
+        closeSystemModal();
+
+        const modal = document.getElementById('cartilhaModal');
+        const titulo = document.getElementById('cartilhaTitulo');
+        const content = document.getElementById('cartilhaContent');
+        if (!modal || !content) return;
+
+        titulo.textContent = `Cartilha – ${system.nome}`;
+        content.innerHTML = buildCartilhaHTML(system);
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Render cartilha charts
+        setTimeout(() => createCartilhaCharts(system), 200);
+    };
+
+    window.closeCartilhaModal = function () {
+        const modal = document.getElementById('cartilhaModal');
+        if (modal) modal.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    function buildCartilhaHTML(system) {
+        const desc = system.identificacao?.descricao || {};
+        const layers = system.identificacao?.camadas || [];
+        const imp = system.impactos || {};
+        const comps = system.consumo?.componentes || [];
+        const regs = dataManager.getRegulations();
+        const typeClass = getTypeClass(system);
+
+        let html = '';
+
+        // Logos header
+        html += `<div class="cartilha-logos-row"><img src="assets/logo_ufrgs.png" alt="UFRGS" class="cartilha-inline-logo"><img src="assets/logo_e3build.svg" alt="E³ Build" class="cartilha-inline-logo"><img src="assets/logo_life.png" alt="LIfE" class="cartilha-inline-logo"></div>`;
+
+        // Image
+        if (system.imagem) {
+            html += `<img src="${system.imagem}" alt="${system.nome}" class="cartilha-image">`;
+        }
+
+        // 1. Identification
+        html += `<h3>1. IDENTIFICAÇÃO DO SISTEMA</h3>`;
+        html += `<p><strong>Sistema:</strong> ${system.nome}</p>`;
+        html += `<p><strong>Fronteira do sistema:</strong> ${system.identificacao?.fronteira || '—'}</p>`;
+        html += `<p><strong>Unidade funcional:</strong> ${system.identificacao?.unidade || '—'}</p>`;
+        html += `<p><strong>Peso:</strong> ${desc.peso?.toFixed(1) || '—'} kg/m²</p>`;
+        html += `<p><strong>Espessura total:</strong> ${desc.espessura || '—'} cm</p>`;
+        html += `<p><strong>Sistema leve:</strong> ${desc.sistema_leve ? 'Sim' : 'Não'}</p>`;
+        html += `<p><strong>Isolante térmico:</strong> ${desc.isolante_termico ? 'Sim' : 'Não'}</p>`;
+
+        // Layers
+        html += `<h4>Composição (interior → exterior):</h4>`;
+        html += `<ol>${layers.map(l => `<li>${l}</li>`).join('')}</ol>`;
+
+        // 2. Thermal Performance
+        html += `<h3>2. DESEMPENHO TÉRMICO</h3>`;
+        html += `<table class="cartilha-table"><thead><tr><th>Propriedade</th><th>Valor</th><th>Unidade</th></tr></thead><tbody>`;
+        html += `<tr><td>Transmitância Térmica (U)</td><td>${system.transmitancia?.toFixed(2) || '—'}</td><td>W/(m²·K)</td></tr>`;
+        html += `<tr><td>Capacidade Térmica (CT)</td><td>${system.capacidade_termica?.toFixed(0) || '—'}</td><td>kJ/(m²·K)</td></tr>`;
+        html += `</tbody></table>`;
+
+        // 3. Environmental Impacts
+        html += `<h3>3. IMPACTOS AMBIENTAIS (A1-A3)</h3>`;
+        html += `<table class="cartilha-table"><thead><tr><th>Indicador</th><th>Valor</th><th>Unidade</th></tr></thead><tbody>`;
+        const impacts = [
+            ['GWP', imp.gwp, 'kg CO₂ eq'], ['AP', imp.ap, 'kg SO₂ eq'], ['EP', imp.ep, 'kg PO₄ eq'],
+            ['POCP', imp.pocp, 'kg C₂H₄ eq'], ['ODP', imp.odp, 'kg CFC-11 eq'],
+            ['ADP-nf', imp.adpnf, 'kg Sb eq'], ['ADP-f', imp.adpf, 'MJ']
+        ];
+        impacts.forEach(([label, val, unit]) => {
+            html += `<tr><td>${label}</td><td>${formatScientific(val)}</td><td>${unit}</td></tr>`;
+        });
+        html += `</tbody></table>`;
+
+        // 4. Energy consumption
+        html += `<h3>4. CONSUMO ENERGÉTICO (CED)</h3>`;
+        html += `<p><strong>Total:</strong> ${formatScientific(system.consumo?.total)} MJ</p>`;
+        if (comps.length) {
+            html += `<table class="cartilha-table"><thead><tr><th>Componente</th><th>CED (MJ)</th><th>GWP (kg CO₂ eq)</th><th>AP (kg SO₂ eq)</th></tr></thead><tbody>`;
+            comps.forEach(c => {
+                html += `<tr><td>${c.componente}</td><td>${formatScientific(c.consumo_componente)}</td><td>${formatScientific(c.gwp)}</td><td>${formatScientific(c.ap)}</td></tr>`;
+            });
+            html += `</tbody></table>`;
+        }
+
+        // Chart canvases
+        html += `<h3>5. GRÁFICOS</h3>`;
+        html += `<h4>Distribuição de Impactos por Componente</h4>`;
+        html += `<canvas id="cartilhaChartGWP" height="250"></canvas>`;
+        html += `<canvas id="cartilhaChartCED" height="250"></canvas>`;
+
+        // 6. Standards compliance
+        html += `<h3>6. CONFORMIDADE COM NORMAS</h3>`;
+        html += buildCartilhaStandards(system, regs);
+
+        return html;
+    }
+
+    function buildCartilhaStandards(system, regs) {
+        let html = `<table class="cartilha-table"><thead><tr><th>Norma</th><th>Zona</th><th>Resultado</th></tr></thead><tbody>`;
+
+        // NBR
+        if (regs?.nbr15575) {
+            for (let z = 1; z <= 8; z++) {
+                const pass = evaluateNBR(system, regs.nbr15575, z);
+                html += `<tr><td>NBR 15575</td><td>Zona ${z}</td><td style="color:${pass ? 'var(--success-500)' : 'var(--error-500)'}">${pass ? 'ATENDE ✓' : 'NÃO ATENDE ✗'}</td></tr>`;
+            }
+        }
+
+        // ASHRAE residential
+        if (regs?.ashrae_residential) {
+            regs.ashrae_residential.zonas?.forEach(zona => {
+                const maxU = zona.transmitancia_maxima?.wall_mass || 999;
+                const pass = system.transmitancia <= maxU;
+                html += `<tr><td>ASHRAE 90.1 Residencial</td><td>Zona ${zona.zona}</td><td style="color:${pass ? 'var(--success-500)' : 'var(--error-500)'}">${pass ? 'ATENDE ✓' : 'NÃO ATENDE ✗'}</td></tr>`;
+            });
+        }
+
+        // ASHRAE commercial
+        if (regs?.ashrae_commercial) {
+            regs.ashrae_commercial.zonas?.forEach(zona => {
+                const maxU = zona.transmitancia_maxima?.wall_mass || 999;
+                const pass = system.transmitancia <= maxU;
+                html += `<tr><td>ASHRAE 90.1 Comercial</td><td>Zona ${zona.zona}</td><td style="color:${pass ? 'var(--success-500)' : 'var(--error-500)'}">${pass ? 'ATENDE ✓' : 'NÃO ATENDE ✗'}</td></tr>`;
+            });
+        }
+
+        html += `</tbody></table>`;
+        return html;
+    }
+
+    function createCartilhaCharts(system) {
+        const comps = system.consumo?.componentes || [];
+        if (!comps.length) return;
+
+        const labels = comps.map(c => c.componente);
+
+        // GWP Pie/Doughnut
+        const ctxGWP = document.getElementById('cartilhaChartGWP');
+        if (ctxGWP) {
+            new Chart(ctxGWP, {
+                type: 'doughnut',
+                data: { labels, datasets: [{ data: comps.map(c => c.gwp || 0), backgroundColor: chartColors }] },
+                options: { responsive: true, plugins: { title: { display: true, text: 'GWP por Componente (kg CO₂ eq)' } } }
+            });
+        }
+
+        // CED Pie/Doughnut
+        const ctxCED = document.getElementById('cartilhaChartCED');
+        if (ctxCED) {
+            new Chart(ctxCED, {
+                type: 'doughnut',
+                data: { labels, datasets: [{ data: comps.map(c => c.consumo_componente || 0), backgroundColor: chartColors }] },
+                options: { responsive: true, plugins: { title: { display: true, text: 'CED por Componente (MJ)' } } }
+            });
+        }
+    }
+
+    // ===================================================================
+    //  PDF Export
+    // ===================================================================
+    window.exportCartilhaToPDF = function () {
+        const content = document.getElementById('cartilhaContent');
+        if (!content) return;
+
+        const opt = {
+            margin: [10, 10, 10, 10],
+            filename: 'cartilha_sistema.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(content).save();
+    };
+
+    // ===================================================================
+    //  Create System – Component Selector
+    // ===================================================================
+    function renderComponentsList() {
+        const list = document.getElementById('componentsList');
+        if (!list || !dataManager.loaded) return;
+
+        const search = (document.getElementById('componentSearch')?.value || '').toLowerCase();
+        const components = dataManager.getComponents();
+        const filtered = search
+            ? components.filter(c => (c.componente || c.nome || '').toLowerCase().includes(search))
+            : components;
+
+        list.innerHTML = filtered.map((c, i) => {
+            const name = c.componente || c.nome || `Component ${i}`;
+            return `<div class="component-item" onclick="addLayer(${i})">
+                <span>${name}</span>
+                <button class="component-add" onclick="event.stopPropagation(); addLayer(${i})">+</button>
+            </div>`;
         }).join('');
-        return `
-            <div class=\"comparison-row\">\n                <div class=\"comparison-cell\"><strong>${sys.nome}</strong></div>\n                ${cells}\n            </div>`;
-    }).join('');
-
-    const table = `<div class=\"comparison-table\">${thead}${rows}</div>`;
-
-    resultsDiv.innerHTML = `${header}${table}`;
-    resultsDiv.style.display = 'block';
-    scrollToSection('compare');
-}
-
-function formatStandardLabel(std) {
-    switch (std) {
-        case 'INI-C': return 'INI-C';
-        case 'INI-R': return 'INI-R';
-        case 'NBR15575': return 'NBR 15575';
-        case 'ASHRAE_R': return 'ASHRAE 90.1 (R)';
-        case 'ASHRAE_NR': return 'ASHRAE 90.1 (NR)';
-        default: return std;
     }
-}
 
-function evaluateStandard(std, system, regs) {
-    try {
-        if (std === 'NBR15575' && regs.nbr15575) {
-            const zonas = regs.nbr15575.zonas || [];
-            let pass = 0;
-            zonas.forEach(z => {
-                const uMax = z.transmitancia_maxima.superior_limite;
-                const ctMin = z.capacidade_minima || 0;
-                const ok = (system.transmitancia <= uMax) && (system.capacidade_termica >= ctMin);
-                if (ok) pass++;
-            });
-            return { ok: pass > 0, label: `${pass}/${zonas.length} zonas` };
-        }
-        if (std === 'INI-R') {
-            // INI-R (prescritivo da envoltória) mapeia para limiares da NBR 15575 (ou RTQ-R como fallback)
-            const base = regs.nbr15575 || regs.rtqr;
-            if (!base) return { ok: false, label: 'N/A' };
-            const zonas = base.zonas || [];
-            let pass = 0;
-            zonas.forEach(z => {
-                const uMax = z.transmitancia_maxima?.superior_limite;
-                const ctMin = (z.capacidade_minima ?? z.capacitancia_limite) || 0;
-                const ok = (uMax == null ? true : system.transmitancia <= uMax) && (system.capacidade_termica >= ctMin);
-                if (ok) pass++;
-            });
-            return { ok: pass > 0, label: `${pass}/${zonas.length} zonas` };
-        }
-        if (std === 'INI-C' && regs.rtqc) {
-            // Usar a lógica de notas do RTQ-C para inferir aceitação da INI-C para envoltória
-            const zonas = regs.rtqc.zonas || [];
-            const ct = system.capacidade_termica;
-            let grade = 'E';
-            zonas.forEach(z => {
-                const ctMin = z.capacitancia_limite ?? z.capacidade_minima ?? 0;
-                if (ct >= ctMin) {
-                    const uA = z.nota_A?.transmitancia_maxima?.superior_limite;
-                    const uB = z.nota_B?.transmitancia_maxima?.superior_limite;
-                    const uCD = z.nota_CD?.transmitancia_maxima?.superior_limite;
-                    if (uA != null && system.transmitancia <= uA) grade = 'A';
-                    else if ((grade === 'E' || grade === 'C/D' || grade === 'B') && uB != null && system.transmitancia <= uB) grade = maxGrade(grade, 'B');
-                    else if ((grade === 'E' || grade === 'C/D') && uCD != null && system.transmitancia <= uCD) grade = maxGrade(grade, 'C/D');
-                }
-            });
-            return { ok: grade !== 'E', label: grade };
-        }
-        if (std === 'ASHRAE_R' && regs.ashrae_residential) {
-            const zonas = regs.ashrae_residential.zonas || [];
-            const isLight = !!system.identificacao?.descricao?.sistema_leve;
-            let pass = 0;
-            zonas.forEach(z => {
-                const limit = isLight ? z.transmitancia_maxima.steel_frame : z.transmitancia_maxima.wall_mass;
-                if (limit != null && system.transmitancia <= limit) pass++;
-            });
-            return { ok: pass > 0, label: `${pass}/${zonas.length} zonas` };
-        }
-        if (std === 'ASHRAE_NR' && regs.ashrae_commercial) {
-            const zonas = regs.ashrae_commercial.zonas || [];
-            const isLight = !!system.identificacao?.descricao?.sistema_leve;
-            let pass = 0;
-            zonas.forEach(z => {
-                const limit = isLight ? z.transmitancia_maxima.steel_frame : z.transmitancia_maxima.wall_mass;
-                if (limit != null && system.transmitancia <= limit) pass++;
-            });
-            return { ok: pass > 0, label: `${pass}/${zonas.length} zonas` };
-        }
-        return { ok: false, label: 'N/A' };
-    } catch (e) {
-        return { ok: false, label: 'N/A' };
-    }
-}
-
-function maxGrade(current, next) {
-    const order = ['E', 'C/D', 'B', 'A'];
-    return order.indexOf(next) > order.indexOf(current) ? next : current;
-}
-
-function renderGroupComparison() {
-    const resultsDiv = document.getElementById('comparisonResults');
-    const systems = dataManager.getSystems({});
-
-    const groups = {
-        Concreto: [],
-        Cerâmico: [],
-        Drywall: [],
-        Outros: []
+    window.addLayer = function (compIndex) {
+        const components = dataManager.getComponents();
+        const comp = components[compIndex];
+        if (!comp) return;
+        selectedLayers.push({ ...comp, _idx: compIndex });
+        renderSelectedLayers();
     };
 
-    systems.forEach(s => {
-        const name = (s.nome || '').toLowerCase();
-        if (name.includes('concreto')) groups.Concreto.push(s);
-        else if (name.includes('cerâmico') || name.includes('ceramico')) groups.Cerâmico.push(s);
-        else if (name.includes('drywall')) groups.Drywall.push(s);
-        else groups.Outros.push(s);
-    });
-
-    const impacts = ['gwp', 'ap', 'ep', 'pocp'];
-    const impactLabels = { gwp: 'GWP', ap: 'AP', ep: 'EP', pocp: 'POCP' };
-
-    const avg = (arr) => arr.reduce((a, b) => a + b, 0) / (arr.length || 1);
-
-    const groupStats = Object.keys(groups).map(g => {
-        const list = groups[g];
-        const vals = {
-            gwp: avg(list.map(s => s.impactos.gwp || 0)),
-            ap: avg(list.map(s => s.impactos.ap || 0)),
-            ep: avg(list.map(s => s.impactos.ep || 0)),
-            pocp: avg(list.map(s => s.impactos.pocp || 0))
-        };
-        return { group: g, ...vals };
-    });
-
-    const charts = impacts.map(impact => {
-        const maxVal = Math.max(...groupStats.map(gs => gs[impact]));
-        return `
-            <div class=\"chart-group\">\n                <div class=\"chart-label\">${impactLabels[impact]}</div>\n                <div class=\"chart-bars\">\n                    ${groupStats.map((gs, i) => {
-                        const pct = maxVal > 0 ? (gs[impact] / maxVal) * 100 : 0;
-                        const color = ['#3b82f6', '#8b5cf6', '#06b6d4', '#10b981'][i % 4];
-                        return `
-                            <div class=\\"bar-item\\">\n                                <div class=\\"bar-fill\\" style=\\"width: ${pct}%; background: ${color}\\"></div>\n                                <span class=\\"bar-value\\">${gs.group}: ${formatScientific(gs[impact])}</span>\n                            </div>\n                        `;
-                    }).join('')}\n                </div>\n            </div>\n        `;
-    }).join('');
-
-    resultsDiv.innerHTML = `
-        <h3>Comparação por grupos (média dos impactos)</h3>
-        <div class=\"comparison-charts\">\n            ${charts}\n        </div>
-    `;
-    resultsDiv.style.display = 'block';
-    scrollToSection('compare');
-}
-
-function createComparisonTable(systems) {
-    return `
-        <div class="comparison-table">
-            <div class="comparison-row header">
-                <div class="comparison-cell">Propriedade</div>
-                ${systems.map((s, i) => `<div class="comparison-cell">Sistema construtivo ${i + 1}</div>`).join('')}
-            </div>
-            <div class="comparison-row">
-                <div class="comparison-cell"><strong>Nome</strong></div>
-                ${systems.map(s => {
-                    const systemId = s.id || dataManager.systems.indexOf(s);
-                    const description = s.identificacao?.camadas?.join(', ') || 'Sem descrição';
-                    return `<div class="comparison-cell">
-                        <strong><a href="#" onclick="openCartilhaModal(${JSON.stringify(systemId).replace(/"/g, '&quot;')}); return false;" style="color: var(--primary-600); text-decoration: none; cursor: pointer;">${s.nome}</a></strong>
-                        <div style="font-size: 0.875rem; color: var(--gray-600); margin-top: 0.25rem;">${description}</div>
-                    </div>`;
-                }).join('')}
-            </div>
-            <div class="comparison-row">
-                <div class="comparison-cell"><strong>Valor U (W/m²K)</strong></div>
-                ${systems.map(s => {
-                    const min = Math.min(...systems.map(sys => sys.transmitancia));
-                    const isBest = s.transmitancia === min;
-                    return `<div class="comparison-cell ${isBest ? 'best' : ''}">${s.transmitancia.toFixed(2)}</div>`;
-                }).join('')}
-            </div>
-            <div class="comparison-row">
-                <div class="comparison-cell"><strong>Capacidade Térmica (kJ/m²K)</strong></div>
-                ${systems.map(s => {
-                    const max = Math.max(...systems.map(sys => sys.capacidade_termica));
-                    const isBest = s.capacidade_termica === max;
-                    return `<div class="comparison-cell ${isBest ? 'best' : ''}">${s.capacidade_termica.toFixed(0)}</div>`;
-                }).join('')}
-            </div>
-            <div class="comparison-row">
-                <div class="comparison-cell"><strong>Peso (kg/m²)</strong></div>
-                ${systems.map(s => `<div class="comparison-cell">${s.identificacao.descricao.peso.toFixed(1)}</div>`).join('')}
-            </div>
-            <div class="comparison-row">
-                <div class="comparison-cell"><strong>GWP (kg CO₂ eq)</strong></div>
-                ${systems.map(s => {
-                    const min = Math.min(...systems.map(sys => sys.impactos.gwp));
-                    const isBest = s.impactos.gwp === min;
-                    return `<div class="comparison-cell ${isBest ? 'best' : ''}">${formatScientific(s.impactos.gwp)}</div>`;
-                }).join('')}
-            </div>
-            <div class="comparison-row">
-                <div class="comparison-cell"><strong>AP (kg SO₂ eq)</strong></div>
-                ${systems.map(s => {
-                    const min = Math.min(...systems.map(sys => sys.impactos.ap));
-                    const isBest = s.impactos.ap === min;
-                    return `<div class="comparison-cell ${isBest ? 'best' : ''}">${formatScientific(s.impactos.ap)}</div>`;
-                }).join('')}
-            </div>
-            <div class="comparison-row">
-                <div class="comparison-cell"><strong>EP (kg PO₄³⁻ eq)</strong></div>
-                ${systems.map(s => {
-                    const min = Math.min(...systems.map(sys => sys.impactos.ep));
-                    const isBest = s.impactos.ep === min;
-                    return `<div class="comparison-cell ${isBest ? 'best' : ''}">${formatScientific(s.impactos.ep)}</div>`;
-                }).join('')}
-            </div>
-            <div class="comparison-row">
-                <div class="comparison-cell"><strong>Energia (MJ)</strong></div>
-                ${systems.map(s => {
-                    const min = Math.min(...systems.map(sys => sys.consumo.total));
-                    const isBest = s.consumo.total === min;
-                    return `<div class="comparison-cell ${isBest ? 'best' : ''}">${formatScientific(s.consumo.total)}</div>`;
-                }).join('')}
-            </div>
-        </div>
-    `;
-}
-
-function createComparisonCharts(systems) {
-    const colors = ['#3b82f6', '#8b5cf6', '#06b6d4'];
-    
-    return `
-        <div class="chart-section">
-            <h4>Comparação de Impactos Ambientais</h4>
-            <div class="bar-chart">
-                ${['gwp', 'ap', 'ep', 'pocp'].map(impact => {
-                    const impactNames = {
-                        gwp: 'GWP',
-                        ap: 'AP',
-                        ep: 'EP',
-                        pocp: 'POCP'
-                    };
-                    const maxValue = Math.max(...systems.map(s => s.impactos[impact]));
-                    return `
-                        <div class="chart-group">
-                            <div class="chart-label">${impactNames[impact]}</div>
-                            <div class="chart-bars">
-                                ${systems.map((s, i) => {
-                                    const percentage = (s.impactos[impact] / maxValue) * 100;
-                                    return `
-                                        <div class="bar-item">
-                                            <div class="bar-fill" style="width: ${percentage}%; background: ${colors[i]}"></div>
-                                            <span class="bar-value">${formatScientific(s.impactos[impact])}</span>
-                                        </div>
-                                    `;
-                                }).join('')}
-                            </div>
-                        </div>
-                    `;
-                }).join('')}
-            </div>
-        </div>
-    `;
-}
-
-function createStandardsComplianceTable(systems) {
-    const regs = dataManager.getRegulations();
-    const standards = [
-        { key: 'NBR15575', label: 'NBR 15575' },
-        { key: 'INI-R', label: 'INI-R' },
-        { key: 'INI-C', label: 'INI-C' },
-        { key: 'ASHRAE_R', label: 'ASHRAE 90.1 (R)' },
-        { key: 'ASHRAE_NR', label: 'ASHRAE 90.1 (NR)' }
-    ];
-    
-    return `
-        <div class="comparison-table">
-            <div class="comparison-row header">
-                <div class="comparison-cell">Norma</div>
-                ${systems.map((s, i) => `<div class="comparison-cell">Sistema construtivo ${i + 1}</div>`).join('')}
-            </div>
-            ${standards.map(std => {
-                const cells = systems.map(sys => {
-                    const res = evaluateStandard(std.key, sys, regs);
-                    return `<div class="comparison-cell ${res.ok ? 'best' : ''}">${res.label}</div>`;
-                }).join('');
-                return `
-                    <div class="comparison-row">
-                        <div class="comparison-cell"><strong>${std.label}</strong></div>
-                        ${cells}
-                    </div>
-                `;
-            }).join('')}
-        </div>
-    `;
-}
-
-// ===== Utility Functions =====
-function formatScientific(num) {
-    if (num === null || num === undefined) return 'N/A';
-    if (Math.abs(num) < 0.01 || Math.abs(num) > 1000) {
-        return num.toExponential(2);
-    }
-    return num.toFixed(2);
-}
-
-// ===== Funções do Modal Cartilha =====
-function openCartilhaModal(systemIndex) {
-    const system = typeof systemIndex === 'string' && systemIndex.includes('custom_')
-        ? dataManager.systems.find(s => s.id === systemIndex)
-        : dataManager.systems[systemIndex];
-    
-    if (!system) return;
-    
-    const modal = document.getElementById('cartilhaModal');
-    const titulo = document.getElementById('cartilhaTitulo');
-    const content = document.getElementById('cartilhaContent');
-    
-    titulo.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-            <span>${system.nome}</span>
-            <div style="display: flex; gap: var(--space-md); align-items: center;">
-                <img src="assets/logo_ufrgs.png" alt="UFRGS" style="height: 40px;">
-                <img src="assets/logo_life.png" alt="LIfE" style="height: 40px;">
-            </div>
-        </div>
-    `;
-    
-    // Generate regulations section
-    const nbr = dataManager.regulations.nbr15575;
-    const rtqr = dataManager.regulations.rtqr;
-    const rtqc = dataManager.regulations.rtqc;
-    
-    let regulationsHTML = '';
-    if (nbr || rtqr || rtqc) {
-        regulationsHTML = '<h3>NORMAS E REGULAMENTOS BRASILEIROS</h3>';
-        
-        if (nbr) {
-            regulationsHTML += `
-                <h4>${nbr.nome} - Norma de Desempenho de Edificações</h4>
-                <table class="cartilha-table">
-                    <thead>
-                        <tr>
-                            <th>Zona</th>
-                            <th>Transmitância Máx (W/m².K)</th>
-                            <th>Capacidade Térmica Mín (kJ/m².K)</th>
-                            <th>Limite de Absortância</th>
-                            <th>Status do Sistema</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${nbr.zonas.map(zona => {
-                            const uMax = zona.transmitancia_maxima.superior_limite;
-                            const ctMin = zona.capacidade_minima;
-                            const meetsU = system.transmitancia <= uMax;
-                            const meetsCT = system.capacidade_termica >= ctMin;
-                            const meets = meetsU && meetsCT;
-                            return `
-                                <tr style="background-color: ${meets ? '#d1fae5' : '#fee2e2'}">
-                                    <td>Zona ${zona.zona}</td>
-                                    <td>≤ ${uMax}</td>
-                                    <td>≥ ${ctMin}</td>
-                                    <td>≤ ${zona.absortancia_limite}</td>
-                                    <td><strong>${meets ? '✓ Atende' : '✗ Não atende'}</strong></td>
-                                </tr>
-                            `;
-                        }).join('')}
-                    </tbody>
-                </table>
-            `;
-        }
-        
-        if (rtqr) {
-            regulationsHTML += `
-                <h4>${rtqr.nome} - Eficiência Energética de Edificações Residenciais</h4>
-                <table class="cartilha-table">
-                    <thead>
-                        <tr>
-                            <th>Zona</th>
-                            <th>Transmitância Máx (W/m².K)</th>
-                            <th>Capacidade Térmica Mín (kJ/m².K)</th>
-                            <th>Limite de Absortância</th>
-                            <th>Status do Sistema</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${rtqr.zonas.map(zona => {
-                            const uMax = zona.transmitancia_maxima.superior_limite;
-                            const ctMin = zona.capacidade_minima;
-                            const meetsU = system.transmitancia <= uMax;
-                            const meetsCT = system.capacidade_termica >= ctMin;
-                            const meets = meetsU && meetsCT;
-                            return `
-                                <tr style="background-color: ${meets ? '#d1fae5' : '#fee2e2'}">
-                                    <td>Zona ${zona.zona}</td>
-                                    <td>≤ ${uMax}</td>
-                                    <td>≥ ${ctMin}</td>
-                                    <td>≤ ${zona.absortancia_limite}</td>
-                                    <td><strong>${meets ? '✓ Atende' : '✗ Não atende'}</strong></td>
-                                </tr>
-                            `;
-                        }).join('')}
-                    </tbody>
-                </table>
-            `;
-        }
-        
-        if (rtqc) {
-            regulationsHTML += `
-                <h4>${rtqc.nome} - Eficiência Energética de Edificações Comerciais</h4>
-                <table class="cartilha-table">
-                    <thead>
-                        <tr>
-                            <th>Zona</th>
-                            <th>Nota A (≤ W/m².K)</th>
-                            <th>Nota B (≤ W/m².K)</th>
-                            <th>Nota C/D (≤ W/m².K)</th>
-                            <th>Capacitância Mín (kJ/m².K)</th>
-                            <th>Nota do Sistema</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${rtqc.zonas.map(zona => {
-                            const uA = zona.nota_A.transmitancia_maxima.superior_limite;
-                            const uB = zona.nota_B.transmitancia_maxima.superior_limite;
-                            const uCD = zona.nota_CD.transmitancia_maxima.superior_limite;
-                            const ctMin = zona.capacitancia_limite;
-                            
-                            let grade = 'N/A';
-                            let bgColor = '#fee2e2';
-                            if (system.capacidade_termica >= ctMin) {
-                                if (system.transmitancia <= uA) {
-                                    grade = 'A';
-                                    bgColor = '#d1fae5';
-                                } else if (system.transmitancia <= uB) {
-                                    grade = 'B';
-                                    bgColor = '#dbeafe';
-                                } else if (system.transmitancia <= uCD) {
-                                    grade = 'C/D';
-                                    bgColor = '#fef3c7';
-                                } else {
-                                    grade = 'E';
-                                }
-                            }
-                            
-                            return `
-                                <tr style="background-color: ${bgColor}">
-                                    <td>Zona ${zona.zona}</td>
-                                    <td>≤ ${uA}</td>
-                                    <td>≤ ${uB}</td>
-                                    <td>≤ ${uCD}</td>
-                                    <td>≥ ${ctMin}</td>
-                                    <td><strong>${grade}</strong></td>
-                                </tr>
-                            `;
-                        }).join('')}
-                    </tbody>
-                </table>
-            `;
-        }
-    }
-    
-    content.innerHTML = `
-        ${system.imagem ? `<img src="${system.imagem}" alt="${system.nome}" class="cartilha-image">` : ''}
-        
-        <h3>IDENTIFICAÇÃO</h3>
-        <p><strong>Nome:</strong> ${system.nome}</p>
-        <p><strong>Sistema leve:</strong> ${system.identificacao.descricao.sistema_leve ? 'Sim' : 'Não'}</p>
-        <p><strong>Isolante térmico:</strong> ${system.identificacao.descricao.isolante_termico ? 'Sim' : 'Não'}</p>
-        <p><strong>Peso:</strong> ${system.identificacao.descricao.peso} kg/m²</p>
-        <p><strong>Espessura:</strong> ${system.identificacao.descricao.espessura} cm</p>
-        <p><strong>Unidade:</strong> ${system.identificacao.unidade}</p>
-        <p><strong>Fronteira:</strong> ${system.identificacao.fronteira}</p>
-        <p><strong>Validade:</strong> ${system.identificacao.validade}</p>
-        
-        <h3>CAMADAS</h3>
-        <ol>
-            ${system.identificacao.camadas.map(camada => `<li>${camada}</li>`).join('')}
-        </ol>
-        
-        <h3>DESEMPENHO TÉRMICO</h3>
-        <p><strong>Transmitância térmica (U):</strong> ${system.transmitancia} W/(m².K)</p>
-        <p><strong>Capacidade térmica (CT):</strong> ${system.capacidade_termica} kJ/(m².K)</p>
-        
-        <div style="max-width: 700px; margin: 2rem auto 3rem;">
-            <canvas id="thermalChart" style="height: 280px;"></canvas>
-        </div>
-        
-        ${regulationsHTML}
-        
-        <h3>IMPACTOS AMBIENTAIS</h3>
-        <table class="cartilha-table">
-            <thead>
-                <tr>
-                    <th>Categoria de Impacto</th>
-                    <th>Valor</th>
-                    <th>Unidade</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Potencial de Aquecimento Global (GWP)</td>
-                    <td>${formatScientific(system.impactos.gwp)}</td>
-                    <td>kg CO₂ eq</td>
-                </tr>
-                <tr>
-                    <td>Potencial de Acidificação (AP)</td>
-                    <td>${formatScientific(system.impactos.ap)}</td>
-                    <td>kg SO₂ eq</td>
-                </tr>
-                <tr>
-                    <td>Potencial de Eutrofização (EP)</td>
-                    <td>${formatScientific(system.impactos.ep)}</td>
-                    <td>kg PO₄³⁻ eq</td>
-                </tr>
-                <tr>
-                    <td>Potencial de Criação de Ozônio Fotoquímico (POCP)</td>
-                    <td>${formatScientific(system.impactos.pocp)}</td>
-                    <td>kg C₂H₄ eq</td>
-                </tr>
-                <tr>
-                    <td>Potencial de Depleção da Camada de Ozônio (ODP)</td>
-                    <td>${formatScientific(system.impactos.odp)}</td>
-                    <td>kg CFC-11 eq</td>
-                </tr>
-                <tr>
-                    <td>Potencial de Depleção Abiótica - não fóssil (ADPnf)</td>
-                    <td>${formatScientific(system.impactos.adpnf)}</td>
-                    <td>kg Sb eq</td>
-                </tr>
-                <tr>
-                    <td>Potencial de Depleção Abiótica - fóssil (ADPf)</td>
-                    <td>${formatScientific(system.impactos.adpf)}</td>
-                    <td>MJ</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <div style="max-width: 700px; margin: 2rem auto;">
-            <canvas id="impactsChart" style="height: 280px;"></canvas>
-        </div>
-        
-        <h3>CONSUMO DE COMPONENTES & IMPACTOS</h3>
-        <p><strong>Consumo total:</strong> ${formatScientific(system.consumo.total)} kg</p>
-        
-        <div style="max-width: 700px; margin: 2rem auto;">
-            <canvas id="componentGWPChart" style="height: 280px;"></canvas>
-        </div>
-        
-        <table class="cartilha-table">
-            <thead>
-                <tr>
-                    <th>Componente</th>
-                    <th>Consumo (kg)</th>
-                    <th>GWP (kg CO₂ eq)</th>
-                    <th>AP (kg SO₂ eq)</th>
-                    <th>EP (kg PO₄³⁻ eq)</th>
-                    <th>POCP (kg C₂H₄ eq)</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${system.consumo.componentes.map(comp => `
-                    <tr>
-                        <td>${comp.componente}</td>
-                        <td>${formatScientific(comp.consumo_componente)}</td>
-                        <td>${formatScientific(comp.gwp)}</td>
-                        <td>${formatScientific(comp.ap)}</td>
-                        <td>${formatScientific(comp.ep)}</td>
-                        <td>${formatScientific(comp.pocp)}</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-    `;
-    
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    
-    // Create charts after modal is visible
-    setTimeout(() => {
-        createCartilhaCharts(system);
-    }, 100);
-}
-
-function createCartilhaCharts(system) {
-    // Destroy existing charts if they exist
-    if (window.cartilhaCharts) {
-        window.cartilhaCharts.forEach(chart => chart.destroy());
-    }
-    window.cartilhaCharts = [];
-    
-    // 1. Gráfico de Desempenho Térmico
-    const thermalCanvas = document.getElementById('thermalChart');
-    if (thermalCanvas) {
-        const thermalChart = new Chart(thermalCanvas, {
-            type: 'bar',
-            data: {
-                labels: [
-                    `U = ${system.transmitancia} W/(m².K)`,
-                    `CT = ${system.capacidade_termica} kJ/(m².K)`
-                ],
-                datasets: [{
-                    data: [system.transmitancia, system.capacidade_termica / 50], // Escala CT para visualização
-                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
-                    borderColor: 'rgb(102, 126, 234)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    title: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                if (context.dataIndex === 0) {
-                                    return `Transmitância: ${system.transmitancia} W/(m².K)`;
-                                } else {
-                                    return `Capacidade Térmica: ${system.capacidade_termica} kJ/(m².K)`;
-                                }
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: { display: false, beginAtZero: true },
-                    y: { ticks: { font: { size: 11 } } }
-                }
-            }
-        });
-        window.cartilhaCharts.push(thermalChart);
-    }
-    
-    // 2. Gráfico de Barras de Impactos Ambientais (Horizontal)
-    const impactsCanvas = document.getElementById('impactsChart');
-    if (impactsCanvas) {
-        const impactsChart = new Chart(impactsCanvas, {
-            type: 'bar',
-            data: {
-                labels: [
-                    'GWP (kg CO₂ eq)',
-                    'AP (kg SO₂ eq)',
-                    'EP (kg PO₄³⁻ eq)',
-                    'POCP (kg C₂H₄ eq)',
-                    'ODP (kg CFC-11 eq)',
-                    'ADPnf (kg Sb eq)',
-                    'ADPf (MJ)'
-                ],
-                datasets: [{
-                    data: [
-                        system.impactos.gwp,
-                        system.impactos.ap * 300,
-                        system.impactos.ep * 1000,
-                        system.impactos.pocp * 5000,
-                        system.impactos.odp * 10000000,
-                        system.impactos.adpnf * 20000000,
-                        system.impactos.adpf / 5
-                    ],
-                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
-                    borderColor: 'rgb(102, 126, 234)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    title: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const realValues = [
-                                    system.impactos.gwp.toExponential(2),
-                                    system.impactos.ap.toExponential(2),
-                                    system.impactos.ep.toExponential(2),
-                                    system.impactos.pocp.toExponential(2),
-                                    system.impactos.odp.toExponential(2),
-                                    system.impactos.adpnf.toExponential(2),
-                                    system.impactos.adpf.toExponential(2)
-                                ];
-                                return realValues[context.dataIndex];
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        display: false,
-                        beginAtZero: true
-                    },
-                    y: {
-                        ticks: {
-                            font: {
-                                size: 11
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        window.cartilhaCharts.push(impactsChart);
-    }
-    
-    // 3. Gráfico de Barras de Contribuição GWP por Componente (Horizontal)
-    const gwpCanvas = document.getElementById('componentGWPChart');
-    if (gwpCanvas) {
-        const gwpChart = new Chart(gwpCanvas, {
-            type: 'bar',
-            data: {
-                labels: system.consumo.componentes.map(c => c.componente),
-                datasets: [{
-                    data: system.consumo.componentes.map(c => c.gwp),
-                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
-                    borderColor: 'rgb(102, 126, 234)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    title: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const percentage = ((context.parsed.x / system.impactos.gwp) * 100).toFixed(1);
-                                return `${context.parsed.x.toExponential(2)} kg CO₂ eq (${percentage}%)`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        display: false,
-                        beginAtZero: true
-                    },
-                    y: {
-                        ticks: {
-                            font: {
-                                size: 11
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        window.cartilhaCharts.push(gwpChart);
-    }
-}
-
-function closeCartilhaModal() {
-    const modal = document.getElementById('cartilhaModal');
-    modal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-    
-    // Destroy charts when closing modal
-    if (window.cartilhaCharts && window.cartilhaCharts.length > 0) {
-        window.cartilhaCharts.forEach(chart => {
-            if (chart) {
-                chart.destroy();
-            }
-        });
-        window.cartilhaCharts = [];
-    }
-}
-
-// Close modal when clicking outside
-window.addEventListener('click', (e) => {
-    const modal = document.getElementById('cartilhaModal');
-    if (e.target === modal) {
-        closeCartilhaModal();
-    }
-});
-
-function exportCartilhaToPDF() {
-    const element = document.getElementById('cartilhaContent');
-    const titulo = document.getElementById('cartilhaTitulo').textContent;
-    const exportBtn = document.querySelector('.cartilha-actions button[onclick="exportCartilhaToPDF()"]');
-    const originalLabel = exportBtn ? exportBtn.innerHTML : null;
-    if (exportBtn) {
-        exportBtn.disabled = true;
-        exportBtn.innerHTML = '⏳ Gerando PDF…';
-    }
-    const cleanup = () => {
-        if (exportBtn) {
-            exportBtn.disabled = false;
-            exportBtn.innerHTML = originalLabel;
-        }
-        document.querySelectorAll('.html2pdf__overlay, .html2pdf__progress, [id^="html2pdf__"], [class^="html2pdf__"]').forEach(el => {
-            try { el.remove(); } catch (_) { /* noop */ }
-        });
-        document.body.style.pointerEvents = '';
+    window.removeLayer = function (layerIndex) {
+        selectedLayers.splice(layerIndex, 1);
+        renderSelectedLayers();
     };
-    
-    const opt = {
-        margin: 10,
-        filename: `${titulo.replace(/\s+/g, '_')}_Cartilha.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-    
-    try {
-        const worker = html2pdf().set(opt).from(element).save();
-        if (worker && typeof worker.then === 'function') {
-            worker.then(() => cleanup()).catch(() => cleanup());
-        } else {
-            setTimeout(cleanup, 500);
+
+    function renderSelectedLayers() {
+        const container = document.getElementById('selectedLayers');
+        if (!container) return;
+
+        if (selectedLayers.length === 0) {
+            container.innerHTML = `<div class="empty-state">${i18n.t('create.noLayers')}</div>`;
+            return;
         }
-    } catch (_) {
-        cleanup();
+        container.innerHTML = selectedLayers.map((layer, i) => {
+            const name = layer.componente || layer.nome || 'Layer';
+            return `<div class="layer-item">
+                <div class="layer-info"><span class="layer-order">${i + 1}</span><span class="layer-name">${name}</span></div>
+                <button class="layer-remove" onclick="removeLayer(${i})">×</button>
+            </div>`;
+        }).join('');
     }
-}
 
-// Make functions globally accessible
-window.changePage = changePage;
-window.toggleSystemSelection = toggleSystemSelection;
-window.openCartilhaModal = openCartilhaModal;
-window.closeCartilhaModal = closeCartilhaModal;
-window.exportCartilhaToPDF = exportCartilhaToPDF;
-window.onCompareClick = onCompareClick;
+    // ===================================================================
+    //  Create System – Form Submission
+    // ===================================================================
+    function handleCreateSystem(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
 
-// Log welcome message
-console.log('%c🏗️ LIfE App v4.0', 'font-size: 24px; font-weight: bold; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;');
-console.log('%cBuilding Systems Environmental Analysis', 'font-size: 14px; color: #6b7280;');
+        requireLogin(() => {
+            const currentUser = getCurrentUser();
+            if (!currentUser) return;
+
+            const name = document.getElementById('systemName')?.value?.trim();
+            const type = document.getElementById('systemType')?.value;
+            const uVal = parseFloat(document.getElementById('uValue')?.value);
+            const ct = parseFloat(document.getElementById('thermalCapacity')?.value);
+            const weight = parseFloat(document.getElementById('weight')?.value);
+            const thickness = parseFloat(document.getElementById('thickness')?.value);
+            const lightSystem = document.getElementById('lightSystem')?.checked || false;
+            const thermalIns = document.getElementById('thermalInsulation')?.checked || false;
+
+            if (!name || !type || isNaN(uVal) || isNaN(ct) || isNaN(weight) || isNaN(thickness)) {
+                showAlert('error', 'Please fill all required fields.');
+                return;
+            }
+
+            // Calculate impacts from selected layers
+            let gwp = 0, ap = 0, ep = 0, pocp = 0, odp = 0, adpnf = 0, adpf = 0, ced = 0;
+            const compList = [];
+            selectedLayers.forEach(layer => {
+                gwp += layer.gwp || 0;
+                ap += layer.ap || 0;
+                ep += layer.ep || 0;
+                pocp += layer.pocp || 0;
+                odp += layer.odp || 0;
+                adpnf += layer.adpnf || 0;
+                adpf += layer.adpf || 0;
+                ced += layer.consumo_componente || layer.ced || 0;
+                compList.push({
+                    componente: layer.componente || layer.nome || 'Layer',
+                    consumo_componente: layer.consumo_componente || layer.ced || 0,
+                    gwp: layer.gwp || 0,
+                    ap: layer.ap || 0
+                });
+            });
+
+            const system = {
+                nome: name,
+                tipo: type,
+                transmitancia: uVal,
+                capacidade_termica: ct,
+                identificacao: {
+                    descricao: { peso: weight, espessura: thickness, sistema_leve: lightSystem, isolante_termico: thermalIns },
+                    camadas: selectedLayers.map(l => l.componente || l.nome || 'Layer'),
+                    unidade: 'm²',
+                    fronteira: 'Sistema Personalizado',
+                    validade: new Date().toLocaleDateString()
+                },
+                impactos: { gwp, ap, ep, pocp, odp, adpnf, adpf },
+                consumo: { total: ced, componentes: compList },
+                custom: true
+            };
+
+            const saved = saveUserSystem(currentUser, system);
+            if (!dataManager.systems.find(s => s.id === saved.id)) {
+                dataManager.systems.push(saved);
+            }
+
+            showAlert('success', i18n.t('alert.systemCreated'));
+            document.getElementById('createSystemForm')?.reset();
+            selectedLayers = [];
+            renderSelectedLayers();
+            displayUserSystems();
+            renderSystems();
+        });
+    }
+
+    // ===================================================================
+    //  Utility
+    // ===================================================================
+    function formatScientific(value) {
+        if (value === undefined || value === null) return '—';
+        if (typeof value !== 'number') return String(value);
+        if (value === 0) return '0';
+        if (Math.abs(value) >= 0.01 && Math.abs(value) < 10000) return value.toFixed(2);
+        return value.toExponential(2);
+    }
+    window.formatScientific = formatScientific;
+
+})();

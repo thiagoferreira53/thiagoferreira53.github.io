@@ -53,93 +53,10 @@ function deleteUserComparison(username, comparisonId) {
     localStorage.setItem(`userComparisons_${username}`, JSON.stringify(comparisons));
 }
 
-// ===== Formulário de Criar Sistema =====
+// ===== Initialise tabs & user data on DOMContentLoaded =====
 document.addEventListener('DOMContentLoaded', () => {
-    const createForm = document.getElementById('createSystemForm');
-    const clearBtn = document.getElementById('clearForm');
-    
-    if (createForm) {
-        createForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const currentUser = getCurrentUser();
-            if (!currentUser) {
-                alert('Por favor, faça login para criar sistemas');
-                return;
-            }
-            
-            // Coletar dados do formulário
-            const system = {
-                nome: document.getElementById('systemName').value,
-                tipo: document.getElementById('systemType').value,
-                transmitancia: parseFloat(document.getElementById('uValue').value),
-                capacidade_termica: parseFloat(document.getElementById('thermalCapacity').value),
-                identificacao: {
-                    descricao: {
-                        peso: parseFloat(document.getElementById('weight').value),
-                        espessura: parseFloat(document.getElementById('thickness').value),
-                        sistema_leve: document.getElementById('lightSystem').checked,
-                        isolante_termico: document.getElementById('thermalInsulation').checked
-                    },
-                    camadas: document.getElementById('layers').value.split('\n').filter(l => l.trim()),
-                    unidade: 'm²',
-                    fronteira: 'Sistema Personalizado',
-                    validade: new Date().toLocaleDateString()
-                },
-                impactos: {
-                    gwp: parseFloat(document.getElementById('gwp').value),
-                    ap: parseFloat(document.getElementById('ap').value),
-                    ep: parseFloat(document.getElementById('ep').value),
-                    pocp: 0,
-                    odp: 0,
-                    adpnf: 0,
-                    adpf: 0
-                },
-                consumo: {
-                    total: parseFloat(document.getElementById('ced').value),
-                    componentes: []
-                },
-                custom: true
-            };
-            
-            // Salvar sistema
-            const savedSystem = saveUserSystem(currentUser, system);
-            
-            // Adicionar o sistema criado ao dataManager para disponibilizá-lo na lista
-            if (!dataManager.systems.find(s => s.id === savedSystem.id)) {
-                dataManager.systems.push(savedSystem);
-            }
-            
-            // Mostrar mensagem de sucesso
-            showAlert('success', 'Sistema criado com sucesso!');
-            
-            // Limpar formulário
-            createForm.reset();
-            
-            // Atualizar exibição dos Meus Sistemas
-            displayUserSystems();
-            
-            // Recarregar a seção de sistemas para incluir o novo sistema
-            if (typeof renderSystems === 'function') {
-                renderSystems();
-            }
-            
-            // Rolar para Meus Sistemas
-            scrollToSection('mysystems');
-        });
-    }
-    
-    if (clearBtn) {
-        clearBtn.addEventListener('click', () => {
-            createForm.reset();
-        });
-    }
-    
-    // Inicializar abas
     initializeTabs();
-    
-    // Exibir sistemas do usuário ao carregar
-    if (isLoggedIn()) {
+    if (typeof isLoggedIn === 'function' && isLoggedIn()) {
         displayUserSystems();
         displayUserComparisons();
     }
@@ -203,7 +120,7 @@ function displayUserSystems() {
             <div class="system-card ${typeClass}">
                 <div class="system-header">
                     <h3 class="system-name">${system.nome}</h3>
-                    <span class="badge badge-custom">Personalizado</span>
+                    <span class="badge-custom">Custom</span>
                 </div>
                 <div class="system-specs">
                     <div class="spec-item">
@@ -235,7 +152,8 @@ function displayUserSystems() {
                 </div>
                 <div class="system-actions">
                     <button class="btn btn-small btn-secondary" onclick="viewSystemDetail('${system.id}', true)">Ver Detalhes</button>
-                    <button class="btn btn-small btn-danger" onclick="confirmDeleteSystem('${system.id}')">Deletar</button>
+                    <button class="btn btn-small btn-outline" onclick="viewSystemCartilha('${system.id}')">📖 Cartilha</button>
+                    <button class="btn btn-small btn-danger" onclick="event.stopPropagation(); confirmDeleteSystem('${system.id}')">Deletar</button>
                 </div>
             </div>
         `;
@@ -257,16 +175,17 @@ function displayUserComparisons() {
     
     container.innerHTML = comparisons.map(comp => {
         const date = new Date(comp.performedAt).toLocaleString('pt-BR');
+        const systemNames = comp.systems || [];
         return `
             <div class="comparison-history-card">
                 <div class="comparison-header">
                     <span class="comparison-date">${date}</span>
-                    <button class="comparison-delete-btn" onclick="confirmDeleteComparison('${comp.id}')">Deletar</button>
+                    <div class="comparison-actions">
+                        <button class="btn btn-small btn-outline" onclick="event.stopPropagation(); confirmDeleteComparison('${comp.id}')">Deletar</button>
+                    </div>
                 </div>
                 <div class="comparison-systems">
-                    <strong>${comp.systems[0]}</strong>
-                    <span class="comparison-arrow">vs</span>
-                    <strong>${comp.systems[1]}</strong>
+                    ${systemNames.map(name => `<strong>${name}</strong>`).join('<span class="comparison-arrow">vs</span>')}
                 </div>
             </div>
         `;
@@ -275,19 +194,19 @@ function displayUserComparisons() {
 
 // ===== Ver Detalhes do Sistema (Personalizado) =====
 function viewSystemDetail(systemId, isCustom) {
-    const currentUser = getCurrentUser();
-    let system;
-    
-    if (isCustom) {
-        const systems = getUserSystems(currentUser);
-        system = systems.find(s => s.id === systemId);
-    } else {
-        system = dataManager.systems[systemId];
+    // Find index in dataManager.systems
+    const idx = dataManager.systems.findIndex(s => s.id === systemId);
+    if (idx > -1 && typeof showSystemDetail === 'function') {
+        showSystemDetail(idx);
     }
-    
-    if (!system) return;
-    
-    showSystemDetail(system.id || systemId);
+}
+
+// ===== Ver Cartilha do Sistema (Personalizado) =====
+function viewSystemCartilha(systemId) {
+    const idx = dataManager.systems.findIndex(s => s.id === systemId);
+    if (idx > -1 && typeof openCartilhaModal === 'function') {
+        openCartilhaModal(idx);
+    }
 }
 
 // ===== Deletar Sistema =====

@@ -1,280 +1,224 @@
-// ===== Sistema de Autenticação =====
+// ===== Auth Module (Popup Modal – NOT a page gate) =====
 
-// Banco de dados simples em memória (em produção, use autenticação backend apropriada)
-const users = {
-    'ecowallcheck': {
-        password: 'sistemamelhornaoha',
-        fullName: 'EcoWallCheck Admin',
-        email: 'admin@ecowallcheck.com'
-    },
-    'admin': {
-        password: 'admin123',
-        fullName: 'Administrador',
-        email: 'admin@example.com'
-    },
-    'demo': {
-        password: 'demo123',
-        fullName: 'Usuário Demo',
-        email: 'demo@example.com'
-    }
+const hardcodedUsers = {
+    'ecowallcheck': { password: 'sistemamelhornaoha', fullName: 'EcoWallCheck User', email: 'eco@example.com' },
+    'admin': { password: 'admin123', fullName: 'Administrador', email: 'admin@example.com' },
+    'demo': { password: 'demo123', fullName: 'Demo User', email: 'demo@example.com' }
 };
 
-// Armazenamento de usuários registrados (simula banco de dados)
-const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
-
-// Verificar se o usuário está logado
+// ===== Core auth functions =====
 function isLoggedIn() {
-    return sessionStorage.getItem('isAuthenticated') === 'true';
+    return sessionStorage.getItem('e3build_loggedIn') === 'true';
 }
 
-// Obter usuário atual
 function getCurrentUser() {
-    return sessionStorage.getItem('currentUser');
+    return sessionStorage.getItem('e3build_currentUser');
 }
 
-// Função de login
+function getCurrentUserFullName() {
+    return sessionStorage.getItem('e3build_fullName') || getCurrentUser();
+}
+
 function login(username, password) {
-    // Verificar usuários padrão
-    if (users[username] && users[username].password === password) {
-        sessionStorage.setItem('isAuthenticated', 'true');
-        sessionStorage.setItem('currentUser', username);
-        return true;
+    // Check hardcoded users
+    if (hardcodedUsers[username] && hardcodedUsers[username].password === password) {
+        sessionStorage.setItem('e3build_loggedIn', 'true');
+        sessionStorage.setItem('e3build_currentUser', username);
+        sessionStorage.setItem('e3build_fullName', hardcodedUsers[username].fullName);
+        return { success: true, user: hardcodedUsers[username] };
     }
-    
-    // Verificar usuários registrados
-    if (registeredUsers[username] && registeredUsers[username].password === password) {
-        sessionStorage.setItem('isAuthenticated', 'true');
-        sessionStorage.setItem('currentUser', username);
-        return true;
+
+    // Check registered users
+    const registeredUsers = JSON.parse(localStorage.getItem('e3build_registeredUsers') || '[]');
+    const found = registeredUsers.find(u => u.username === username && u.password === password);
+    if (found) {
+        sessionStorage.setItem('e3build_loggedIn', 'true');
+        sessionStorage.setItem('e3build_currentUser', username);
+        sessionStorage.setItem('e3build_fullName', found.fullName);
+        return { success: true, user: found };
     }
-    
-    return false;
+
+    return { success: false };
 }
 
-// Função de registro
-function register(userData) {
-    const username = userData.username;
-    
-    // Validar se as senhas coincidem
-    if (userData.password !== userData.confirmPassword) {
-        return { success: false, message: 'As senhas não coincidem' };
-    }
-    
-    // Verificar se usuário já existe
-    if (users[username] || registeredUsers[username]) {
-        return { success: false, message: 'Nome de usuário já existe. Por favor, escolha outro.' };
-    }
-    
-    // Verificar se email já existe
-    const emailExists = Object.values(registeredUsers).some(user => user.email === userData.email);
-    if (emailExists) {
-        return { success: false, message: 'E-mail já cadastrado' };
-    }
-    
-    // Armazenar dados do usuário
-    registeredUsers[username] = {
-        password: userData.password,
-        fullName: userData.fullName,
-        email: userData.email,
-        usage: userData.usage,
-        education: userData.education,
-        field: userData.field,
-        registeredAt: new Date().toISOString()
-    };
-    
-    // Salvar no localStorage
-    localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-    
-    return { success: true, username: username };
+function register(data) {
+    const { username, password, fullName, email, usage, education, field } = data;
+
+    // Check if username already exists
+    if (hardcodedUsers[username]) return { success: false, error: 'register.errorExists' };
+    const registeredUsers = JSON.parse(localStorage.getItem('e3build_registeredUsers') || '[]');
+    if (registeredUsers.find(u => u.username === username)) return { success: false, error: 'register.errorExists' };
+    if (registeredUsers.find(u => u.email === email)) return { success: false, error: 'register.errorEmail' };
+
+    const newUser = { username, password, fullName, email, usage, education, field, registeredAt: new Date().toISOString() };
+    registeredUsers.push(newUser);
+    localStorage.setItem('e3build_registeredUsers', JSON.stringify(registeredUsers));
+
+    // Auto-login after registration
+    sessionStorage.setItem('e3build_loggedIn', 'true');
+    sessionStorage.setItem('e3build_currentUser', username);
+    sessionStorage.setItem('e3build_fullName', fullName);
+
+    return { success: true, user: newUser };
 }
 
-// Função de logout
 function logout() {
-    sessionStorage.removeItem('isAuthenticated');
-    sessionStorage.removeItem('currentUser');
-    location.reload();
+    sessionStorage.removeItem('e3build_loggedIn');
+    sessionStorage.removeItem('e3build_currentUser');
+    sessionStorage.removeItem('e3build_fullName');
+    updateAuthUI();
 }
 
-// Inicializar autenticação ao carregar a página
-window.addEventListener('DOMContentLoaded', () => {
-    const loginModal = document.getElementById('loginModal');
-    const registerPopup = document.getElementById('registerPopup');
+// ===== Login modal helpers =====
+let pendingLoginCallback = null;
+
+function showLoginModal(actionMsg) {
+    const modal = document.getElementById('loginModal');
+    const msgEl = document.getElementById('loginActionMsg');
+    if (actionMsg && msgEl) {
+        msgEl.textContent = actionMsg;
+        msgEl.style.display = 'block';
+    } else if (msgEl) {
+        msgEl.style.display = 'none';
+    }
+    modal.classList.remove('hidden');
+}
+
+function hideLoginModal() {
+    const modal = document.getElementById('loginModal');
+    modal.classList.add('hidden');
+    pendingLoginCallback = null;
+}
+
+/**
+ * Gate an action behind login. If logged in, execute immediately.
+ * Otherwise show the login modal; on success the callback is executed.
+ */
+function requireLogin(callback, actionMsg) {
+    if (isLoggedIn()) {
+        callback();
+        return;
+    }
+    pendingLoginCallback = callback;
+    showLoginModal(actionMsg || i18n.t('login.actionRequired'));
+}
+
+// ===== UI updates =====
+function updateAuthUI() {
+    const navLoginBtn = document.getElementById('navLoginBtn');
+    const userMenu = document.getElementById('userMenu');
+    const userDisplayName = document.getElementById('userDisplayName');
+    const userAvatar = document.getElementById('userAvatar');
+
+    if (isLoggedIn()) {
+        if (navLoginBtn) navLoginBtn.style.display = 'none';
+        if (userMenu) { userMenu.classList.remove('hidden'); }
+        const fullName = getCurrentUserFullName();
+        if (userDisplayName) userDisplayName.textContent = fullName;
+        if (userAvatar) userAvatar.textContent = (fullName || 'U').charAt(0).toUpperCase();
+    } else {
+        if (navLoginBtn) navLoginBtn.style.display = '';
+        if (userMenu) { userMenu.classList.add('hidden'); }
+    }
+}
+
+// ===== Wire up DOM events =====
+document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
+    const loginOverlay = document.getElementById('loginOverlay');
+    const loginCloseBtn = document.getElementById('loginCloseBtn');
+    const navLoginBtn = document.getElementById('navLoginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
     const showRegisterBtn = document.getElementById('showRegisterBtn');
+    const registerPopup = document.getElementById('registerPopup');
     const closeRegisterPopup = document.getElementById('closeRegisterPopup');
     const cancelRegisterBtn = document.getElementById('cancelRegisterBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    
-    // Verificar se o usuário está logado
-    if (!isLoggedIn()) {
-        loginModal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    } else {
-        loginModal.classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    }
-    
-    // Mostrar popup de registro
-    if (showRegisterBtn) {
-        showRegisterBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            registerPopup.style.display = 'flex';
-        });
-    }
-    
-    // Fechar popup de registro
-    const closePopup = () => {
-        registerPopup.style.display = 'none';
-        registerForm.reset();
-    };
-    
-    if (closeRegisterPopup) {
-        closeRegisterPopup.addEventListener('click', closePopup);
-    }
-    
-    if (cancelRegisterBtn) {
-        cancelRegisterBtn.addEventListener('click', closePopup);
-    }
-    
-    // Fechar ao clicar no overlay
-    if (registerPopup) {
-        registerPopup.addEventListener('click', (e) => {
-            if (e.target === registerPopup) {
-                closePopup();
-            }
-        });
-    }
-    
-    // Lidar com envio do formulário de login
+    const registerForm = document.getElementById('registerForm');
+
+    // Show login modal from nav button
+    if (navLoginBtn) navLoginBtn.addEventListener('click', () => showLoginModal());
+
+    // Close login modal
+    if (loginCloseBtn) loginCloseBtn.addEventListener('click', hideLoginModal);
+    if (loginOverlay) loginOverlay.addEventListener('click', hideLoginModal);
+
+    // Handle login
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
-            const username = document.getElementById('username').value;
+            const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
-            
-            if (login(username, password)) {
-                loginModal.classList.add('hidden');
-                document.body.style.overflow = 'auto';
-                
-                // Mostrar mensagem de sucesso
-                const successMsg = document.createElement('div');
-                successMsg.className = 'alert alert-success';
-                successMsg.textContent = `Bem-vindo de volta, ${username}!`;
-                successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 10001; animation: slideInRight 0.3s ease-out;';
-                document.body.appendChild(successMsg);
-                
-                setTimeout(() => {
-                    successMsg.style.animation = 'slideOutRight 0.3s ease-out';
-                    setTimeout(() => successMsg.remove(), 300);
-                }, 3000);
+            const result = login(username, password);
+            if (result.success) {
+                hideLoginModal();
+                updateAuthUI();
+                showAlert('success', `${i18n.t('login.welcome')} ${result.user.fullName}!`);
+                // Load user data
+                loadUserSystemsIntoDataManager();
+                if (typeof displayUserSystems === 'function') displayUserSystems();
+                if (typeof displayUserComparisons === 'function') displayUserComparisons();
+                if (typeof renderSystems === 'function') renderSystems();
+                // Execute pending callback
+                if (pendingLoginCallback) {
+                    const cb = pendingLoginCallback;
+                    pendingLoginCallback = null;
+                    cb();
+                }
             } else {
-                // Mostrar mensagem de erro
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'alert alert-error';
-                errorMsg.textContent = 'Usuário ou senha inválidos';
-                errorMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ef4444; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 10001; animation: slideInRight 0.3s ease-out;';
-                document.body.appendChild(errorMsg);
-                
-                setTimeout(() => {
-                    errorMsg.style.animation = 'slideOutRight 0.3s ease-out';
-                    setTimeout(() => errorMsg.remove(), 300);
-                }, 3000);
-                
-                // Limpar campo de senha
-                document.getElementById('password').value = '';
+                showAlert('error', i18n.t('login.error'));
             }
         });
     }
-    
-    // Lidar com envio do formulário de registro
+
+    // Logout
+    if (logoutBtn) logoutBtn.addEventListener('click', () => {
+        logout();
+        showAlert('success', 'Logged out');
+    });
+
+    // Show register popup
+    if (showRegisterBtn) showRegisterBtn.addEventListener('click', () => {
+        hideLoginModal();
+        if (registerPopup) registerPopup.style.display = 'flex';
+    });
+    if (closeRegisterPopup) closeRegisterPopup.addEventListener('click', () => { registerPopup.style.display = 'none'; });
+    if (cancelRegisterBtn) cancelRegisterBtn.addEventListener('click', () => { registerPopup.style.display = 'none'; });
+
+    // Handle register
     if (registerForm) {
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
-            const userData = {
-                fullName: document.getElementById('regFullName').value,
-                email: document.getElementById('regEmail').value,
-                username: document.getElementById('regUsername').value,
-                password: document.getElementById('regPassword').value,
-                confirmPassword: document.getElementById('regConfirmPassword').value,
+            const pw = document.getElementById('regPassword').value;
+            const cpw = document.getElementById('regConfirmPassword').value;
+            if (pw !== cpw) { showAlert('error', i18n.t('register.errorPasswords')); return; }
+
+            const data = {
+                fullName: document.getElementById('regFullName').value.trim(),
+                email: document.getElementById('regEmail').value.trim(),
+                username: document.getElementById('regUsername').value.trim(),
+                password: pw,
                 usage: document.getElementById('regUsage').value,
                 education: document.getElementById('regEducation').value,
-                field: document.getElementById('regField').value
+                field: document.getElementById('regField').value.trim()
             };
-            
-            const result = register(userData);
-            
+
+            const result = register(data);
             if (result.success) {
-                // Auto-login após registro
-                login(result.username, userData.password);
-                
-                // Fechar popup
                 registerPopup.style.display = 'none';
-                
-                // Esconder modal de login
-                loginModal.classList.add('hidden');
-                document.body.style.overflow = 'auto';
-                
-                // Mostrar mensagem de sucesso
-                const successMsg = document.createElement('div');
-                successMsg.className = 'alert alert-success';
-                successMsg.textContent = `Conta criada com sucesso! Bem-vindo, ${userData.fullName}!`;
-                successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 40000; animation: slideInRight 0.3s ease-out;';
-                document.body.appendChild(successMsg);
-                
-                setTimeout(() => {
-                    successMsg.style.animation = 'slideOutRight 0.3s ease-out';
-                    setTimeout(() => successMsg.remove(), 300);
-                }, 3000);
-                
-                registerForm.reset();
+                updateAuthUI();
+                showAlert('success', `${i18n.t('register.success')} ${result.user.fullName}!`);
+                loadUserSystemsIntoDataManager();
+                if (pendingLoginCallback) {
+                    const cb = pendingLoginCallback;
+                    pendingLoginCallback = null;
+                    cb();
+                }
             } else {
-                // Mostrar mensagem de erro
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'alert alert-error';
-                errorMsg.textContent = result.message || 'Falha no registro. Tente novamente.';
-                errorMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ef4444; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 40000; animation: slideInRight 0.3s ease-out;';
-                document.body.appendChild(errorMsg);
-                
-                setTimeout(() => {
-                    errorMsg.style.animation = 'slideOutRight 0.3s ease-out';
-                    setTimeout(() => errorMsg.remove(), 300);
-                }, 3000);
+                showAlert('error', i18n.t(result.error));
             }
         });
     }
-    
-    // Lidar com botão de logout
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', logout);
-    }
-});
 
-// Adicionar animações de alerta ao CSS
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideInRight {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOutRight {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
+    // Initial UI state
+    updateAuthUI();
+});

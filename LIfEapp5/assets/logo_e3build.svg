@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80">
+  <!-- House outline with arrow -->
+  <g transform="translate(5, 5)">
+    <!-- Arrow going up-right from house -->
+    <path d="M2 58 L2 30 L30 8 L58 30 L58 58 Z" fill="none" stroke="#1a2e44" stroke-width="3" stroke-linejoin="round"/>
+    <!-- Arrow tip top-right -->
+    <path d="M42 8 L58 2 L52 18" fill="none" stroke="#1a2e44" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="30" y1="38" x2="56" y2="4" stroke="#1a2e44" stroke-width="2.5" stroke-linecap="round"/>
+    
+    <!-- Bar chart bars inside house -->
+    <rect x="12" y="48" width="8" height="10" rx="1" fill="#2d6a30"/>
+    <rect x="22" y="42" width="8" height="16" rx="1" fill="#3a8b3e"/>
+    <rect x="32" y="36" width="8" height="22" rx="1" fill="#4aad4e"/>
+    <rect x="42" y="30" width="8" height="28" rx="1" fill="#5cc960"/>
+  </g>
+  
+  <!-- Text E³ Build -->
+  <text x="78" y="48" font-family="'Inter', 'Segoe UI', Arial, sans-serif" font-weight="800" font-size="38" fill="#1a2e44" letter-spacing="-1">
+    E<tspan baseline-shift="super" font-size="18">3</tspan> Build
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="80" y="65" font-family="'Inter', 'Segoe UI', Arial, sans-serif" font-weight="400" font-size="10.5" fill="#5a7a6a" letter-spacing="1.5">
+    (Energy • Environment • Envelope)
+  </text>
+</svg>
