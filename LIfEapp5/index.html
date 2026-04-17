@@ -14,7 +14,7 @@
     <title>E³ Build - Análise de Sistemas Construtivos</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="assets/logo_e3build.svg">
+    <link rel="icon" type="image/png" href="assets/logo_e3build.png?v=20260413d">
     
     <!-- Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -25,7 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css?v=20260413d">
 </head>
 <body>
     <!-- Login Modal (popup, NOT a gate) -->
@@ -34,7 +34,7 @@
         <div class="login-container">
             <button class="login-close" id="loginCloseBtn">&times;</button>
             <div class="login-header">
-                <img src="assets/logo_e3build.svg" alt="E³ Build" class="login-logo">
+                <img src="assets/logo_e3build.png?v=20260413d" alt="E³ Build" class="login-logo">
                 <p class="login-subtitle" data-i18n="login.subtitle">Plataforma de Análise de Sistemas Construtivos</p>
                 <p class="login-action-msg" id="loginActionMsg" data-i18n="login.actionRequired">É necessário fazer login para realizar esta ação.</p>
             </div>
@@ -131,17 +131,17 @@
     <nav class="navbar">
         <div class="nav-container">
             <a class="nav-brand" href="#" data-nav="home">
-                <img src="assets/logo_e3build.svg" alt="E³ Build" class="brand-logo">
+                <img src="assets/logo_e3build.png?v=20260413d" alt="E³ Build" class="brand-logo">
             </a>
             <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
                 <span></span><span></span><span></span>
             </button>
             <ul class="nav-menu" id="navMenu">
-                <li><a href="#" class="nav-link active" data-nav="home" data-i18n="nav.home">Início</a></li>
+                <li><a href="#" class="nav-link active" data-nav="home" data-i18n="nav.home">Página Inicial</a></li>
                 <li><a href="#" class="nav-link" data-nav="systems" data-i18n="nav.systems">Sistemas</a></li>
-                <li><a href="#" class="nav-link" data-nav="compare" data-i18n="nav.compare">Comparar</a></li>
-                <li><a href="#" class="nav-link" data-nav="create" data-i18n="nav.create">Crie e Calcule</a></li>
-                <li><a href="#" class="nav-link" data-nav="history" data-i18n="nav.history">Histórico</a></li>
+                <li><a href="#" class="nav-link" data-nav="compare" data-i18n="nav.compare">Compare Sistemas</a></li>
+                <li><a href="#" class="nav-link" data-nav="create" data-i18n="nav.create">Crie e Avalie</a></li>
+                <li><a href="#" class="nav-link" data-nav="history" data-i18n="nav.history">Meus Projetos</a></li>
                 <li><a href="#" class="nav-link" data-nav="about" data-i18n="nav.about">Saiba Mais</a></li>
             </ul>
             <div class="nav-actions">
@@ -198,7 +198,7 @@
                 </div>
                 <div class="hero-image">
                     <div class="logos-container">
-                        <img src="assets/logo_e3build.svg" alt="E³ Build" class="partner-logo partner-logo-main">
+                        <img src="assets/logo_e3build.png?v=20260413d" alt="E³ Build" class="partner-logo partner-logo-main">
                         <div class="partner-logos-row">
                             <img src="assets/logo_life.png" alt="LIfE Logo" class="partner-logo">
                             <img src="assets/logo_ufrgs.png" alt="UFRGS Logo" class="partner-logo">
@@ -253,7 +253,7 @@
                 <div class="filters-container">
                     <div class="filter-group">
                         <label data-i18n="systems.filterType">Tipo:</label>
-                        <select id="filterType" class="filter-select"><option value="" data-i18n="systems.allTypes">Todos os Tipos</option><option value="Bloco de concreto">Bloco de concreto</option><option value="Parede de concreto">Parede de concreto</option><option value="Bloco cerâmico">Bloco cerâmico</option><option value="Steel frame (leve)">Steel frame (leve)</option></select>
+                        <select id="filterType" class="filter-select"><option value="" data-i18n="systems.allTypes">Todos os Tipos</option><option value="Bloco de concreto" data-i18n="filter.concreteBlock">Bloco de concreto</option><option value="Parede de concreto" data-i18n="filter.concreteWall">Parede de concreto</option><option value="Bloco cerâmico" data-i18n="filter.ceramicBlock">Bloco cerâmico</option><option value="Steel frame (leve)" data-i18n="filter.steelFrame">Steel frame (leve)</option></select>
                     </div>
                     <div class="filter-group">
                         <label data-i18n="systems.filterInsulation">Isolamento Térmico:</label>
@@ -278,14 +278,107 @@
             <div class="container">
                 <div class="section-header">
                     <h2 class="section-title" data-i18n="compare.title">Comparar Sistemas</h2>
-                    <p class="section-description" data-i18n="compare.description">Selecione os sistemas de vedação vertical externa opaca que você deseja comparar.</p>
+                    <p class="section-description" data-i18n="compare.description">Escolha o método de comparação e selecione os sistemas de vedação vertical externa opaca.</p>
                 </div>
-                <div class="compare-container">
-                    <div class="compare-instructions">
-                        <div class="selected-systems" id="selectedSystems"><div class="empty-state" data-i18n="compare.empty">Nenhum sistema selecionado</div></div>
-                        <button class="btn btn-primary" id="compareBtn" disabled data-i18n="compare.btn">Comparar</button>
+
+                <!-- Step 1: Choose comparison method -->
+                <div class="compare-method-selector" id="compareMethodSelector">
+                    <h3 class="compare-step-title" data-i18n="compare.stepMethod">1. Escolha o método de comparação</h3>
+                    <div class="compare-method-cards">
+                        <div class="compare-method-card" id="methodThermal" onclick="selectCompareMethod('thermal')">
+                            <div class="method-icon">🌡️</div>
+                            <h4 data-i18n="compare.methodThermal">Desempenho Térmico</h4>
+                            <p data-i18n="compare.methodThermalDesc">Compare todos os sistemas com base em normas de desempenho térmico (NBR, ASHRAE, RTQ-C, RTQ-R)</p>
+                        </div>
+                        <div class="compare-method-card" id="methodGroups" onclick="selectCompareMethod('groups')">
+                            <div class="method-icon">📊</div>
+                            <h4 data-i18n="compare.methodGroups">Grupos de Sistemas</h4>
+                            <p data-i18n="compare.methodGroupsDesc">Compare impactos ambientais entre sistemas — selecione individualmente ou compare todos de uma vez</p>
+                        </div>
                     </div>
-                    <div class="comparison-results" id="comparisonResults" style="display: none;"></div>
+                </div>
+
+                <!-- Method A: Thermal Performance — norm selection -->
+                <div class="compare-panel" id="panelThermal" style="display:none;">
+                    <div class="compare-panel-header">
+                        <button class="btn btn-outline btn-small" onclick="selectCompareMethod(null)">← <span data-i18n="compare.back">Voltar</span></button>
+                        <h3 data-i18n="compare.thermalTitle">Comparação por Desempenho Térmico</h3>
+                    </div>
+                    <p class="compare-panel-desc" data-i18n="compare.thermalDesc">Selecione uma norma técnica para verificar a conformidade de todos os sistemas:</p>
+                    <div class="norm-cards-grid">
+                        <div class="norm-card" onclick="runThermalComparison('nbr15575')">
+                            <div class="norm-card-header"><span class="norm-badge">Brasil</span><h4>NBR 15575</h4></div>
+                            <p data-i18n="compare.normNBR">Norma de Desempenho — Edificações Habitacionais (Zonas 1–8)</p>
+                        </div>
+                        <div class="norm-card" onclick="runThermalComparison('rtqr')">
+                            <div class="norm-card-header"><span class="norm-badge">Brasil</span><h4>RTQ-R</h4></div>
+                            <p data-i18n="compare.normRTQR">Requisitos Técnicos — Edifícios Residenciais (Zonas 1–8)</p>
+                        </div>
+                        <div class="norm-card" onclick="runThermalComparison('rtqc')">
+                            <div class="norm-card-header"><span class="norm-badge">Brasil</span><h4>RTQ-C</h4></div>
+                            <p data-i18n="compare.normRTQC">Requisitos Técnicos — Edifícios Comerciais (Zonas 1–8)</p>
+                        </div>
+                        <div class="norm-card" onclick="runThermalComparison('ashrae_residential')">
+                            <div class="norm-card-header"><span class="norm-badge norm-badge-intl">Internacional</span><h4>ASHRAE 90.1 Residencial</h4></div>
+                            <p data-i18n="compare.normASHRAERes">Padrão de Energia — Edifícios Residenciais (Zonas 0–3)</p>
+                        </div>
+                        <div class="norm-card" onclick="runThermalComparison('ashrae_commercial')">
+                            <div class="norm-card-header"><span class="norm-badge norm-badge-intl">Internacional</span><h4>ASHRAE 90.1 Não Residencial</h4></div>
+                            <p data-i18n="compare.normASHRAECom">Padrão de Energia — Edifícios Comerciais (Zonas 0–3)</p>
+                        </div>
+                    </div>
+                    <div class="comparison-results" id="thermalComparisonResults" style="display:none;"></div>
+                </div>
+
+                <!-- Method B: System Groups — individual or compare all -->
+                <div class="compare-panel" id="panelGroups" style="display:none;">
+                    <div class="compare-panel-header">
+                        <button class="btn btn-outline btn-small" onclick="selectCompareMethod(null)">← <span data-i18n="compare.back">Voltar</span></button>
+                        <h3 data-i18n="compare.groupsTitle">Comparação por Grupos de Sistemas</h3>
+                    </div>
+                    <div class="groups-approach-selector">
+                        <button class="btn btn-outline approach-btn active" id="approachIndividual" onclick="selectGroupApproach('individual')">
+                            <span data-i18n="compare.approachIndividual">Seleção Individual</span>
+                        </button>
+                        <button class="btn btn-outline approach-btn" id="approachAll" onclick="selectGroupApproach('all')">
+                            <span data-i18n="compare.approachAll">Comparar Todos</span>
+                        </button>
+                    </div>
+
+                    <!-- Individual selection sub-panel -->
+                    <div class="groups-subpanel" id="subpanelIndividual">
+                        <p class="compare-panel-desc" data-i18n="compare.individualDesc">Selecione até 5 sistemas para comparar seus impactos ambientais:</p>
+                        <div class="compare-search-row">
+                            <input type="text" id="compareSearchSystem" class="search-input" data-i18n-placeholder="compare.searchPlaceholder" placeholder="Buscar sistemas por nome...">
+                            <div class="compare-filter-group">
+                                <label data-i18n="systems.filterType">Tipo:</label>
+                                <select id="compareFilterType" class="filter-select">
+                                    <option value="" data-i18n="systems.allTypes">Todos os Tipos</option>
+                                    <option value="Bloco de concreto" data-i18n="filter.concreteBlock">Bloco de concreto</option>
+                                    <option value="Parede de concreto" data-i18n="filter.concreteWall">Parede de concreto</option>
+                                    <option value="Bloco cerâmico" data-i18n="filter.ceramicBlock">Bloco cerâmico</option>
+                                    <option value="Steel frame (leve)" data-i18n="filter.steelFrame">Steel frame (leve)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="compare-selected-bar">
+                            <div class="selected-systems" id="selectedSystems"><div class="empty-state" data-i18n="compare.empty">Nenhum sistema selecionado</div></div>
+                            <button class="btn btn-primary" id="compareBtn" disabled data-i18n="compare.btn">Comparar</button>
+                        </div>
+                        <div class="compare-system-grid" id="compareSystemGrid"></div>
+                    </div>
+
+                    <!-- Compare All sub-panel -->
+                    <div class="groups-subpanel" id="subpanelAll" style="display:none;">
+                        <p class="compare-panel-desc" data-i18n="compare.allDesc">Compare todos os 42 sistemas da biblioteca de uma vez, visualizando impactos ambientais e desempenho térmico de toda a base de dados.</p>
+                        <div style="text-align:center;">
+                            <button class="btn btn-primary btn-large" id="compareAllBtn" onclick="runCompareAll()">
+                                <span data-i18n="compare.compareAllBtn">Comparar Todos os Sistemas</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="comparison-results" id="groupComparisonResults" style="display:none;"></div>
                 </div>
             </div>
         </section>
@@ -302,30 +395,30 @@
                 <div class="create-form-container">
                     <form id="createSystemForm" class="create-form">
                         <div class="form-row">
-                            <div class="form-group"><label for="systemName" data-i18n="create.name">Nome do Sistema *</label><input type="text" id="systemName" required placeholder="Digite o nome do sistema"></div>
-                            <div class="form-group"><label for="systemType" data-i18n="create.type">Tipo *</label><select id="systemType" required><option value="">Selecione o tipo</option><option value="Concreto">Concreto</option><option value="Cerâmico">Cerâmico</option><option value="Drywall">Drywall</option><option value="Outro">Outro</option></select></div>
+                            <div class="form-group"><label for="systemName" class="tooltip-label" data-i18n-tooltip="tooltip.create.name"><span data-i18n="create.name">Nome do Sistema *</span><span class="info-icon">?</span></label><input type="text" id="systemName" required placeholder="Digite o nome do sistema"></div>
+                            <div class="form-group"><label for="systemType" class="tooltip-label" data-i18n-tooltip="tooltip.create.type"><span data-i18n="create.type">Tipo *</span><span class="info-icon">?</span></label><select id="systemType" required><option value="">Selecione o tipo</option><option value="Concreto">Concreto</option><option value="Cerâmico">Cerâmico</option><option value="Drywall">Drywall</option><option value="Outro">Outro</option></select></div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group"><label for="uValue" data-i18n="create.uValue">Valor U (W/m²K) *</label><input type="number" id="uValue" step="0.01" required placeholder="0,00"></div>
-                            <div class="form-group"><label for="thermalCapacity" data-i18n="create.thermalCapacity">Capacidade Térmica (kJ/m²K) *</label><input type="number" id="thermalCapacity" step="1" required placeholder="0"></div>
+                            <div class="form-group"><label for="uValue" class="tooltip-label" data-i18n-tooltip="tooltip.create.uValue"><span data-i18n="create.uValue">Valor U (W/m²K) *</span><span class="info-icon">?</span></label><input type="number" id="uValue" step="0.01" required placeholder="0,00"></div>
+                            <div class="form-group"><label for="thermalCapacity" class="tooltip-label" data-i18n-tooltip="tooltip.create.thermalCapacity"><span data-i18n="create.thermalCapacity">Capacidade Térmica (kJ/m²K) *</span><span class="info-icon">?</span></label><input type="number" id="thermalCapacity" step="1" required placeholder="0"></div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group"><label for="weight" data-i18n="create.weight">Peso (kg/m²) *</label><input type="number" id="weight" step="0.1" required placeholder="0,0"></div>
-                            <div class="form-group"><label for="thickness" data-i18n="create.thickness">Espessura (cm) *</label><input type="number" id="thickness" step="0.1" required placeholder="0,0"></div>
+                            <div class="form-group"><label for="weight" class="tooltip-label" data-i18n-tooltip="tooltip.create.weight"><span data-i18n="create.weight">Peso (kg/m²) *</span><span class="info-icon">?</span></label><input type="number" id="weight" step="0.1" required placeholder="0,0"></div>
+                            <div class="form-group"><label for="thickness" class="tooltip-label" data-i18n-tooltip="tooltip.create.thickness"><span data-i18n="create.thickness">Espessura (cm) *</span><span class="info-icon">?</span></label><input type="number" id="thickness" step="0.1" required placeholder="0,0"></div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group checkbox-group"><label><input type="checkbox" id="lightSystem"><span data-i18n="create.lightSystem">Sistema Leve</span></label></div>
-                            <div class="form-group checkbox-group"><label><input type="checkbox" id="thermalInsulation"><span data-i18n="create.thermalInsulation">Isolamento Térmico</span></label></div>
+                            <div class="form-group checkbox-group"><label class="tooltip-label" data-i18n-tooltip="tooltip.create.lightSystem"><input type="checkbox" id="lightSystem"><span data-i18n="create.lightSystem">Sistema Leve</span><span class="info-icon">?</span></label></div>
+                            <div class="form-group checkbox-group"><label class="tooltip-label" data-i18n-tooltip="tooltip.create.thermalInsulation"><input type="checkbox" id="thermalInsulation"><span data-i18n="create.thermalInsulation">Isolamento Térmico</span><span class="info-icon">?</span></label></div>
                         </div>
                         <div class="form-section-title" data-i18n="create.componentsTitle">Componentes do Sistema</div>
                         <p class="form-help-text" data-i18n="create.componentsDesc">Selecione os componentes que compõem o sistema de vedação.</p>
                         <div class="components-selector" id="componentsSelector">
-                            <div class="form-group"><label data-i18n="create.available">Componentes Disponíveis</label><div class="components-search"><input type="text" id="componentSearch" placeholder="Buscar componente..." class="search-input"></div><div class="components-list" id="componentsList"></div></div>
-                            <div class="form-group"><label data-i18n="create.selectedLayers">Camadas Selecionadas</label><div class="selected-layers" id="selectedLayers"><div class="empty-state" data-i18n="create.noLayers">Nenhuma camada selecionada</div></div></div>
+                            <div class="form-group"><label class="tooltip-label" data-i18n-tooltip="tooltip.create.components"><span data-i18n="create.available">Componentes Disponíveis</span><span class="info-icon">?</span></label><div class="components-search"><input type="text" id="componentSearch" placeholder="Buscar componente..." class="search-input"></div><div class="components-list" id="componentsList"></div></div>
+                            <div class="form-group"><label class="tooltip-label" data-i18n-tooltip="tooltip.create.selectedLayers"><span data-i18n="create.selectedLayers">Camadas Selecionadas</span><span class="info-icon">?</span></label><div class="selected-layers" id="selectedLayers"><div class="empty-state" data-i18n="create.noLayers">Nenhuma camada selecionada</div></div></div>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary btn-large" data-i18n="create.save">Salvar Sistema</button>
-                            <button type="button" class="btn btn-outline btn-large" id="clearForm" data-i18n="create.clear">Limpar Formulário</button>
+                            <button type="submit" class="btn btn-primary btn-large" data-i18n="create.save" data-i18n-tooltip="tooltip.create.save">Salvar Sistema</button>
+                            <button type="button" class="btn btn-outline btn-large" id="clearForm" data-i18n="create.clear" data-i18n-tooltip="tooltip.create.clear">Limpar Formulário</button>
                         </div>
                     </form>
                 </div>
@@ -343,9 +436,9 @@
                 </div>
                 <div class="tabs-container">
                     <div class="tabs">
-                        <button class="tab-btn active" data-tab="created" data-i18n="history.createdTab">Sistemas Criados</button>
-                        <button class="tab-btn" data-tab="comparisons" data-i18n="history.comparisonsTab">Histórico de Comparações</button>
-                        <button class="btn btn-outline btn-small" id="printHistory" style="margin-left:auto;" onclick="window.print()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg> <span data-i18n="history.print">Imprimir</span></button>
+                        <button class="tab-btn active" data-tab="created" data-i18n="history.createdTab" data-i18n-tooltip="tooltip.history.createdTab">Sistemas Criados</button>
+                        <button class="tab-btn" data-tab="comparisons" data-i18n="history.comparisonsTab" data-i18n-tooltip="tooltip.history.comparisonsTab">Histórico de Comparações</button>
+                        <button class="btn btn-outline btn-small" id="printHistory" style="margin-left:auto;" onclick="window.print()" data-i18n-tooltip="tooltip.history.print"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg> <span data-i18n="history.print">Imprimir</span></button>
                     </div>
                     <div class="tab-content active" id="createdTab"><div class="systems-grid" id="mySystemsGrid"><div class="empty-state" data-i18n="history.noSystems">Nenhum sistema criado ainda.</div></div></div>
                     <div class="tab-content" id="comparisonsTab"><div class="comparisons-list" id="myComparisons"><div class="empty-state" data-i18n="history.noComparisons">Nenhuma comparação realizada ainda.</div></div></div>
@@ -474,7 +567,7 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-brand"><img src="assets/logo_e3build.svg" alt="E³ Build" class="footer-logo"></div>
+                <div class="footer-brand"><img src="assets/logo_e3build.png?v=20260413d" alt="E³ Build" class="footer-logo"></div>
                 <div class="footer-text"><p data-i18n="footer.copy">&copy; 2025 E³ Build - UFRGS/PPGCI. Energy, Environment, Envelope for Buildings.</p></div>
             </div>
         </div>
@@ -483,10 +576,10 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="js/i18n.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/data.js"></script>
-    <script src="js/userSystems.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/i18n.js?v=20260413d"></script>
+    <script src="js/auth.js?v=20260413d"></script>
+    <script src="js/data.js?v=20260413d"></script>
+    <script src="js/userSystems.js?v=20260413d"></script>
+    <script src="js/app.js?v=20260413d"></script>
 </body>
 </html>

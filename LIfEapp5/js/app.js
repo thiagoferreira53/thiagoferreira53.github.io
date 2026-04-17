@@ -41,7 +41,10 @@
 
         // Page-specific init
         if (pageName === 'systems' && dataManager.loaded) renderSystems();
-        if (pageName === 'compare') renderSelectedChips();
+        if (pageName === 'compare') {
+            renderSelectedChips();
+            if (dataManager.loaded) renderCompareSystemGrid();
+        }
         if (pageName === 'create' && dataManager.loaded) renderComponentsList();
         if (pageName === 'history' && isLoggedIn()) {
             displayUserSystems();
@@ -122,6 +125,29 @@
         // i18n initial update
         i18n.updatePage();
 
+        // Re-render dynamic content when language changes
+        document.addEventListener('languageChanged', () => {
+            if (currentPage === 'systems' && dataManager.loaded) renderSystems();
+            if (currentPage === 'compare' && dataManager.loaded) {
+                renderCompareSystemGrid();
+                renderSelectedChips();
+                // Re-render thermal comparison results if visible
+                const thermalRes = document.getElementById('thermalComparisonResults');
+                if (thermalRes && thermalRes.style.display !== 'none' && lastThermalNormKey) {
+                    runThermalComparison(lastThermalNormKey, true);
+                }
+                // Re-render group comparison results if visible
+                const groupRes = document.getElementById('groupComparisonResults');
+                if (groupRes && groupRes.style.display !== 'none' && lastGroupResultType) {
+                    if (lastGroupResultType === 'all') {
+                        runCompareAll(true);
+                    } else if (lastGroupResultType === 'individual' && selectedSystems.length >= 2) {
+                        showComparison(true);
+                    }
+                }
+            }
+        });
+
         // --- Filters ---
         document.getElementById('searchSystem')?.addEventListener('input', () => { currentSystemPage = 1; renderSystems(); });
         document.getElementById('filterType')?.addEventListener('change', () => { currentSystemPage = 1; renderSystems(); });
@@ -182,37 +208,38 @@
     function createSystemCard(system) {
         const idx = dataManager.systems.indexOf(system);
         const isCustom = system.custom === true;
-        const isSelected = selectedSystems.includes(idx);
         const typeClass = getTypeClass(system);
 
         const imageSrc = system.imagem || '';
         const imageHtml = imageSrc
-            ? `<div class="system-image"><img src="${imageSrc}" alt="${system.nome}" loading="lazy"></div>`
+            ? `<div class="system-image"><img src="${imageSrc}" alt="${tData(system.nome)}" loading="lazy"></div>`
             : '';
+
+        const weightLabel = i18n.t('card.weight');
+        const thicknessLabel = i18n.t('card.thickness');
+        const insulationTag = i18n.t('card.insulation');
+        const lightTag = i18n.t('card.light');
 
         return `
         <div class="system-card ${typeClass}" onclick="showSystemDetail(${idx})">
             ${isCustom ? `<span class="badge-custom">Custom</span>` : ''}
             ${imageHtml}
             <div class="system-header">
-                <h3 class="system-name">${system.nome}</h3>
-                <button class="select-system ${isSelected ? 'selected' : ''}" onclick="event.stopPropagation(); toggleSelectSystem(${idx})">
-                    ${isSelected ? i18n.t('systems.selected') : i18n.t('systems.select')}
-                </button>
+                <h3 class="system-name">${tData(system.nome)}</h3>
             </div>
             <div class="system-specs">
                 <div class="spec-item"><span class="spec-label">U:</span><span class="spec-value">${system.transmitancia?.toFixed(2) || '—'} W/m²K</span></div>
                 <div class="spec-item"><span class="spec-label">CT:</span><span class="spec-value">${system.capacidade_termica?.toFixed(0) || '—'} kJ/m²K</span></div>
-                <div class="spec-item"><span class="spec-label">Peso:</span><span class="spec-value">${system.identificacao?.descricao?.peso?.toFixed(1) || '—'} kg/m²</span></div>
-                <div class="spec-item"><span class="spec-label">Esp.:</span><span class="spec-value">${system.identificacao?.descricao?.espessura || '—'} cm</span></div>
+                <div class="spec-item"><span class="spec-label">${weightLabel}:</span><span class="spec-value">${system.identificacao?.descricao?.peso?.toFixed(1) || '—'} kg/m²</span></div>
+                <div class="spec-item"><span class="spec-label">${thicknessLabel}:</span><span class="spec-value">${system.identificacao?.descricao?.espessura || '—'} cm</span></div>
             </div>
             <div class="system-impacts">
                 <div class="impact-item"><span class="impact-label">GWP:</span><span class="impact-value">${formatScientific(system.impactos?.gwp)} kg CO₂ eq</span></div>
                 <div class="impact-item"><span class="impact-label">CED:</span><span class="impact-value">${formatScientific(system.consumo?.total)} MJ</span></div>
             </div>
             <div class="system-tags">
-                ${system.identificacao?.descricao?.isolante_termico ? `<span class="tag">🛡️ Isolamento</span>` : ''}
-                ${system.identificacao?.descricao?.sistema_leve ? `<span class="tag">⚡ Leve</span>` : ''}
+                ${system.identificacao?.descricao?.isolante_termico ? `<span class="tag">🛡️ ${insulationTag}</span>` : ''}
+                ${system.identificacao?.descricao?.sistema_leve ? `<span class="tag">⚡ ${lightTag}</span>` : ''}
             </div>
         </div>`;
     }
@@ -264,20 +291,93 @@
     }
 
     // ===================================================================
-    //  System Selection (for compare)
+    //  Compare Tab — Method Selection
     // ===================================================================
-    window.toggleSelectSystem = function (idx) {
+    let compareMethod = null; // 'thermal' | 'groups'
+    let groupApproach = 'individual'; // 'individual' | 'all'
+    let lastThermalNormKey = null;   // track last thermal norm for re-render on lang change
+    let lastGroupResultType = null;  // 'individual' | 'all' — track for re-render on lang change
+
+    window.selectCompareMethod = function (method) {
+        compareMethod = method;
+        document.getElementById('compareMethodSelector').style.display = method ? 'none' : 'block';
+        document.getElementById('panelThermal').style.display = method === 'thermal' ? 'block' : 'none';
+        document.getElementById('panelGroups').style.display = method === 'groups' ? 'block' : 'none';
+
+        // Reset results
+        const thermalRes = document.getElementById('thermalComparisonResults');
+        const groupRes = document.getElementById('groupComparisonResults');
+        if (thermalRes) thermalRes.style.display = 'none';
+        if (groupRes) groupRes.style.display = 'none';
+
+        // Highlight selected method card
+        document.querySelectorAll('.compare-method-card').forEach(c => c.classList.remove('active'));
+        if (method === 'thermal') document.getElementById('methodThermal')?.classList.add('active');
+        if (method === 'groups') {
+            document.getElementById('methodGroups')?.classList.add('active');
+            selectGroupApproach('individual');
+            renderCompareSystemGrid();
+        }
+    };
+
+    window.selectGroupApproach = function (approach) {
+        groupApproach = approach;
+        document.getElementById('subpanelIndividual').style.display = approach === 'individual' ? 'block' : 'none';
+        document.getElementById('subpanelAll').style.display = approach === 'all' ? 'block' : 'none';
+        document.getElementById('approachIndividual')?.classList.toggle('active', approach === 'individual');
+        document.getElementById('approachAll')?.classList.toggle('active', approach === 'all');
+        const groupRes = document.getElementById('groupComparisonResults');
+        if (groupRes) groupRes.style.display = 'none';
+    };
+
+    // ===================================================================
+    //  Compare Tab — System Selection Grid (inside compare)
+    // ===================================================================
+    function renderCompareSystemGrid() {
+        const grid = document.getElementById('compareSystemGrid');
+        if (!grid || !dataManager.loaded) return;
+
+        const search = document.getElementById('compareSearchSystem')?.value || '';
+        const type = document.getElementById('compareFilterType')?.value || '';
+        const systems = dataManager.getSystems({ search, type });
+
+        if (systems.length === 0) {
+            grid.innerHTML = `<div class="empty-state">${i18n.t('systems.noResults')}</div>`;
+            return;
+        }
+
+        grid.innerHTML = systems.map(system => {
+            const idx = dataManager.systems.indexOf(system);
+            const isSelected = selectedSystems.includes(idx);
+            const typeClass = getTypeClass(system);
+            const weightLabel = i18n.t('card.weight');
+            const thicknessLabel = i18n.t('card.thickness');
+
+            return `
+            <div class="compare-mini-card ${typeClass} ${isSelected ? 'selected' : ''}" onclick="toggleCompareSystem(${idx})">
+                <div class="mini-card-check">${isSelected ? '✓' : ''}</div>
+                <h4 class="mini-card-name">${tData(system.nome)}</h4>
+                <div class="mini-card-specs">
+                    <span>U: ${system.transmitancia?.toFixed(2) || '—'}</span>
+                    <span>CT: ${system.capacidade_termica?.toFixed(0) || '—'}</span>
+                    <span>${weightLabel}: ${system.identificacao?.descricao?.peso?.toFixed(1) || '—'}</span>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    window.toggleCompareSystem = function (idx) {
         const pos = selectedSystems.indexOf(idx);
         if (pos > -1) {
             selectedSystems.splice(pos, 1);
         } else {
-            if (selectedSystems.length >= 3) {
+            if (selectedSystems.length >= 5) {
                 showAlert('error', i18n.t('alert.maxSystems'));
                 return;
             }
             selectedSystems.push(idx);
         }
-        renderSystems();
+        renderCompareSystemGrid();
         renderSelectedChips();
     };
 
@@ -295,10 +395,161 @@
 
         container.innerHTML = selectedSystems.map((idx) => {
             const sys = dataManager.systems[idx];
-            return `<span class="selected-chip">${sys?.nome || idx}<button class="remove-chip" onclick="toggleSelectSystem(${idx})">×</button></span>`;
+            return `<span class="selected-chip">${tData(sys?.nome) || idx}<button class="remove-chip" onclick="event.stopPropagation(); toggleCompareSystem(${idx})">×</button></span>`;
         }).join('');
     }
     window.updateSelectedSystems = renderSelectedChips;
+
+    // Search / filter listeners for compare grid
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('compareSearchSystem')?.addEventListener('input', renderCompareSystemGrid);
+        document.getElementById('compareFilterType')?.addEventListener('change', renderCompareSystemGrid);
+    });
+
+    // ===================================================================
+    //  Thermal Performance Comparison (Method A)
+    // ===================================================================
+    window.runThermalComparison = function (normKey, skipScroll) {
+        const regs = dataManager.getRegulations();
+        const resultsDiv = document.getElementById('thermalComparisonResults');
+        if (!resultsDiv || !regs) return;
+
+        lastThermalNormKey = normKey;
+
+        const systems = dataManager.systems.filter(s => !s.custom);
+        let html = '';
+
+        // Highlight the selected norm card
+        if (!skipScroll) {
+            document.querySelectorAll('.norm-card').forEach(c => c.classList.remove('active'));
+            event?.target?.closest('.norm-card')?.classList.add('active');
+        }
+
+        const ashraeResLabel = i18n.getLang() === 'en' ? 'ASHRAE 90.1 Residential' : 'ASHRAE 90.1 Residencial';
+        const ashraeComLabel = i18n.getLang() === 'en' ? 'ASHRAE 90.1 Non-Residential' : 'ASHRAE 90.1 Não Residencial';
+
+        if (normKey === 'nbr15575' && regs.nbr15575) {
+            html = buildThermalTable(systems, regs.nbr15575, 'NBR 15575', 8, (sys, zona) => {
+                const maxU = zona.transmitancia_maxima?.inferior_limite || 999;
+                const minCT = zona.capacidade_minima || 0;
+                return sys.transmitancia <= maxU && sys.capacidade_termica >= minCT;
+            });
+        } else if (normKey === 'rtqr' && regs.rtqr) {
+            html = buildThermalTable(systems, regs.rtqr, 'RTQ-R', 8, (sys, zona) => {
+                const maxU = zona.transmitancia_maxima?.inferior_limite || 999;
+                const minCT = zona.capacidade_minima || 0;
+                return sys.transmitancia <= maxU && sys.capacidade_termica >= minCT;
+            });
+        } else if (normKey === 'rtqc' && regs.rtqc) {
+            html = buildRTQCTable(systems, regs.rtqc);
+        } else if (normKey === 'ashrae_residential' && regs.ashrae_residential) {
+            html = buildASHRAETable(systems, regs.ashrae_residential, ashraeResLabel);
+        } else if (normKey === 'ashrae_commercial' && regs.ashrae_commercial) {
+            html = buildASHRAETable(systems, regs.ashrae_commercial, ashraeComLabel);
+        }
+
+        resultsDiv.innerHTML = html;
+        resultsDiv.style.display = 'block';
+        if (!skipScroll) resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    function buildThermalTable(systems, norm, normName, numZones, evaluateFn) {
+        let html = `<h3 style="text-align:center;margin:2rem 0 1rem;">${i18n.t('compare.thermalResultsTitle')} — ${normName}</h3>`;
+        html += `<div class="thermal-results-table"><table><thead><tr><th>${i18n.t('compare.system')}</th><th>U (W/m²K)</th><th>CT (kJ/m²K)</th>`;
+        for (let z = 1; z <= numZones; z++) html += `<th>${i18n.t('compare.zone')} ${z}</th>`;
+        html += `</tr></thead><tbody>`;
+
+        systems.forEach(sys => {
+            html += `<tr><td class="system-name-cell">${tData(sys.nome)}</td><td>${sys.transmitancia?.toFixed(2) || '—'}</td><td>${sys.capacidade_termica?.toFixed(0) || '—'}</td>`;
+            for (let z = 1; z <= numZones; z++) {
+                const zona = norm.zonas?.find(zn => zn.zona === z);
+                const pass = zona ? evaluateFn(sys, zona) : false;
+                html += `<td class="compliance-cell ${pass ? 'pass' : 'fail'}">${pass ? '✓' : '✗'}</td>`;
+            }
+            html += `</tr>`;
+        });
+        html += `</tbody></table></div>`;
+        return html;
+    }
+
+    function buildRTQCTable(systems, rtqc) {
+        let html = `<h3 style="text-align:center;margin:2rem 0 1rem;">${i18n.t('compare.thermalResultsTitle')} — RTQ-C</h3>`;
+        html += `<p style="text-align:center;color:var(--gray-500);margin-bottom:1rem;">${i18n.t('compare.rtqcGrades')}</p>`;
+        html += `<div class="thermal-results-table"><table><thead><tr><th>${i18n.t('compare.system')}</th><th>U (W/m²K)</th><th>CT (kJ/m²K)</th>`;
+        for (let z = 1; z <= 8; z++) html += `<th>${i18n.t('compare.zone')} ${z}</th>`;
+        html += `</tr></thead><tbody>`;
+
+        systems.forEach(sys => {
+            html += `<tr><td class="system-name-cell">${tData(sys.nome)}</td><td>${sys.transmitancia?.toFixed(2) || '—'}</td><td>${sys.capacidade_termica?.toFixed(0) || '—'}</td>`;
+            for (let z = 1; z <= 8; z++) {
+                const zona = rtqc.zonas?.find(zn => zn.zona === z);
+                if (!zona) { html += `<td>—</td>`; continue; }
+                const u = sys.transmitancia;
+                let grade = '—';
+                if (u <= (zona.nota_A?.transmitancia_maxima?.inferior_limite || 0)) grade = 'A';
+                else if (u <= (zona.nota_B?.transmitancia_maxima?.inferior_limite || 0)) grade = 'B';
+                else if (u <= (zona.nota_CD?.transmitancia_maxima?.inferior_limite || 0)) grade = 'CD';
+                else grade = 'E';
+                const cls = grade === 'A' ? 'grade-a' : grade === 'B' ? 'grade-b' : grade === 'CD' ? 'grade-cd' : 'grade-e';
+                html += `<td class="compliance-cell ${cls}">${grade}</td>`;
+            }
+            html += `</tr>`;
+        });
+        html += `</tbody></table></div>`;
+        return html;
+    }
+
+    function buildASHRAETable(systems, ashrae, normName) {
+        const zones = ashrae.zonas || [];
+        let html = `<h3 style="text-align:center;margin:2rem 0 1rem;">${i18n.t('compare.thermalResultsTitle')} — ${normName}</h3>`;
+        html += `<div class="thermal-results-table"><table><thead><tr><th>${i18n.t('compare.system')}</th><th>U (W/m²K)</th>`;
+        zones.forEach(z => html += `<th>${i18n.t('compare.zone')} ${z.zona}</th>`);
+        html += `</tr></thead><tbody>`;
+
+        systems.forEach(sys => {
+            html += `<tr><td class="system-name-cell">${tData(sys.nome)}</td><td>${sys.transmitancia?.toFixed(2) || '—'}</td>`;
+            const isSteelFrame = sys.identificacao?.descricao?.sistema_leve === true;
+            zones.forEach(zona => {
+                const maxU = isSteelFrame
+                    ? (zona.transmitancia_maxima?.steel_frame || zona.transmitancia_maxima?.wall_mass || 999)
+                    : (zona.transmitancia_maxima?.wall_mass || 999);
+                const pass = sys.transmitancia <= maxU;
+                html += `<td class="compliance-cell ${pass ? 'pass' : 'fail'}">${pass ? '✓' : '✗'}</td>`;
+            });
+            html += `</tr>`;
+        });
+        html += `</tbody></table></div>`;
+        return html;
+    }
+
+    // ===================================================================
+    //  Compare All (Method B — all systems)
+    // ===================================================================
+    window.runCompareAll = function (skipScroll) {
+        const systems = dataManager.systems.filter(s => !s.custom);
+        if (systems.length === 0) return;
+
+        lastGroupResultType = 'all';
+
+        const resultsDiv = document.getElementById('groupComparisonResults');
+        if (!resultsDiv) return;
+
+        let html = `<h3 style="text-align:center;">${i18n.t('compare.allResultsTitle')}</h3>`;
+        html += createComparisonTable(systems);
+        html += `<div class="comparison-charts">${createComparisonCharts(systems, 'all')}</div>`;
+        html += createStandardsComplianceTable(systems);
+        resultsDiv.innerHTML = html;
+        resultsDiv.style.display = 'block';
+
+        setTimeout(() => renderBarCharts(systems, 'all'), 100);
+        if (!skipScroll) {
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (isLoggedIn()) {
+                saveUserComparison(getCurrentUser(), { systems: systems.map(s => s.nome), type: 'compare-all' });
+                displayUserComparisons();
+            }
+        }
+    };
 
     // ===================================================================
     //  System Detail Modal
@@ -330,32 +581,34 @@
         const layers = system.identificacao?.camadas || [];
         const imp = system.impactos || {};
         const comps = system.consumo?.componentes || [];
+        const yes = i18n.t('detail.yes');
+        const no = i18n.t('detail.no');
 
-        let html = `<h2 class="modal-title">${system.nome}</h2>`;
+        let html = `<h2 class="modal-title">${tData(system.nome)}</h2>`;
 
         // Identification
-        html += `<div class="detail-section"><h3>Identificação</h3><div class="detail-grid">`;
-        html += `<div class="detail-item"><strong>Fronteira:</strong> ${system.identificacao?.fronteira || '—'}</div>`;
-        html += `<div class="detail-item"><strong>Unidade:</strong> ${system.identificacao?.unidade || '—'}</div>`;
-        html += `<div class="detail-item"><strong>Peso:</strong> ${desc.peso?.toFixed(1) || '—'} kg/m²</div>`;
-        html += `<div class="detail-item"><strong>Espessura:</strong> ${desc.espessura || '—'} cm</div>`;
-        html += `<div class="detail-item"><strong>Sistema Leve:</strong> ${desc.sistema_leve ? 'Sim' : 'Não'}</div>`;
-        html += `<div class="detail-item"><strong>Isolante Térmico:</strong> ${desc.isolante_termico ? 'Sim' : 'Não'}</div>`;
+        html += `<div class="detail-section"><h3>${i18n.t('detail.identification')}</h3><div class="detail-grid">`;
+        html += `<div class="detail-item"><strong>${i18n.t('detail.boundary')}:</strong> ${tData(system.identificacao?.fronteira) || '—'}</div>`;
+        html += `<div class="detail-item"><strong>${i18n.t('detail.unit')}:</strong> ${tData(system.identificacao?.unidade) || '—'}</div>`;
+        html += `<div class="detail-item"><strong>${i18n.t('detail.weight')}:</strong> ${desc.peso?.toFixed(1) || '—'} kg/m²</div>`;
+        html += `<div class="detail-item"><strong>${i18n.t('detail.thickness')}:</strong> ${desc.espessura || '—'} cm</div>`;
+        html += `<div class="detail-item"><strong>${i18n.t('detail.lightweight')}:</strong> ${desc.sistema_leve ? yes : no}</div>`;
+        html += `<div class="detail-item"><strong>${i18n.t('detail.insulation')}:</strong> ${desc.isolante_termico ? yes : no}</div>`;
         html += `</div></div>`;
 
         // Layers
         if (layers.length) {
-            html += `<div class="detail-section"><h3>Camadas (interior → exterior)</h3><ol class="layers-list">${layers.map(l => `<li>${l}</li>`).join('')}</ol></div>`;
+            html += `<div class="detail-section"><h3>${i18n.t('detail.layers')}</h3><ol class="layers-list">${layers.map(l => `<li>${tData(l)}</li>`).join('')}</ol></div>`;
         }
 
         // Thermal properties
-        html += `<div class="detail-section"><h3>Propriedades Térmicas</h3><div class="detail-grid">`;
-        html += `<div class="detail-item"><strong>Transmitância Térmica (U):</strong> ${system.transmitancia?.toFixed(2) || '—'} W/m²K</div>`;
-        html += `<div class="detail-item"><strong>Capacidade Térmica (CT):</strong> ${system.capacidade_termica?.toFixed(0) || '—'} kJ/m²K</div>`;
+        html += `<div class="detail-section"><h3>${i18n.t('detail.thermalProps')}</h3><div class="detail-grid">`;
+        html += `<div class="detail-item"><strong>${i18n.t('detail.thermalTransmittance')}:</strong> ${system.transmitancia?.toFixed(2) || '—'} W/m²K</div>`;
+        html += `<div class="detail-item"><strong>${i18n.t('detail.thermalCapacity')}:</strong> ${system.capacidade_termica?.toFixed(0) || '—'} kJ/m²K</div>`;
         html += `</div></div>`;
 
         // Environmental impacts
-        html += `<div class="detail-section"><h3>Impactos Ambientais (A1-A3)</h3><div class="impacts-table">`;
+        html += `<div class="detail-section"><h3>${i18n.t('detail.envImpacts')}</h3><div class="impacts-table">`;
         const impactLabels = { gwp: 'GWP (kg CO₂ eq)', ap: 'AP (kg SO₂ eq)', ep: 'EP (kg PO₄ eq)', pocp: 'POCP (kg C₂H₄ eq)', odp: 'ODP (kg CFC-11 eq)', adpf: 'ADP-f (MJ)', adpnf: 'ADP-nf (kg Sb eq)' };
         for (const [key, label] of Object.entries(impactLabels)) {
             html += `<div class="impact-row"><span>${label}</span><span>${formatScientific(imp[key])}</span></div>`;
@@ -363,12 +616,12 @@
         html += `</div></div>`;
 
         // Energy consumption
-        html += `<div class="detail-section"><h3>Consumo Energético (CED)</h3>`;
-        html += `<div class="total-row"><strong>Total: ${formatScientific(system.consumo?.total)} MJ</strong></div>`;
+        html += `<div class="detail-section"><h3>${i18n.t('detail.energyConsumption')}</h3>`;
+        html += `<div class="total-row"><strong>${i18n.t('detail.total')}: ${formatScientific(system.consumo?.total)} MJ</strong></div>`;
         if (comps.length) {
-            html += `<div class="components-table"><div class="component-header"><span>Componente</span><span>CED (MJ)</span><span>GWP (kg CO₂ eq)</span></div>`;
+            html += `<div class="components-table"><div class="component-header"><span>${i18n.t('detail.component')}</span><span>CED (MJ)</span><span>GWP (kg CO₂ eq)</span></div>`;
             comps.forEach(c => {
-                html += `<div class="component-row"><span>${c.componente}</span><span>${formatScientific(c.consumo_componente)}</span><span>${formatScientific(c.gwp)}</span></div>`;
+                html += `<div class="component-row"><span>${tData(c.componente)}</span><span>${formatScientific(c.consumo_componente)}</span><span>${formatScientific(c.gwp)}</span></div>`;
             });
             html += `</div>`;
         }
@@ -383,38 +636,43 @@
     // ===================================================================
     //  Comparison
     // ===================================================================
-    function showComparison() {
+    function showComparison(skipScroll) {
         if (selectedSystems.length < 2) return;
 
+        lastGroupResultType = 'individual';
+
         const systems = selectedSystems.map(i => dataManager.systems[i]).filter(Boolean);
-        const resultsDiv = document.getElementById('comparisonResults');
+        const resultsDiv = document.getElementById('groupComparisonResults');
         if (!resultsDiv) return;
         resultsDiv.style.display = 'block';
 
         let html = `<h3>${i18n.t('compare.results')}</h3>`;
         html += createComparisonTable(systems);
-        html += `<div class="comparison-charts">${createComparisonCharts(systems)}</div>`;
+        html += `<div class="comparison-charts">${createComparisonCharts(systems, 'ind')}</div>`;
         html += createStandardsComplianceTable(systems);
         resultsDiv.innerHTML = html;
 
         // Render charts after DOM is ready
         setTimeout(() => {
-            renderBarCharts(systems);
+            renderBarCharts(systems, 'ind');
         }, 100);
 
-        // Save comparison to history
-        if (isLoggedIn()) {
-            saveUserComparison(getCurrentUser(), { systems: systems.map(s => s.nome) });
-            displayUserComparisons();
+        if (!skipScroll) {
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Save comparison to history
+            if (isLoggedIn()) {
+                saveUserComparison(getCurrentUser(), { systems: systems.map(s => s.nome) });
+                displayUserComparisons();
+            }
         }
     }
 
     function createComparisonTable(systems) {
         const props = [
-            { key: 'transmitancia', label: 'Transmitância Térmica (U)', unit: 'W/m²K', lower: true },
-            { key: 'capacidade_termica', label: 'Capacidade Térmica (CT)', unit: 'kJ/m²K', lower: false },
-            { key: 'peso', label: 'Peso', unit: 'kg/m²', lower: true, path: 'identificacao.descricao.peso' },
-            { key: 'espessura', label: 'Espessura', unit: 'cm', lower: true, path: 'identificacao.descricao.espessura' },
+            { key: 'transmitancia', label: `${i18n.t('detail.thermalTransmittance')}`, unit: 'W/m²K', lower: true },
+            { key: 'capacidade_termica', label: `${i18n.t('detail.thermalCapacity')}`, unit: 'kJ/m²K', lower: false },
+            { key: 'peso', label: `${i18n.t('detail.weight')} (kg/m²)`, unit: '', lower: true, path: 'identificacao.descricao.peso' },
+            { key: 'espessura', label: `${i18n.t('detail.thickness')} (cm)`, unit: '', lower: true, path: 'identificacao.descricao.espessura' },
             { key: 'gwp', label: 'GWP (kg CO₂ eq)', unit: '', lower: true, path: 'impactos.gwp' },
             { key: 'ap', label: 'AP (kg SO₂ eq)', unit: '', lower: true, path: 'impactos.ap' },
             { key: 'ep', label: 'EP (kg PO₄ eq)', unit: '', lower: true, path: 'impactos.ep' },
@@ -423,16 +681,16 @@
             { key: 'ced', label: 'CED (MJ)', unit: '', lower: true, path: 'consumo.total' }
         ];
 
-        let html = `<div class="comparison-table">`;
+        let html = `<div class="comparison-table" style="--compare-cols: ${systems.length}">`;
         // Header with clickable system names and descriptions
-        html += `<div class="comparison-row header"><div class="comparison-cell">${i18n.t('compare.property')}</div>`;
+        html += `<div class="comparison-row header" style="grid-template-columns: 1.5fr repeat(${systems.length}, 1fr)"><div class="comparison-cell">${i18n.t('compare.property')}</div>`;
         systems.forEach(s => {
             const idx = dataManager.systems.indexOf(s);
             const typeClass = getTypeClass(s);
             const desc = s.identificacao?.descricao || {};
-            const layers = (s.identificacao?.camadas || []).join(', ');
+            const layers = (s.identificacao?.camadas || []).map(l => tData(l)).join(', ');
             html += `<div class="comparison-cell system-header-cell ${typeClass}-header">
-                <a href="#" class="system-name-link" onclick="event.preventDefault(); showSystemDetail(${idx})">${s.nome}</a>
+                <a href="#" class="system-name-link" onclick="event.preventDefault(); showSystemDetail(${idx})">${tData(s.nome)}</a>
                 <span class="system-desc-sub">${layers || ''}</span>
             </div>`;
         });
@@ -445,7 +703,7 @@
             });
             const best = prop.lower ? Math.min(...values.filter(v => v != null)) : Math.max(...values.filter(v => v != null));
 
-            html += `<div class="comparison-row"><div class="comparison-cell">${prop.label}</div>`;
+            html += `<div class="comparison-row" style="grid-template-columns: 1.5fr repeat(${systems.length}, 1fr)"><div class="comparison-cell">${prop.label}</div>`;
             values.forEach(v => {
                 const isBest = v === best;
                 const display = v != null ? (prop.unit ? `${typeof v === 'number' && Math.abs(v) < 0.01 ? formatScientific(v) : (typeof v === 'number' ? v.toFixed(2) : v)} ${prop.unit}` : formatScientific(v)) : '—';
@@ -457,46 +715,46 @@
         return html;
     }
 
-    function createComparisonCharts(systems) {
+    function createComparisonCharts(systems, prefix) {
         // Placeholder canvases – will be rendered in renderBarCharts
         return `
-            <h4>Impactos Ambientais</h4>
-            <canvas id="chartGWP" height="200"></canvas>
-            <canvas id="chartEnergy" height="200"></canvas>
-            <canvas id="chartAP" height="200"></canvas>
+            <h4>${i18n.t('compare.chartsTitle')}</h4>
+            <canvas id="chartGWP_${prefix}" height="200"></canvas>
+            <canvas id="chartEnergy_${prefix}" height="200"></canvas>
+            <canvas id="chartAP_${prefix}" height="200"></canvas>
         `;
     }
 
-    function renderBarCharts(systems) {
-        const labels = systems.map(s => s.nome);
+    function renderBarCharts(systems, prefix) {
+        const labels = systems.map(s => tData(s.nome));
 
         // GWP Chart
-        const ctxGWP = document.getElementById('chartGWP');
+        const ctxGWP = document.getElementById(`chartGWP_${prefix}`);
         if (ctxGWP) {
             new Chart(ctxGWP, {
                 type: 'bar',
-                data: { labels, datasets: [{ label: 'GWP (kg CO₂ eq)', data: systems.map(s => s.impactos?.gwp || 0), backgroundColor: chartColors }] },
-                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                data: { labels, datasets: [{ label: 'GWP (kg CO₂ eq)', data: systems.map(s => s.impactos?.gwp || 0), backgroundColor: chartColors.concat(chartColors).slice(0, systems.length) }] },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { ticks: { maxRotation: 90, minRotation: 45, font: { size: 10 } } } } }
             });
         }
 
         // CED Chart
-        const ctxCED = document.getElementById('chartEnergy');
+        const ctxCED = document.getElementById(`chartEnergy_${prefix}`);
         if (ctxCED) {
             new Chart(ctxCED, {
                 type: 'bar',
-                data: { labels, datasets: [{ label: 'CED (MJ)', data: systems.map(s => s.consumo?.total || 0), backgroundColor: chartColors }] },
-                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                data: { labels, datasets: [{ label: 'CED (MJ)', data: systems.map(s => s.consumo?.total || 0), backgroundColor: chartColors.concat(chartColors).slice(0, systems.length) }] },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { ticks: { maxRotation: 90, minRotation: 45, font: { size: 10 } } } } }
             });
         }
 
         // AP Chart
-        const ctxAP = document.getElementById('chartAP');
+        const ctxAP = document.getElementById(`chartAP_${prefix}`);
         if (ctxAP) {
             new Chart(ctxAP, {
                 type: 'bar',
-                data: { labels, datasets: [{ label: 'AP (kg SO₂ eq)', data: systems.map(s => s.impactos?.ap || 0), backgroundColor: chartColors }] },
-                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                data: { labels, datasets: [{ label: 'AP (kg SO₂ eq)', data: systems.map(s => s.impactos?.ap || 0), backgroundColor: chartColors.concat(chartColors).slice(0, systems.length) }] },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { ticks: { maxRotation: 90, minRotation: 45, font: { size: 10 } } } } }
             });
         }
     }
@@ -509,14 +767,14 @@
         if (!regs) return '';
 
         let html = `<h3 style="text-align:center;margin-top:2rem;">${i18n.t('compare.standardsTitle')}</h3>`;
-        html += `<div class="comparison-table"><div class="comparison-row header"><div class="comparison-cell">${i18n.t('compare.standard')}</div>`;
-        systems.forEach(s => { html += `<div class="comparison-cell">${s.nome}</div>`; });
+        html += `<div class="comparison-table"><div class="comparison-row header" style="grid-template-columns: 1.5fr repeat(${systems.length}, 1fr)"><div class="comparison-cell">${i18n.t('compare.standard')}</div>`;
+        systems.forEach(s => { html += `<div class="comparison-cell">${tData(s.nome)}</div>`; });
         html += `</div>`;
 
         // NBR 15575 – zones 1-8
         if (regs.nbr15575) {
             for (let z = 1; z <= 8; z++) {
-                html += `<div class="comparison-row"><div class="comparison-cell">NBR 15575 – Zona ${z}</div>`;
+                html += `<div class="comparison-row" style="grid-template-columns: 1.5fr repeat(${systems.length}, 1fr)"><div class="comparison-cell">NBR 15575 – ${i18n.t('compare.zone')} ${z}</div>`;
                 systems.forEach(s => {
                     const result = evaluateNBR(s, regs.nbr15575, z);
                     html += `<div class="comparison-cell" style="color:${result ? 'var(--success-500)' : 'var(--error-500)'}">${result ? '✓' : '✗'}</div>`;
@@ -527,10 +785,12 @@
 
         // ASHRAE residential
         if (regs.ashrae_residential) {
+            const ashraeResShort = i18n.getLang() === 'en' ? 'ASHRAE Res.' : 'ASHRAE Res.';
             regs.ashrae_residential.zonas?.forEach(zona => {
-                html += `<div class="comparison-row"><div class="comparison-cell">ASHRAE Res. – Zona ${zona.zona}</div>`;
+                html += `<div class="comparison-row" style="grid-template-columns: 1.5fr repeat(${systems.length}, 1fr)"><div class="comparison-cell">${ashraeResShort} – ${i18n.t('compare.zone')} ${zona.zona}</div>`;
                 systems.forEach(s => {
-                    const maxU = zona.transmitancia_maxima?.wall_mass || 999;
+                    const isSF = s.identificacao?.descricao?.sistema_leve === true;
+                    const maxU = isSF ? (zona.transmitancia_maxima?.steel_frame || zona.transmitancia_maxima?.wall_mass || 999) : (zona.transmitancia_maxima?.wall_mass || 999);
                     const pass = s.transmitancia <= maxU;
                     html += `<div class="comparison-cell" style="color:${pass ? 'var(--success-500)' : 'var(--error-500)'}">${pass ? '✓' : '✗'}</div>`;
                 });
@@ -540,10 +800,12 @@
 
         // ASHRAE commercial
         if (regs.ashrae_commercial) {
+            const ashraeComShort = i18n.getLang() === 'en' ? 'ASHRAE Com.' : 'ASHRAE Com.';
             regs.ashrae_commercial.zonas?.forEach(zona => {
-                html += `<div class="comparison-row"><div class="comparison-cell">ASHRAE Com. – Zona ${zona.zona}</div>`;
+                html += `<div class="comparison-row" style="grid-template-columns: 1.5fr repeat(${systems.length}, 1fr)"><div class="comparison-cell">${ashraeComShort} – ${i18n.t('compare.zone')} ${zona.zona}</div>`;
                 systems.forEach(s => {
-                    const maxU = zona.transmitancia_maxima?.wall_mass || 999;
+                    const isSF = s.identificacao?.descricao?.sistema_leve === true;
+                    const maxU = isSF ? (zona.transmitancia_maxima?.steel_frame || zona.transmitancia_maxima?.wall_mass || 999) : (zona.transmitancia_maxima?.wall_mass || 999);
                     const pass = s.transmitancia <= maxU;
                     html += `<div class="comparison-cell" style="color:${pass ? 'var(--success-500)' : 'var(--error-500)'}">${pass ? '✓' : '✗'}</div>`;
                 });
@@ -578,7 +840,7 @@
         const content = document.getElementById('cartilhaContent');
         if (!modal || !content) return;
 
-        titulo.textContent = `Cartilha – ${system.nome}`;
+        titulo.textContent = `${i18n.t('cartilha.title')} – ${tData(system.nome)}`;
         content.innerHTML = buildCartilhaHTML(system);
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -600,41 +862,43 @@
         const comps = system.consumo?.componentes || [];
         const regs = dataManager.getRegulations();
         const typeClass = getTypeClass(system);
+        const yes = i18n.t('detail.yes');
+        const no = i18n.t('detail.no');
 
         let html = '';
 
         // Logos header
-        html += `<div class="cartilha-logos-row"><img src="assets/logo_ufrgs.png" alt="UFRGS" class="cartilha-inline-logo"><img src="assets/logo_e3build.svg" alt="E³ Build" class="cartilha-inline-logo"><img src="assets/logo_life.png" alt="LIfE" class="cartilha-inline-logo"></div>`;
+        html += `<div class="cartilha-logos-row"><img src="assets/logo_ufrgs.png" alt="UFRGS" class="cartilha-inline-logo"><img src="assets/logo_e3build.png?v=20260413d" alt="E³ Build" class="cartilha-inline-logo"><img src="assets/logo_life.png" alt="LIfE" class="cartilha-inline-logo"></div>`;
 
         // Image
         if (system.imagem) {
-            html += `<img src="${system.imagem}" alt="${system.nome}" class="cartilha-image">`;
+            html += `<img src="${system.imagem}" alt="${tData(system.nome)}" class="cartilha-image">`;
         }
 
         // 1. Identification
-        html += `<h3>1. IDENTIFICAÇÃO DO SISTEMA</h3>`;
-        html += `<p><strong>Sistema:</strong> ${system.nome}</p>`;
-        html += `<p><strong>Fronteira do sistema:</strong> ${system.identificacao?.fronteira || '—'}</p>`;
-        html += `<p><strong>Unidade funcional:</strong> ${system.identificacao?.unidade || '—'}</p>`;
-        html += `<p><strong>Peso:</strong> ${desc.peso?.toFixed(1) || '—'} kg/m²</p>`;
-        html += `<p><strong>Espessura total:</strong> ${desc.espessura || '—'} cm</p>`;
-        html += `<p><strong>Sistema leve:</strong> ${desc.sistema_leve ? 'Sim' : 'Não'}</p>`;
-        html += `<p><strong>Isolante térmico:</strong> ${desc.isolante_termico ? 'Sim' : 'Não'}</p>`;
+        html += `<h3>${i18n.t('cartilha.identification')}</h3>`;
+        html += `<p><strong>${i18n.t('cartilha.system')}:</strong> ${tData(system.nome)}</p>`;
+        html += `<p><strong>${i18n.t('cartilha.boundary')}:</strong> ${tData(system.identificacao?.fronteira) || '—'}</p>`;
+        html += `<p><strong>${i18n.t('cartilha.functionalUnit')}:</strong> ${tData(system.identificacao?.unidade) || '—'}</p>`;
+        html += `<p><strong>${i18n.t('cartilha.weight')}:</strong> ${desc.peso?.toFixed(1) || '—'} kg/m²</p>`;
+        html += `<p><strong>${i18n.t('cartilha.totalThickness')}:</strong> ${desc.espessura || '—'} cm</p>`;
+        html += `<p><strong>${i18n.t('cartilha.lightweight')}:</strong> ${desc.sistema_leve ? yes : no}</p>`;
+        html += `<p><strong>${i18n.t('cartilha.insulation')}:</strong> ${desc.isolante_termico ? yes : no}</p>`;
 
         // Layers
-        html += `<h4>Composição (interior → exterior):</h4>`;
-        html += `<ol>${layers.map(l => `<li>${l}</li>`).join('')}</ol>`;
+        html += `<h4>${i18n.t('cartilha.composition')}</h4>`;
+        html += `<ol>${layers.map(l => `<li>${tData(l)}</li>`).join('')}</ol>`;
 
         // 2. Thermal Performance
-        html += `<h3>2. DESEMPENHO TÉRMICO</h3>`;
-        html += `<table class="cartilha-table"><thead><tr><th>Propriedade</th><th>Valor</th><th>Unidade</th></tr></thead><tbody>`;
-        html += `<tr><td>Transmitância Térmica (U)</td><td>${system.transmitancia?.toFixed(2) || '—'}</td><td>W/(m²·K)</td></tr>`;
-        html += `<tr><td>Capacidade Térmica (CT)</td><td>${system.capacidade_termica?.toFixed(0) || '—'}</td><td>kJ/(m²·K)</td></tr>`;
+        html += `<h3>${i18n.t('cartilha.thermalPerf')}</h3>`;
+        html += `<table class="cartilha-table"><thead><tr><th>${i18n.t('cartilha.property')}</th><th>${i18n.t('cartilha.value')}</th><th>${i18n.t('cartilha.unitCol')}</th></tr></thead><tbody>`;
+        html += `<tr><td>${i18n.t('cartilha.thermalTransmittance')}</td><td>${system.transmitancia?.toFixed(2) || '—'}</td><td>W/(m²·K)</td></tr>`;
+        html += `<tr><td>${i18n.t('cartilha.thermalCapacity')}</td><td>${system.capacidade_termica?.toFixed(0) || '—'}</td><td>kJ/(m²·K)</td></tr>`;
         html += `</tbody></table>`;
 
         // 3. Environmental Impacts
-        html += `<h3>3. IMPACTOS AMBIENTAIS (A1-A3)</h3>`;
-        html += `<table class="cartilha-table"><thead><tr><th>Indicador</th><th>Valor</th><th>Unidade</th></tr></thead><tbody>`;
+        html += `<h3>${i18n.t('cartilha.envImpacts')}</h3>`;
+        html += `<table class="cartilha-table"><thead><tr><th>${i18n.t('cartilha.indicator')}</th><th>${i18n.t('cartilha.value')}</th><th>${i18n.t('cartilha.unitCol')}</th></tr></thead><tbody>`;
         const impacts = [
             ['GWP', imp.gwp, 'kg CO₂ eq'], ['AP', imp.ap, 'kg SO₂ eq'], ['EP', imp.ep, 'kg PO₄ eq'],
             ['POCP', imp.pocp, 'kg C₂H₄ eq'], ['ODP', imp.odp, 'kg CFC-11 eq'],
@@ -646,55 +910,61 @@
         html += `</tbody></table>`;
 
         // 4. Energy consumption
-        html += `<h3>4. CONSUMO ENERGÉTICO (CED)</h3>`;
-        html += `<p><strong>Total:</strong> ${formatScientific(system.consumo?.total)} MJ</p>`;
+        html += `<h3>${i18n.t('cartilha.energyCED')}</h3>`;
+        html += `<p><strong>${i18n.t('cartilha.total')}:</strong> ${formatScientific(system.consumo?.total)} MJ</p>`;
         if (comps.length) {
-            html += `<table class="cartilha-table"><thead><tr><th>Componente</th><th>CED (MJ)</th><th>GWP (kg CO₂ eq)</th><th>AP (kg SO₂ eq)</th></tr></thead><tbody>`;
+            html += `<table class="cartilha-table"><thead><tr><th>${i18n.t('cartilha.component')}</th><th>CED (MJ)</th><th>GWP (kg CO₂ eq)</th><th>AP (kg SO₂ eq)</th></tr></thead><tbody>`;
             comps.forEach(c => {
-                html += `<tr><td>${c.componente}</td><td>${formatScientific(c.consumo_componente)}</td><td>${formatScientific(c.gwp)}</td><td>${formatScientific(c.ap)}</td></tr>`;
+                html += `<tr><td>${tData(c.componente)}</td><td>${formatScientific(c.consumo_componente)}</td><td>${formatScientific(c.gwp)}</td><td>${formatScientific(c.ap)}</td></tr>`;
             });
             html += `</tbody></table>`;
         }
 
         // Chart canvases
-        html += `<h3>5. GRÁFICOS</h3>`;
-        html += `<h4>Distribuição de Impactos por Componente</h4>`;
+        html += `<h3>${i18n.t('cartilha.charts')}</h3>`;
+        html += `<h4>${i18n.t('cartilha.chartSubtitle')}</h4>`;
         html += `<canvas id="cartilhaChartGWP" height="250"></canvas>`;
         html += `<canvas id="cartilhaChartCED" height="250"></canvas>`;
 
         // 6. Standards compliance
-        html += `<h3>6. CONFORMIDADE COM NORMAS</h3>`;
+        html += `<h3>${i18n.t('cartilha.standards')}</h3>`;
         html += buildCartilhaStandards(system, regs);
 
         return html;
     }
 
     function buildCartilhaStandards(system, regs) {
-        let html = `<table class="cartilha-table"><thead><tr><th>Norma</th><th>Zona</th><th>Resultado</th></tr></thead><tbody>`;
+        const passLabel = i18n.t('cartilha.pass');
+        const failLabel = i18n.t('cartilha.fail');
+        let html = `<table class="cartilha-table"><thead><tr><th>${i18n.t('cartilha.standard')}</th><th>${i18n.t('cartilha.zone')}</th><th>${i18n.t('cartilha.result')}</th></tr></thead><tbody>`;
 
         // NBR
         if (regs?.nbr15575) {
             for (let z = 1; z <= 8; z++) {
                 const pass = evaluateNBR(system, regs.nbr15575, z);
-                html += `<tr><td>NBR 15575</td><td>Zona ${z}</td><td style="color:${pass ? 'var(--success-500)' : 'var(--error-500)'}">${pass ? 'ATENDE ✓' : 'NÃO ATENDE ✗'}</td></tr>`;
+                html += `<tr><td>NBR 15575</td><td>${i18n.t('cartilha.zone')} ${z}</td><td style="color:${pass ? 'var(--success-500)' : 'var(--error-500)'}">${pass ? passLabel : failLabel}</td></tr>`;
             }
         }
 
         // ASHRAE residential
         if (regs?.ashrae_residential) {
+            const ashraeResShort = i18n.getLang() === 'en' ? 'ASHRAE 90.1 Res.' : 'ASHRAE 90.1 Res.';
             regs.ashrae_residential.zonas?.forEach(zona => {
-                const maxU = zona.transmitancia_maxima?.wall_mass || 999;
+                const isSF = system.identificacao?.descricao?.sistema_leve === true;
+                const maxU = isSF ? (zona.transmitancia_maxima?.steel_frame || zona.transmitancia_maxima?.wall_mass || 999) : (zona.transmitancia_maxima?.wall_mass || 999);
                 const pass = system.transmitancia <= maxU;
-                html += `<tr><td>ASHRAE 90.1 Residencial</td><td>Zona ${zona.zona}</td><td style="color:${pass ? 'var(--success-500)' : 'var(--error-500)'}">${pass ? 'ATENDE ✓' : 'NÃO ATENDE ✗'}</td></tr>`;
+                html += `<tr><td>${ashraeResShort}</td><td>${i18n.t('cartilha.zone')} ${zona.zona}</td><td style="color:${pass ? 'var(--success-500)' : 'var(--error-500)'}">${pass ? passLabel : failLabel}</td></tr>`;
             });
         }
 
         // ASHRAE commercial
         if (regs?.ashrae_commercial) {
+            const ashraeComShort = i18n.getLang() === 'en' ? 'ASHRAE 90.1 Com.' : 'ASHRAE 90.1 Com.';
             regs.ashrae_commercial.zonas?.forEach(zona => {
-                const maxU = zona.transmitancia_maxima?.wall_mass || 999;
+                const isSF = system.identificacao?.descricao?.sistema_leve === true;
+                const maxU = isSF ? (zona.transmitancia_maxima?.steel_frame || zona.transmitancia_maxima?.wall_mass || 999) : (zona.transmitancia_maxima?.wall_mass || 999);
                 const pass = system.transmitancia <= maxU;
-                html += `<tr><td>ASHRAE 90.1 Comercial</td><td>Zona ${zona.zona}</td><td style="color:${pass ? 'var(--success-500)' : 'var(--error-500)'}">${pass ? 'ATENDE ✓' : 'NÃO ATENDE ✗'}</td></tr>`;
+                html += `<tr><td>${ashraeComShort}</td><td>${i18n.t('cartilha.zone')} ${zona.zona}</td><td style="color:${pass ? 'var(--success-500)' : 'var(--error-500)'}">${pass ? passLabel : failLabel}</td></tr>`;
             });
         }
 
@@ -706,7 +976,9 @@
         const comps = system.consumo?.componentes || [];
         if (!comps.length) return;
 
-        const labels = comps.map(c => c.componente);
+        const labels = comps.map(c => tData(c.componente));
+        const gwpChartTitle = i18n.getLang() === 'en' ? 'GWP per Component (kg CO₂ eq)' : 'GWP por Componente (kg CO₂ eq)';
+        const cedChartTitle = i18n.getLang() === 'en' ? 'CED per Component (MJ)' : 'CED por Componente (MJ)';
 
         // GWP Pie/Doughnut
         const ctxGWP = document.getElementById('cartilhaChartGWP');
@@ -714,7 +986,7 @@
             new Chart(ctxGWP, {
                 type: 'doughnut',
                 data: { labels, datasets: [{ data: comps.map(c => c.gwp || 0), backgroundColor: chartColors }] },
-                options: { responsive: true, plugins: { title: { display: true, text: 'GWP por Componente (kg CO₂ eq)' } } }
+                options: { responsive: true, plugins: { title: { display: true, text: gwpChartTitle } } }
             });
         }
 
@@ -724,7 +996,7 @@
             new Chart(ctxCED, {
                 type: 'doughnut',
                 data: { labels, datasets: [{ data: comps.map(c => c.consumo_componente || 0), backgroundColor: chartColors }] },
-                options: { responsive: true, plugins: { title: { display: true, text: 'CED por Componente (MJ)' } } }
+                options: { responsive: true, plugins: { title: { display: true, text: cedChartTitle } } }
             });
         }
     }

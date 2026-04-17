@@ -1,26 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80">
-  <!-- House outline with arrow -->
-  <g transform="translate(5, 5)">
-    <!-- Arrow going up-right from house -->
-    <path d="M2 58 L2 30 L30 8 L58 30 L58 58 Z" fill="none" stroke="#1a2e44" stroke-width="3" stroke-linejoin="round"/>
-    <!-- Arrow tip top-right -->
-    <path d="M42 8 L58 2 L52 18" fill="none" stroke="#1a2e44" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <line x1="30" y1="38" x2="56" y2="4" stroke="#1a2e44" stroke-width="2.5" stroke-linecap="round"/>
-    
-    <!-- Bar chart bars inside house -->
-    <rect x="12" y="48" width="8" height="10" rx="1" fill="#2d6a30"/>
-    <rect x="22" y="42" width="8" height="16" rx="1" fill="#3a8b3e"/>
-    <rect x="32" y="36" width="8" height="22" rx="1" fill="#4aad4e"/>
-    <rect x="42" y="30" width="8" height="28" rx="1" fill="#5cc960"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 160" fill="none">
+  <!-- House + bar chart + arrow icon -->
+  <g transform="translate(8, 8)">
+    <!-- House outline: roof peak + walls -->
+    <path d="M20 135 L20 65 L68 18 L116 65 L116 135 Z" stroke="#1c2e3d" stroke-width="6.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+
+    <!-- Curved arrow swoosh from bottom-left going up around to upper-right -->
+    <path d="M2 142 Q2 90, 35 62 Q50 50, 72 38" stroke="#1c2e3d" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+    <!-- Arrowhead -->
+    <polygon points="68,28 82,38 68,46" fill="#1c2e3d"/>
+
+    <!-- Bar chart: 4 ascending bars (green tones, left to right) -->
+    <rect x="34" y="105" width="16" height="30" rx="1.5" fill="#5ebd5e"/>
+    <rect x="54" y="88" width="16" height="47" rx="1.5" fill="#4aaa4a"/>
+    <rect x="74" y="70" width="16" height="65" rx="1.5" fill="#389438"/>
+    <rect x="94" y="50" width="16" height="85" rx="1.5" fill="#267d26"/>
   </g>
-  
-  <!-- Text E³ Build -->
-  <text x="78" y="48" font-family="'Inter', 'Segoe UI', Arial, sans-serif" font-weight="800" font-size="38" fill="#1a2e44" letter-spacing="-1">
-    E<tspan baseline-shift="super" font-size="18">3</tspan> Build
-  </text>
-  
+
+  <!-- "E" character -->
+  <text x="155" y="102" font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="88" fill="#1a3a2a" letter-spacing="-3">E</text>
+  <!-- Superscript "3" -->
+  <text x="216" y="56" font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="42" fill="#1a3a2a">3</text>
+  <!-- "Build" -->
+  <text x="248" y="102" font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="88" fill="#1a3a2a" letter-spacing="-3">Build</text>
+
   <!-- Subtitle -->
-  <text x="80" y="65" font-family="'Inter', 'Segoe UI', Arial, sans-serif" font-weight="400" font-size="10.5" fill="#5a7a6a" letter-spacing="1.5">
-    (Energy • Environment • Envelope)
-  </text>
+  <text x="160" y="136" font-family="Arial, Helvetica, sans-serif" font-weight="500" font-size="22" fill="#3a6b48" letter-spacing="0.5" font-style="italic">(Energy + Environment + Envelope)</text>
 </svg>

@@ -3,11 +3,11 @@
 const translations = {
     'pt-BR': {
         // Navigation
-        'nav.home': 'Início',
+        'nav.home': 'Página Inicial',
         'nav.systems': 'Sistemas',
-        'nav.compare': 'Comparar',
-        'nav.create': 'Crie e Calcule',
-        'nav.history': 'Histórico',
+        'nav.compare': 'Compare Sistemas',
+        'nav.create': 'Crie e Avalie',
+        'nav.history': 'Meus Projetos',
         'nav.about': 'Saiba Mais',
         'nav.login': 'Entrar',
         'nav.logout': 'Sair',
@@ -66,16 +66,102 @@ const translations = {
 
         // Compare Section
         'compare.title': 'Comparar Sistemas',
-        'compare.description': '<a href="#" data-nav="systems" class="inline-link">Selecione</a> os sistemas de vedação vertical externa opaca que você deseja comparar considerando o desempenho ambiental e térmico.',
-        'compare.selectLink': 'Selecione',
+        'compare.description': 'Escolha o método de comparação e selecione os sistemas de vedação vertical externa opaca.',
+        'compare.stepMethod': '1. Escolha o método de comparação',
+        'compare.methodThermal': 'Desempenho Térmico',
+        'compare.methodThermalDesc': 'Compare todos os sistemas com base em normas de desempenho térmico (NBR, ASHRAE, RTQ-C, RTQ-R)',
+        'compare.methodGroups': 'Grupos de Sistemas',
+        'compare.methodGroupsDesc': 'Compare impactos ambientais entre sistemas — selecione individualmente ou compare todos de uma vez',
+        'compare.back': 'Voltar',
+        'compare.thermalTitle': 'Comparação por Desempenho Térmico',
+        'compare.thermalDesc': 'Selecione uma norma técnica para verificar a conformidade de todos os sistemas:',
+        'compare.normNBR': 'Norma de Desempenho — Edificações Habitacionais (Zonas 1–8)',
+        'compare.normRTQR': 'Requisitos Técnicos — Edifícios Residenciais (Zonas 1–8)',
+        'compare.normRTQC': 'Requisitos Técnicos — Edifícios Comerciais (Zonas 1–8)',
+        'compare.normASHRAERes': 'Padrão de Energia — Edifícios Residenciais (Zonas 0–3)',
+        'compare.normASHRAECom': 'Padrão de Energia — Edifícios Comerciais (Zonas 0–3)',
+        'compare.groupsTitle': 'Comparação por Grupos de Sistemas',
+        'compare.approachIndividual': 'Seleção Individual',
+        'compare.approachAll': 'Comparar Todos',
+        'compare.individualDesc': 'Selecione até 5 sistemas para comparar seus impactos ambientais:',
+        'compare.allDesc': 'Compare todos os sistemas da biblioteca de uma vez, visualizando impactos ambientais e desempenho térmico de toda a base de dados.',
+        'compare.compareAllBtn': 'Comparar Todos os Sistemas',
+        'compare.searchPlaceholder': 'Buscar sistemas por nome...',
         'compare.empty': 'Nenhum sistema selecionado',
-        'compare.btn': 'Comparar',
+        'compare.btn': 'Comparar Selecionados',
         'compare.results': 'Resultados da Comparação',
+        'compare.allResultsTitle': 'Comparação de Todos os Sistemas',
+        'compare.thermalResultsTitle': 'Conformidade Térmica',
         'compare.property': 'Propriedade',
-        'compare.system': 'Sistema construtivo',
+        'compare.system': 'Sistema',
+        'compare.zone': 'Zona',
+        'compare.chartsTitle': 'Impactos Ambientais',
+        'compare.rtqcGrades': 'Classificação energética: A (melhor) → B → CD → E (não atende)',
         'compare.standardsTitle': 'Conformidade com Normas Térmicas',
         'compare.standard': 'Norma',
         'compare.loginRequired': 'Faça login para comparar sistemas',
+
+        // System card labels
+        'card.weight': 'Peso',
+        'card.thickness': 'Esp.',
+        'card.insulation': 'Isolamento',
+        'card.light': 'Leve',
+
+        // System detail modal
+        'detail.identification': 'Identificação',
+        'detail.boundary': 'Fronteira',
+        'detail.unit': 'Unidade',
+        'detail.weight': 'Peso',
+        'detail.thickness': 'Espessura',
+        'detail.lightweight': 'Sistema Leve',
+        'detail.insulation': 'Isolante Térmico',
+        'detail.yes': 'Sim',
+        'detail.no': 'Não',
+        'detail.layers': 'Camadas (interior → exterior)',
+        'detail.thermalProps': 'Propriedades Térmicas',
+        'detail.thermalTransmittance': 'Transmitância Térmica (U)',
+        'detail.thermalCapacity': 'Capacidade Térmica (CT)',
+        'detail.envImpacts': 'Impactos Ambientais (A1-A3)',
+        'detail.energyConsumption': 'Consumo Energético (CED)',
+        'detail.total': 'Total',
+        'detail.component': 'Componente',
+
+        // Filter type options
+        'filter.concreteBlock': 'Bloco de concreto',
+        'filter.concreteWall': 'Parede de concreto',
+        'filter.ceramicBlock': 'Bloco cerâmico',
+        'filter.steelFrame': 'Steel frame (leve)',
+
+        // Cartilha (System Card)
+        'cartilha.title': 'Cartilha',
+        'cartilha.identification': '1. IDENTIFICAÇÃO DO SISTEMA',
+        'cartilha.system': 'Sistema',
+        'cartilha.boundary': 'Fronteira do sistema',
+        'cartilha.functionalUnit': 'Unidade funcional',
+        'cartilha.weight': 'Peso',
+        'cartilha.totalThickness': 'Espessura total',
+        'cartilha.lightweight': 'Sistema leve',
+        'cartilha.insulation': 'Isolante térmico',
+        'cartilha.composition': 'Composição (interior → exterior):',
+        'cartilha.thermalPerf': '2. DESEMPENHO TÉRMICO',
+        'cartilha.property': 'Propriedade',
+        'cartilha.value': 'Valor',
+        'cartilha.unitCol': 'Unidade',
+        'cartilha.thermalTransmittance': 'Transmitância Térmica (U)',
+        'cartilha.thermalCapacity': 'Capacidade Térmica (CT)',
+        'cartilha.envImpacts': '3. IMPACTOS AMBIENTAIS (A1-A3)',
+        'cartilha.indicator': 'Indicador',
+        'cartilha.energyCED': '4. CONSUMO ENERGÉTICO (CED)',
+        'cartilha.total': 'Total',
+        'cartilha.component': 'Componente',
+        'cartilha.charts': '5. GRÁFICOS',
+        'cartilha.chartSubtitle': 'Distribuição de Impactos por Componente',
+        'cartilha.standards': '6. CONFORMIDADE COM NORMAS',
+        'cartilha.standard': 'Norma',
+        'cartilha.zone': 'Zona',
+        'cartilha.result': 'Resultado',
+        'cartilha.pass': 'ATENDE ✓',
+        'cartilha.fail': 'NÃO ATENDE ✗',
 
         // Create Section
         'create.title': 'Criar Sistema Personalizado',
@@ -227,19 +313,42 @@ const translations = {
         'alert.systemCreated': 'Sistema criado com sucesso!',
         'alert.systemDeleted': 'Sistema deletado com sucesso',
         'alert.comparisonDeleted': 'Comparação deletada com sucesso',
-        'alert.maxSystems': 'Máximo de 3 sistemas podem ser comparados de cada vez',
+        'alert.maxSystems': 'Máximo de 5 sistemas podem ser comparados de cada vez',
         'confirm.deleteSystem': 'Tem certeza que deseja deletar este sistema?',
         'confirm.deleteComparison': 'Tem certeza que deseja deletar esta comparação?',
+
+        // Tooltips — Compare page
+        'tooltip.compare.selected': 'Os sistemas selecionados para comparação aparecem aqui. Selecione sistemas na aba "Sistemas".',
+        'tooltip.compare.btn': 'Clique para gerar gráficos e tabela comparativa dos sistemas selecionados (mín. 2, máx. 3)',
+
+        // Tooltips — Create page
+        'tooltip.create.name': 'Dê um nome descritivo ao sistema, por exemplo: "Bloco cerâmico 14cm com EPS"',
+        'tooltip.create.type': 'Selecione a categoria principal do sistema construtivo',
+        'tooltip.create.uValue': 'Transmitância térmica: indica a quantidade de calor que atravessa o sistema. Quanto menor, melhor o isolamento. Unidade: W/(m²·K)',
+        'tooltip.create.thermalCapacity': 'Indica a quantidade de calor que o sistema armazena. Alta CT amortece variações de temperatura. Unidade: kJ/(m²·K)',
+        'tooltip.create.weight': 'Peso total do sistema construtivo por metro quadrado de parede',
+        'tooltip.create.thickness': 'Espessura total do sistema de vedação, incluindo todas as camadas',
+        'tooltip.create.lightSystem': 'Marque se o sistema é leve (< 60 kg/m²), como steel frame ou drywall',
+        'tooltip.create.thermalInsulation': 'Marque se o sistema possui camada de isolamento térmico (EPS, lã de rocha, etc.)',
+        'tooltip.create.components': 'Adicione as camadas que compõem o sistema (ex.: bloco, argamassa, revestimento). A ordem importa: da camada externa para a interna.',
+        'tooltip.create.selectedLayers': 'Camadas adicionadas ao sistema. Arraste para reordenar ou clique em × para remover.',
+        'tooltip.create.save': 'Salva o sistema no seu histórico pessoal. Requer login.',
+        'tooltip.create.clear': 'Limpa todos os campos e camadas selecionadas',
+
+        // Tooltips — History page
+        'tooltip.history.createdTab': 'Sistemas construtivos que você criou e salvou',
+        'tooltip.history.comparisonsTab': 'Comparações entre sistemas que você realizou anteriormente',
+        'tooltip.history.print': 'Imprimir ou salvar o histórico como PDF',
     },
 
     'en': {
         // Navigation
         'nav.home': 'Home',
         'nav.systems': 'Systems',
-        'nav.compare': 'Compare',
-        'nav.create': 'Create & Calculate',
-        'nav.history': 'History',
-        'nav.about': 'About',
+        'nav.compare': 'Compare Systems',
+        'nav.create': 'Create & Evaluate',
+        'nav.history': 'My Projects',
+        'nav.about': 'Learn More',
         'nav.login': 'Sign In',
         'nav.logout': 'Sign Out',
         'nav.myAccount': 'My Account',
@@ -297,16 +406,102 @@ const translations = {
 
         // Compare Section
         'compare.title': 'Compare Systems',
-        'compare.description': '<a href="#" data-nav="systems" class="inline-link">Select</a> the external wall systems you want to compare considering environmental and thermal performance.',
-        'compare.selectLink': 'Select',
+        'compare.description': 'Choose the comparison method and select the external wall systems.',
+        'compare.stepMethod': '1. Choose the comparison method',
+        'compare.methodThermal': 'Thermal Performance',
+        'compare.methodThermalDesc': 'Compare all systems based on thermal performance standards (NBR, ASHRAE, RTQ-C, RTQ-R)',
+        'compare.methodGroups': 'System Groups',
+        'compare.methodGroupsDesc': 'Compare environmental impacts between systems — select individually or compare all at once',
+        'compare.back': 'Back',
+        'compare.thermalTitle': 'Thermal Performance Comparison',
+        'compare.thermalDesc': 'Select a technical standard to check compliance of all systems:',
+        'compare.normNBR': 'Performance Standard — Residential Buildings (Zones 1–8)',
+        'compare.normRTQR': 'Technical Requirements — Residential Buildings (Zones 1–8)',
+        'compare.normRTQC': 'Technical Requirements — Commercial Buildings (Zones 1–8)',
+        'compare.normASHRAERes': 'Energy Standard — Residential Buildings (Zones 0–3)',
+        'compare.normASHRAECom': 'Energy Standard — Commercial Buildings (Zones 0–3)',
+        'compare.groupsTitle': 'System Groups Comparison',
+        'compare.approachIndividual': 'Individual Selection',
+        'compare.approachAll': 'Compare All',
+        'compare.individualDesc': 'Select up to 5 systems to compare their environmental impacts:',
+        'compare.allDesc': 'Compare all library systems at once, viewing environmental impacts and thermal performance of the entire database.',
+        'compare.compareAllBtn': 'Compare All Systems',
+        'compare.searchPlaceholder': 'Search systems by name...',
         'compare.empty': 'No systems selected',
-        'compare.btn': 'Compare',
+        'compare.btn': 'Compare Selected',
         'compare.results': 'Comparison Results',
+        'compare.allResultsTitle': 'All Systems Comparison',
+        'compare.thermalResultsTitle': 'Thermal Compliance',
         'compare.property': 'Property',
-        'compare.system': 'Building system',
+        'compare.system': 'System',
+        'compare.zone': 'Zone',
+        'compare.chartsTitle': 'Environmental Impacts',
+        'compare.rtqcGrades': 'Energy rating: A (best) → B → CD → E (non-compliant)',
         'compare.standardsTitle': 'Thermal Standards Compliance',
         'compare.standard': 'Standard',
         'compare.loginRequired': 'Sign in to compare systems',
+
+        // System card labels
+        'card.weight': 'Weight',
+        'card.thickness': 'Thk.',
+        'card.insulation': 'Insulation',
+        'card.light': 'Lightweight',
+
+        // System detail modal
+        'detail.identification': 'Identification',
+        'detail.boundary': 'Boundary',
+        'detail.unit': 'Unit',
+        'detail.weight': 'Weight',
+        'detail.thickness': 'Thickness',
+        'detail.lightweight': 'Lightweight System',
+        'detail.insulation': 'Thermal Insulation',
+        'detail.yes': 'Yes',
+        'detail.no': 'No',
+        'detail.layers': 'Layers (interior → exterior)',
+        'detail.thermalProps': 'Thermal Properties',
+        'detail.thermalTransmittance': 'Thermal Transmittance (U)',
+        'detail.thermalCapacity': 'Thermal Capacity (CT)',
+        'detail.envImpacts': 'Environmental Impacts (A1-A3)',
+        'detail.energyConsumption': 'Energy Consumption (CED)',
+        'detail.total': 'Total',
+        'detail.component': 'Component',
+
+        // Filter type options
+        'filter.concreteBlock': 'Concrete block',
+        'filter.concreteWall': 'Concrete wall',
+        'filter.ceramicBlock': 'Ceramic block',
+        'filter.steelFrame': 'Steel frame (light)',
+
+        // Cartilha (System Card)
+        'cartilha.title': 'System Card',
+        'cartilha.identification': '1. SYSTEM IDENTIFICATION',
+        'cartilha.system': 'System',
+        'cartilha.boundary': 'System boundary',
+        'cartilha.functionalUnit': 'Functional unit',
+        'cartilha.weight': 'Weight',
+        'cartilha.totalThickness': 'Total thickness',
+        'cartilha.lightweight': 'Lightweight system',
+        'cartilha.insulation': 'Thermal insulation',
+        'cartilha.composition': 'Composition (interior → exterior):',
+        'cartilha.thermalPerf': '2. THERMAL PERFORMANCE',
+        'cartilha.property': 'Property',
+        'cartilha.value': 'Value',
+        'cartilha.unitCol': 'Unit',
+        'cartilha.thermalTransmittance': 'Thermal Transmittance (U)',
+        'cartilha.thermalCapacity': 'Thermal Capacity (CT)',
+        'cartilha.envImpacts': '3. ENVIRONMENTAL IMPACTS (A1-A3)',
+        'cartilha.indicator': 'Indicator',
+        'cartilha.energyCED': '4. ENERGY CONSUMPTION (CED)',
+        'cartilha.total': 'Total',
+        'cartilha.component': 'Component',
+        'cartilha.charts': '5. CHARTS',
+        'cartilha.chartSubtitle': 'Impact Distribution by Component',
+        'cartilha.standards': '6. STANDARDS COMPLIANCE',
+        'cartilha.standard': 'Standard',
+        'cartilha.zone': 'Zone',
+        'cartilha.result': 'Result',
+        'cartilha.pass': 'COMPLIANT ✓',
+        'cartilha.fail': 'NON-COMPLIANT ✗',
 
         // Create Section
         'create.title': 'Create Custom System',
@@ -458,11 +653,116 @@ const translations = {
         'alert.systemCreated': 'System created successfully!',
         'alert.systemDeleted': 'System deleted successfully',
         'alert.comparisonDeleted': 'Comparison deleted successfully',
-        'alert.maxSystems': 'Maximum of 3 systems can be compared at once',
+        'alert.maxSystems': 'Maximum of 5 systems can be compared at once',
         'confirm.deleteSystem': 'Are you sure you want to delete this system?',
         'confirm.deleteComparison': 'Are you sure you want to delete this comparison?',
+
+        // Tooltips — Compare page
+        'tooltip.compare.selected': 'Systems selected for comparison appear here. Select systems from the "Systems" tab.',
+        'tooltip.compare.btn': 'Click to generate charts and comparison table for the selected systems (min. 2, max. 3)',
+
+        // Tooltips — Create page
+        'tooltip.create.name': 'Give your system a descriptive name, e.g.: "Ceramic block 14cm with EPS"',
+        'tooltip.create.type': 'Select the main category of the construction system',
+        'tooltip.create.uValue': 'Thermal transmittance: indicates how much heat passes through the system. Lower is better insulation. Unit: W/(m²·K)',
+        'tooltip.create.thermalCapacity': 'Indicates how much heat the system stores. High CT dampens temperature variations. Unit: kJ/(m²·K)',
+        'tooltip.create.weight': 'Total weight of the construction system per square meter of wall',
+        'tooltip.create.thickness': 'Total thickness of the wall system, including all layers',
+        'tooltip.create.lightSystem': 'Check if the system is lightweight (< 60 kg/m²), such as steel frame or drywall',
+        'tooltip.create.thermalInsulation': 'Check if the system has a thermal insulation layer (EPS, rock wool, etc.)',
+        'tooltip.create.components': 'Add the layers that make up the system (e.g.: block, mortar, coating). Order matters: from outer to inner layer.',
+        'tooltip.create.selectedLayers': 'Layers added to the system. Drag to reorder or click × to remove.',
+        'tooltip.create.save': 'Save the system to your personal history. Requires login.',
+        'tooltip.create.clear': 'Clear all fields and selected layers',
+
+        // Tooltips — History page
+        'tooltip.history.createdTab': 'Construction systems you created and saved',
+        'tooltip.history.comparisonsTab': 'Comparisons between systems you performed previously',
+        'tooltip.history.print': 'Print or save the history as PDF',
     }
 };
+
+// ===== Data-level Translation Dictionary (PT → EN) =====
+// Used to translate system names, layer names, component names, and field values
+// coming from the JSON data files when the UI is set to English.
+const dataTranslations = {
+    // --- System name parts ---
+    'Sistema': 'System',
+    'Concreto Estrutural': 'Structural Concrete',
+    'Concreto estrutural': 'Structural Concrete',
+    'Cerâmico': 'Ceramic',
+    'Concreto': 'Concrete',
+    'Steel frame': 'Steel Frame',
+
+    // --- Layer names ---
+    'Pintura interna': 'Interior paint',
+    'Pintura Interna': 'Interior paint',
+    'Pintura externa': 'Exterior paint',
+    'Argamassa interna': 'Interior mortar',
+    'Argamassa externa': 'Exterior mortar',
+    'Argamassa de assentamento': 'Laying mortar',
+    'Bloco cerâmico': 'Ceramic block',
+    'Bloco de concreto': 'Concrete block',
+    'Concreto maciço': 'Solid concrete',
+    'Tijolo maciço': 'Solid brick',
+    'Câmara de ar': 'Air gap',
+    'Câmara de Ar': 'Air gap',
+    'Gesso': 'Gypsum',
+    'Granito': 'Granite',
+    'Lã de rocha': 'Rock wool',
+    'Lã de Rocha': 'Rock wool',
+    'Poliestireno': 'Polystyrene',
+    'Placa Cimentícia': 'Cement board',
+    'Placa de Gesso': 'Gypsum board',
+    'Placa melamínica': 'Melamine board',
+    'Alumínio composto': 'Composite aluminium',
+
+    // --- Component names (CED table) ---
+    'Aço galvanizado': 'Galvanized steel',
+    'Aço': 'Steel',
+    'Alumínio composto': 'Composite aluminium',
+    'Alvenaria': 'Masonry',
+    'Argamassa de assentamento': 'Laying mortar',
+    'Argamassa de revestimento': 'Rendering mortar',
+    'Armadura': 'Reinforcement',
+    'Forma': 'Formwork',
+    'Isolante': 'Insulation',
+    'MDF': 'MDF',
+    'Perfis de Aço': 'Steel profiles',
+    'Pintura': 'Paint',
+    'Placa de Cimentícia': 'Cement board',
+    'Placa de Gesso': 'Gypsum board',
+
+    // --- Field values ---
+    'Fase de produção (A1-3)': 'Production phase (A1-3)',
+    '1m²': '1 m²',
+    'Sistema Personalizado': 'Custom System'
+};
+
+/**
+ * Translate a data-level string from Portuguese to English.
+ * If the current language is PT-BR, the original string is returned unchanged.
+ * If the current language is EN, the dictionary is consulted.
+ * For system names (e.g., "Sistema 13 - Cerâmico"), partial replacement is done.
+ */
+function tData(str) {
+    if (!str || typeof str !== 'string') return str || '—';
+    if (i18n.getLang() !== 'en') return str;
+
+    // Direct match first
+    if (dataTranslations[str]) return dataTranslations[str];
+
+    // Partial / composite translation for system names like "Sistema 13 - Concreto Estrutural"
+    let result = str;
+    // Sort keys by length descending so longer matches are applied first
+    const sortedKeys = Object.keys(dataTranslations).sort((a, b) => b.length - a.length);
+    for (const key of sortedKeys) {
+        if (result.includes(key)) {
+            result = result.split(key).join(dataTranslations[key]);
+        }
+    }
+    return result;
+}
 
 // ===== i18n Manager =====
 class I18nManager {
@@ -508,6 +808,11 @@ class I18nManager {
         // Update all elements with data-i18n-placeholder
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             el.placeholder = this.t(el.getAttribute('data-i18n-placeholder'));
+        });
+
+        // Update all elements with data-i18n-tooltip
+        document.querySelectorAll('[data-i18n-tooltip]').forEach(el => {
+            el.setAttribute('data-tooltip', this.t(el.getAttribute('data-i18n-tooltip')));
         });
 
         // Dispatch event so other code can react
