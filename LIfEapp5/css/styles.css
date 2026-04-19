@@ -232,13 +232,56 @@ body {
 
 .hero-image { display: flex; align-items: center; justify-content: center; animation: fadeInUp 0.8s ease-out 0.2s both; }
 .logos-container { display: flex; flex-direction: column; gap: var(--space-2xl); align-items: center; }
-.partner-logo { max-width: 180px; height: auto; opacity: 0.9; transition: all var(--transition-base); }
-.partner-logo-main { max-width: 320px; }
-.partner-logo:hover { transform: scale(1.03); opacity: 1; }
+.partner-logo { max-width: 180px; height: auto; }
+.partner-logo-main { max-width: 500px; width: 100%; }
 .partner-logos-row { display: flex; gap: var(--space-xl); align-items: center; }
 
 /* Feature Cards */
-.feature-cards-section { margin-top: var(--space-3xl); padding-bottom: var(--space-3xl); }
+.feature-cards-section { margin-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+
+/* Home Info Section */
+.home-info-section { padding: var(--space-3xl) 0 var(--space-xl); }
+.home-info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2xl); margin-bottom: var(--space-3xl); }
+.home-info-block h3 {
+    font-size: 1.3rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm); border-bottom: 3px solid var(--primary-400);
+}
+.home-info-block p { font-size: 0.95rem; color: var(--gray-600); line-height: 1.7; margin-bottom: var(--space-md); }
+.home-info-list { list-style: none; padding: 0; }
+.home-info-list li {
+    position: relative; padding-left: var(--space-lg); font-size: 0.95rem;
+    color: var(--gray-600); line-height: 1.7; margin-bottom: var(--space-sm);
+}
+.home-info-list li::before {
+    content: ''; position: absolute; left: 0; top: 10px;
+    width: 8px; height: 8px; border-radius: 50%; background: var(--primary-500);
+}
+
+/* Indicator cards on home page */
+.home-indicators { text-align: center; margin-bottom: var(--space-xl); }
+.home-indicators h3 { font-size: 1.5rem; font-weight: 800; color: var(--gray-900); margin-bottom: var(--space-xl); }
+.home-indicators-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl); max-width: 700px; margin: 0 auto; }
+.home-indicator-card {
+    padding: var(--space-xl); background: var(--warm-50); border: 2px solid var(--warm-200);
+    border-radius: var(--radius-lg); text-align: center;
+    transition: all var(--transition-fast);
+}
+.home-indicator-card:hover { border-color: var(--primary-400); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.indicator-card-icon { font-size: 2.5rem; margin-bottom: var(--space-md); }
+.home-indicator-card h4 { font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: var(--space-sm); }
+.home-indicator-card p { font-size: 0.9rem; color: var(--gray-500); line-height: 1.5; margin-bottom: var(--space-lg); }
+
+/* Partner logos below feature cards */
+.home-partner-logos { padding: var(--space-2xl) 0 var(--space-3xl); }
+.home-partner-logos .partner-logos-row { justify-content: center; align-items: center; gap: var(--space-3xl); margin-right: 240px; }
+.partner-logos-stacked { display: flex; flex-direction: column; align-items: center; gap: var(--space-lg); }
+
+.feature-cards-title {
+    font-size: 1.5rem; font-weight: 800; color: var(--gray-900);
+    text-align: center; margin-bottom: var(--space-xl);
+}
+
+/* Feature Cards Grid */
 .feature-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-xl); }
 .feature-card {
     background: white; border-radius: var(--radius-lg); padding: var(--space-xl);
@@ -906,6 +949,8 @@ section { padding: var(--space-3xl) 0; }
     .tab-btn.active::after { display: none; }
     .partner-logos-row { flex-direction: column; gap: var(--space-md); }
     .partner-logo { max-width: 140px; }
+    .home-info-grid { grid-template-columns: 1fr; }
+    .home-indicators-grid { grid-template-columns: 1fr; }
     .login-container { padding: var(--space-2xl); }
     .btn-nav-login { padding: 6px 14px; font-size: 0.85rem; min-width: 80px; text-align: center; }
     .nav-actions { gap: var(--space-sm); }
