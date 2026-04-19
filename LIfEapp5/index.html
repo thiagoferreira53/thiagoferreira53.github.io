@@ -360,6 +360,41 @@
                     </div>
                 </div>
 
+                <!-- Finder: Encontrar sistema ideal -->
+                <div class="finder-section" id="finderSection">
+                    <h3 class="compare-step-title" data-i18n="finder.title">Encontrar Sistema Ideal</h3>
+                    <p class="finder-description" data-i18n="finder.description">Defina os critérios do seu projeto, como norma e zona bioclimática, e identifique os sistemas construtivos que atendem aos requisitos de desempenho. Os resultados indicam os níveis de desempenho alcançados e os impactos ambientais associados, auxiliando na escolha da solução mais adequada.</p>
+                    <div class="finder-controls">
+                        <div class="finder-control-group">
+                            <label data-i18n="finder.normLabel">Norma técnica</label>
+                            <select id="finderNorm" class="filter-select">
+                                <option value="" data-i18n="finder.selectNorm">Selecione uma norma...</option>
+                                <option value="nbr15575">NBR 15575</option>
+                                <option value="rtqr">RTQ-R</option>
+                                <option value="rtqc">RTQ-C</option>
+                                <option value="ashrae_residential">ASHRAE 90.1 Residencial</option>
+                                <option value="ashrae_commercial">ASHRAE 90.1 Não Residencial</option>
+                            </select>
+                        </div>
+                        <div class="finder-control-group">
+                            <label data-i18n="finder.zoneLabel">Zona bioclimática</label>
+                            <select id="finderZone" class="filter-select">
+                                <option value="" data-i18n="finder.selectZone">Selecione a zona...</option>
+                                <option value="1">Zona 1</option>
+                                <option value="2">Zona 2</option>
+                                <option value="3">Zona 3</option>
+                                <option value="4">Zona 4</option>
+                                <option value="5">Zona 5</option>
+                                <option value="6">Zona 6</option>
+                                <option value="7">Zona 7</option>
+                                <option value="8">Zona 8</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="finderBtn" onclick="runFinder()" data-i18n="finder.btn">Buscar Sistemas</button>
+                    </div>
+                    <div class="finder-results" id="finderResults" style="display:none;"></div>
+                </div>
+
                 <!-- Method A: Thermal Performance — norm selection -->
                 <div class="compare-panel" id="panelThermal" style="display:none;">
                     <div class="compare-panel-header">
@@ -642,6 +677,6 @@
     <script src="js/auth.js?v=20260413d"></script>
     <script src="js/data.js?v=20260413d"></script>
     <script src="js/userSystems.js?v=20260413d"></script>
-    <script src="js/app.js?v=20260413d"></script>
+    <script src="js/app.js?v=20260419"></script>
 </body>
 </html>

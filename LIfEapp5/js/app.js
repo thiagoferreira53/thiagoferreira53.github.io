@@ -303,6 +303,7 @@
         document.getElementById('compareMethodSelector').style.display = method ? 'none' : 'block';
         document.getElementById('panelThermal').style.display = method === 'thermal' ? 'block' : 'none';
         document.getElementById('panelGroups').style.display = method === 'groups' ? 'block' : 'none';
+        document.getElementById('finderSection').style.display = method ? 'none' : 'block';
 
         // Reset results
         const thermalRes = document.getElementById('thermalComparisonResults');
@@ -405,6 +406,91 @@
         document.getElementById('compareSearchSystem')?.addEventListener('input', renderCompareSystemGrid);
         document.getElementById('compareFilterType')?.addEventListener('change', renderCompareSystemGrid);
     });
+
+    // ===================================================================
+    //  Finder: Encontrar Sistema Ideal
+    // ===================================================================
+    window.runFinder = function () {
+        const normKey = document.getElementById('finderNorm').value;
+        const zoneVal = document.getElementById('finderZone').value;
+        const resultsDiv = document.getElementById('finderResults');
+        if (!normKey || !zoneVal || !resultsDiv) return;
+
+        const regs = dataManager.getRegulations();
+        const norm = regs?.[normKey];
+        const zoneNum = parseInt(zoneVal);
+        const zona = norm?.zonas?.find(z => z.zona === zoneNum);
+
+        const systems = dataManager.systems.filter(s => !s.custom);
+        const isASHRAE = normKey.startsWith('ashrae');
+        const isRTQC = normKey === 'rtqc';
+
+        const results = systems.map(sys => {
+            let status = '';
+            let pass = false;
+            if (!zona) {
+                // Zone not defined in this norm — mark as N/A
+                status = '—'; pass = false;
+            } else if (isRTQC) {
+                const u = sys.transmitancia;
+                if (u <= (zona.nota_A?.transmitancia_maxima?.inferior_limite || 0)) { status = 'A'; pass = true; }
+                else if (u <= (zona.nota_B?.transmitancia_maxima?.inferior_limite || 0)) { status = 'B'; pass = true; }
+                else if (u <= (zona.nota_CD?.transmitancia_maxima?.inferior_limite || 0)) { status = 'CD'; pass = true; }
+                else { status = 'E'; pass = false; }
+            } else if (isASHRAE) {
+                const isSF = sys.identificacao?.descricao?.sistema_leve === true;
+                const maxU = isSF
+                    ? (zona.transmitancia_maxima?.steel_frame || zona.transmitancia_maxima?.wall_mass || 999)
+                    : (zona.transmitancia_maxima?.wall_mass || 999);
+                pass = sys.transmitancia <= maxU;
+                status = pass ? '✓' : '✗';
+            } else {
+                const maxU = zona.transmitancia_maxima?.inferior_limite || 999;
+                const minCT = zona.capacidade_minima || 0;
+                pass = sys.transmitancia <= maxU && sys.capacidade_termica >= minCT;
+                status = pass ? '✓' : '✗';
+            }
+            return { sys, pass, status };
+        });
+
+        // Sort: passing first, then by GWP
+        results.sort((a, b) => {
+            if (a.pass !== b.pass) return a.pass ? -1 : 1;
+            return (a.sys.impactos?.gwp || 999) - (b.sys.impactos?.gwp || 999);
+        });
+
+        const passing = results.filter(r => r.pass);
+        let html = `<h4 style="margin-bottom:var(--space-sm);">${i18n.t('finder.resultsTitle')}</h4>`;
+        html += `<p class="finder-summary"><strong>${passing.length}</strong> ${i18n.t('finder.found')} (${results.length} total)</p>`;
+
+        if (results.length === 0) {
+            html += `<p>${i18n.t('finder.noResults')}</p>`;
+        } else {
+            results.forEach(({ sys, pass, status }) => {
+                const idx = dataManager.systems.indexOf(sys);
+                const badgeClass = isRTQC ? 'grade' : (pass ? 'pass' : 'fail');
+                const badgeText = isRTQC ? status : (pass ? i18n.t('finder.compliant') : i18n.t('finder.nonCompliant'));
+                html += `<div class="finder-card" style="opacity:${pass ? 1 : 0.55}">
+                    <div class="finder-card-header">
+                        <h4 onclick="showSystemDetail(${idx})">${tData(sys.nome)}</h4>
+                        <span class="finder-badge ${badgeClass}">${badgeText}</span>
+                    </div>
+                    <div class="finder-card-props">
+                        <div class="finder-prop">U: <span>${sys.transmitancia?.toFixed(2) || '—'} W/m²K</span></div>
+                        <div class="finder-prop">CT: <span>${sys.capacidade_termica?.toFixed(0) || '—'} kJ/m²K</span></div>
+                        <div class="finder-prop">GWP: <span>${sys.impactos?.gwp != null ? formatScientific(sys.impactos.gwp) : '—'} kg CO₂ eq</span></div>
+                        <div class="finder-prop">CED: <span>${sys.consumo?.total != null ? formatScientific(sys.consumo.total) : '—'} MJ</span></div>
+                        <div class="finder-prop">AP: <span>${sys.impactos?.ap != null ? formatScientific(sys.impactos.ap) : '—'} kg SO₂ eq</span></div>
+                        <div class="finder-prop">EP: <span>${sys.impactos?.ep != null ? formatScientific(sys.impactos.ep) : '—'} kg PO₄ eq</span></div>
+                    </div>
+                </div>`;
+            });
+        }
+
+        resultsDiv.innerHTML = html;
+        resultsDiv.style.display = 'block';
+        resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
 
     // ===================================================================
     //  Thermal Performance Comparison (Method A)

@@ -282,6 +282,32 @@ body {
 }
 
 /* Feature Cards Grid */
+
+/* Finder Section */
+.finder-section { margin-top: var(--space-2xl); border-top: 2px solid var(--warm-200); padding-top: var(--space-2xl); text-align: center; }
+.finder-description { color: var(--gray-500); font-size: 0.95rem; line-height: 1.7; margin-bottom: var(--space-xl); max-width: 800px; margin-left: auto; margin-right: auto; }
+.finder-controls { display: flex; gap: var(--space-lg); align-items: flex-end; flex-wrap: wrap; margin-bottom: var(--space-xl); justify-content: center; }
+.finder-control-group { display: flex; flex-direction: column; gap: var(--space-xs); min-width: 220px; text-align: left; }
+.finder-control-group label { font-weight: 600; font-size: 0.85rem; color: var(--gray-600); }
+.finder-control-group select { padding: 10px 14px; border: 2px solid var(--warm-200); border-radius: var(--radius-md); font-size: 0.9rem; background: white; }
+.finder-control-group select:focus { border-color: var(--primary-500); outline: none; }
+.finder-results { margin-top: var(--space-xl); }
+.finder-summary { font-size: 0.95rem; color: var(--gray-600); margin-bottom: var(--space-lg); }
+.finder-summary strong { color: var(--primary-600); font-size: 1.1rem; }
+.finder-card { background: white; border: 2px solid var(--warm-200); border-radius: var(--radius-lg); padding: var(--space-lg); margin-bottom: var(--space-md); transition: all var(--transition-fast); }
+.finder-card:hover { border-color: var(--primary-400); box-shadow: var(--shadow-md); }
+.finder-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md); }
+.finder-card-header h4 { font-size: 1rem; font-weight: 700; color: var(--gray-800); cursor: pointer; }
+.finder-card-header h4:hover { color: var(--primary-600); }
+.finder-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+.finder-badge.pass { background: var(--primary-100); color: var(--primary-700); }
+.finder-badge.fail { background: #fecaca; color: #991b1b; }
+.finder-badge.grade { background: var(--secondary-100); color: var(--secondary-700); }
+.finder-card-props { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--space-sm); }
+.finder-prop { font-size: 0.85rem; color: var(--gray-500); }
+.finder-prop span { font-weight: 600; color: var(--gray-700); }
+
+/* Feature Cards Grid */
 .feature-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-xl); }
 .feature-card {
     background: white; border-radius: var(--radius-lg); padding: var(--space-xl);
@@ -951,6 +977,8 @@ section { padding: var(--space-3xl) 0; }
     .partner-logo { max-width: 140px; }
     .home-info-grid { grid-template-columns: 1fr; }
     .home-indicators-grid { grid-template-columns: 1fr; }
+    .finder-controls { flex-direction: column; }
+    .finder-control-group { min-width: 100%; }
     .login-container { padding: var(--space-2xl); }
     .btn-nav-login { padding: 6px 14px; font-size: 0.85rem; min-width: 80px; text-align: center; }
     .nav-actions { gap: var(--space-sm); }
