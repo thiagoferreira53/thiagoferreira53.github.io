@@ -270,6 +270,32 @@ section { padding: var(--space-3xl) 0; }
 .section-description { font-size: 1.05rem; color: var(--gray-500); max-width: 700px; margin: 0 auto; }
 .section-cta { font-weight: 600; color: var(--primary-600); margin-top: var(--space-md); }
 
+/* ===== Systems Expandable Section ===== */
+.systems-expand { margin-top: var(--space-lg); text-align: center; }
+.systems-expand-toggle {
+    display: inline-flex; align-items: center; gap: var(--space-sm);
+    font-weight: 700; font-size: 1.05rem; color: var(--primary-600); cursor: pointer;
+    list-style: none; padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-md); transition: all var(--transition-fast);
+}
+.systems-expand-toggle::-webkit-details-marker { display: none; }
+.systems-expand-toggle::before { content: '▶'; font-size: 0.7rem; transition: transform 0.3s ease; display: inline-block; }
+.systems-expand[open] > .systems-expand-toggle::before { transform: rotate(90deg); }
+.systems-expand-toggle:hover { background: var(--warm-100); color: var(--primary-700); }
+.systems-expand-content {
+    max-width: 750px; margin: var(--space-md) auto 0; text-align: left;
+    padding: var(--space-lg) var(--space-xl); background: var(--warm-50);
+    border-radius: var(--radius-lg); border: 1px solid var(--warm-200);
+    overflow: hidden;
+    animation: expandIn 0.4s ease-out;
+}
+@keyframes expandIn {
+    from { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; margin-top: 0; }
+    to { opacity: 1; max-height: 300px; padding-top: var(--space-lg); padding-bottom: var(--space-lg); margin-top: var(--space-md); }
+}
+.systems-expand-content p { font-size: 0.95rem; color: var(--gray-600); line-height: 1.7; margin-bottom: var(--space-md); }
+.systems-expand-content p:last-child { margin-bottom: 0; }
+
 /* ===== Color Legend ===== */
 .color-legend { display: flex; gap: var(--space-lg); justify-content: center; margin-top: var(--space-lg); flex-wrap: wrap; }
 .legend-item { display: flex; align-items: center; gap: var(--space-xs); font-size: 0.875rem; color: var(--gray-600); }
