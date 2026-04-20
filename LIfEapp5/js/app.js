@@ -45,7 +45,7 @@
             renderSelectedChips();
             if (dataManager.loaded) renderCompareSystemGrid();
         }
-        if (pageName === 'create' && dataManager.loaded) renderComponentsList();
+        if (pageName === 'create' && dataManager.loaded) initBuilder();
         if (pageName === 'history' && isLoggedIn()) {
             displayUserSystems();
             displayUserComparisons();
@@ -165,14 +165,8 @@
         document.getElementById('modalClose')?.addEventListener('click', closeSystemModal);
         document.querySelector('#systemModal .modal-overlay')?.addEventListener('click', closeSystemModal);
 
-        // --- Create form: override default submit to require login ---
-        const createForm = document.getElementById('createSystemForm');
-        if (createForm) {
-            // Remove existing listener from userSystems.js (it fires on DOMContentLoaded too)
-            // We'll add our own wrapper here:
-            createForm.addEventListener('submit', handleCreateSystem, true);
-        }
-        document.getElementById('componentSearch')?.addEventListener('input', renderComponentsList);
+        // Initialize builder material dropdown
+        initBuilder();
     });
 
     // ===================================================================
@@ -1108,113 +1102,246 @@
     // ===================================================================
     //  Create System – Component Selector
     // ===================================================================
-    function renderComponentsList() {
-        const list = document.getElementById('componentsList');
-        if (!list || !dataManager.loaded) return;
+    // ===================================================================
+    //  Create System – Builder
+    // ===================================================================
+    let builderLayers = []; // {compIndex, name, thickness}
 
-        const search = (document.getElementById('componentSearch')?.value || '').toLowerCase();
+    function initBuilder() {
+        const select = document.getElementById('builderMaterial');
+        if (!select || !dataManager.loaded) return;
         const components = dataManager.getComponents();
-        const filtered = search
-            ? components.filter(c => (c.componente || c.nome || '').toLowerCase().includes(search))
-            : components;
-
-        list.innerHTML = filtered.map((c, i) => {
-            const name = c.componente || c.nome || `Component ${i}`;
-            return `<div class="component-item" onclick="addLayer(${i})">
-                <span>${name}</span>
-                <button class="component-add" onclick="event.stopPropagation(); addLayer(${i})">+</button>
-            </div>`;
-        }).join('');
+        // Keep existing options if already populated
+        if (select.options.length > 1) return;
+        components.forEach((c, i) => {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = tData(c.componente || c.nome || `Componente ${i + 1}`);
+            select.appendChild(opt);
+        });
     }
 
-    window.addLayer = function (compIndex) {
+    // Re-render builder when language changes
+    document.addEventListener('languageChanged', () => {
+        // Re-populate dropdown with translated names
+        const select = document.getElementById('builderMaterial');
+        if (select && dataManager.loaded) {
+            const savedVal = select.value;
+            const components = dataManager.getComponents();
+            // Clear all but first placeholder option
+            while (select.options.length > 1) select.remove(1);
+            components.forEach((c, i) => {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = tData(c.componente || c.nome || `Componente ${i + 1}`);
+                select.appendChild(opt);
+            });
+            select.value = savedVal;
+        }
+        // Re-render layers and preview with translated names
+        renderBuilderLayers();
+        renderBuilderPreview();
+    });
+
+    window.builderAddLayer = function () {
+        const matSelect = document.getElementById('builderMaterial');
+        const thicknessInput = document.getElementById('builderThickness');
+        const compIndex = parseInt(matSelect?.value);
+        const thickness = parseFloat(thicknessInput?.value);
+
+        if (isNaN(compIndex) || compIndex < 0) return;
+        if (isNaN(thickness) || thickness <= 0) { thicknessInput?.focus(); return; }
+
         const components = dataManager.getComponents();
         const comp = components[compIndex];
         if (!comp) return;
-        selectedLayers.push({ ...comp, _idx: compIndex });
-        renderSelectedLayers();
+
+        builderLayers.push({
+            compIndex,
+            name: comp.componente || comp.nome || 'Camada',
+            thickness,
+            comp
+        });
+
+        matSelect.value = '';
+        thicknessInput.value = '';
+        renderBuilderLayers();
+        renderBuilderPreview();
     };
 
-    window.removeLayer = function (layerIndex) {
-        selectedLayers.splice(layerIndex, 1);
-        renderSelectedLayers();
+    window.builderRemoveLayer = function (idx) {
+        builderLayers.splice(idx, 1);
+        renderBuilderLayers();
+        renderBuilderPreview();
     };
 
-    function renderSelectedLayers() {
-        const container = document.getElementById('selectedLayers');
+    window.builderMoveLayer = function (idx, dir) {
+        const newIdx = idx + dir;
+        if (newIdx < 0 || newIdx >= builderLayers.length) return;
+        const temp = builderLayers[idx];
+        builderLayers[idx] = builderLayers[newIdx];
+        builderLayers[newIdx] = temp;
+        renderBuilderLayers();
+        renderBuilderPreview();
+    };
+
+    function renderBuilderLayers() {
+        const container = document.getElementById('builderLayersList');
         if (!container) return;
 
-        if (selectedLayers.length === 0) {
+        if (builderLayers.length === 0) {
             container.innerHTML = `<div class="empty-state">${i18n.t('create.noLayers')}</div>`;
             return;
         }
-        container.innerHTML = selectedLayers.map((layer, i) => {
-            const name = layer.componente || layer.nome || 'Layer';
-            return `<div class="layer-item">
-                <div class="layer-info"><span class="layer-order">${i + 1}</span><span class="layer-name">${name}</span></div>
-                <button class="layer-remove" onclick="removeLayer(${i})">×</button>
-            </div>`;
-        }).join('');
+
+        container.innerHTML = builderLayers.map((layer, i) => `
+            <div class="builder-layer-item">
+                <div class="builder-layer-order">${i + 1}</div>
+                <div class="builder-layer-info">
+                    <span class="builder-layer-name">${tData(layer.name)}</span>
+                    <span class="builder-layer-thick">${layer.thickness} cm</span>
+                </div>
+                <div class="builder-layer-actions">
+                    <button class="builder-layer-btn" onclick="builderMoveLayer(${i}, -1)" ${i === 0 ? 'disabled' : ''}>↑</button>
+                    <button class="builder-layer-btn" onclick="builderMoveLayer(${i}, 1)" ${i === builderLayers.length - 1 ? 'disabled' : ''}>↓</button>
+                    <button class="builder-layer-btn remove" onclick="builderRemoveLayer(${i})">×</button>
+                </div>
+            </div>
+        `).join('');
     }
 
-    // ===================================================================
-    //  Create System – Form Submission
-    // ===================================================================
-    function handleCreateSystem(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
+    // Material colors for visual preview
+    const materialColors = {
+        'argamassa': '#d4a574',
+        'gesso': '#f5f0e8',
+        'concreto': '#a0a0a0',
+        'bloco de concreto': '#b0b0b0',
+        'bloco cerâmico': '#c4725a',
+        'cerâm': '#c4725a',
+        'tijolo': '#b85c3a',
+        'tinta': '#e8dcc8',
+        'placa cimentícia': '#c0c0c0',
+        'drywall': '#eee8d5',
+        'gesso acartonado': '#eee8d5',
+        'lã de vidro': '#e6d45a',
+        'lã de rocha': '#8b7355',
+        'eps': '#d0e8ff',
+        'xps': '#a0d4ff',
+        'poliuretano': '#ffe0a0',
+        'steel frame': '#808080',
+        'madeira': '#b8834e',
+        'revestimento': '#d4a574'
+    };
 
+    function getMaterialColor(name) {
+        const lower = (name || '').toLowerCase();
+        for (const [key, color] of Object.entries(materialColors)) {
+            if (lower.includes(key)) return color;
+        }
+        return '#c8bfb0';
+    }
+
+    function getMaterialPattern(name) {
+        const lower = (name || '').toLowerCase();
+        if (lower.includes('bloco') || lower.includes('tijolo')) return 'brick';
+        if (lower.includes('concreto maciço') || lower.includes('concreto') && !lower.includes('bloco')) return 'concrete';
+        if (lower.includes('lã') || lower.includes('eps') || lower.includes('xps') || lower.includes('poliuretano')) return 'insulation';
+        return 'solid';
+    }
+
+    function renderBuilderPreview() {
+        const card = document.getElementById('builderPreviewCard');
+        if (!card) return;
+
+        if (builderLayers.length === 0) {
+            card.innerHTML = `<div class="builder-preview-empty">${i18n.t('create.previewEmpty')}</div>`;
+            return;
+        }
+
+        const systemName = document.getElementById('builderSystemName')?.value || i18n.t('create.namePlaceholder');
+        const totalThickness = builderLayers.reduce((s, l) => s + l.thickness, 0);
+
+        // Calculate impacts from layers
+        let gwp = 0, ced = 0;
+        builderLayers.forEach(l => {
+            gwp += l.comp?.Impactos?.gwp || l.comp?.impactos?.gwp || 0;
+            ced += l.comp?.Impactos?.ced || l.comp?.consumo?.total || 0;
+        });
+
+        // Build visual wall section
+        let wallHtml = `<div class="preview-wall">`;
+        wallHtml += `<div class="preview-wall-label">${i18n.t('create.exterior')}</div>`;
+        wallHtml += `<div class="preview-wall-layers">`;
+        builderLayers.forEach((layer, i) => {
+            const pct = Math.max((layer.thickness / totalThickness) * 100, 8);
+            const color = getMaterialColor(layer.name);
+            const pattern = getMaterialPattern(layer.name);
+            wallHtml += `<div class="preview-layer preview-pattern-${pattern}" style="width:${pct}%;background-color:${color};" title="${tData(layer.name)} (${layer.thickness}cm)">
+                <span class="preview-layer-label">${layer.thickness}</span>
+            </div>`;
+        });
+        wallHtml += `</div>`;
+        wallHtml += `<div class="preview-wall-label">${i18n.t('create.interior')}</div>`;
+        wallHtml += `</div>`;
+
+        // Legend
+        let legendHtml = `<div class="preview-legend">`;
+        builderLayers.forEach((layer, i) => {
+            const color = getMaterialColor(layer.name);
+            legendHtml += `<div class="preview-legend-item"><span class="preview-legend-swatch" style="background:${color};"></span>${tData(layer.name)} (${layer.thickness}cm)</div>`;
+        });
+        legendHtml += `</div>`;
+
+        // System info card (like existing system cards)
+        let infoHtml = `<div class="preview-info">
+            <h4 class="preview-system-name">${systemName}</h4>
+            <div class="preview-specs">
+                <div class="spec-item"><span class="spec-label">${i18n.t('card.thickness')}:</span><span class="spec-value">${totalThickness.toFixed(1)} cm</span></div>
+                <div class="spec-item"><span class="spec-label">GWP:</span><span class="spec-value">${formatScientific(gwp)} kg CO₂ eq</span></div>
+                <div class="spec-item"><span class="spec-label">CED:</span><span class="spec-value">${formatScientific(ced)} MJ</span></div>
+            </div>
+        </div>`;
+
+        card.innerHTML = infoHtml + wallHtml + legendHtml;
+    }
+
+    window.builderSave = function () {
         requireLogin(() => {
             const currentUser = getCurrentUser();
             if (!currentUser) return;
 
-            const name = document.getElementById('systemName')?.value?.trim();
-            const type = document.getElementById('systemType')?.value;
-            const uVal = parseFloat(document.getElementById('uValue')?.value);
-            const ct = parseFloat(document.getElementById('thermalCapacity')?.value);
-            const weight = parseFloat(document.getElementById('weight')?.value);
-            const thickness = parseFloat(document.getElementById('thickness')?.value);
-            const lightSystem = document.getElementById('lightSystem')?.checked || false;
-            const thermalIns = document.getElementById('thermalInsulation')?.checked || false;
+            const name = document.getElementById('builderSystemName')?.value?.trim();
+            if (!name) { showAlert('error', 'Digite um nome para o sistema.'); return; }
+            if (builderLayers.length === 0) { showAlert('error', 'Adicione pelo menos uma camada.'); return; }
 
-            if (!name || !type || isNaN(uVal) || isNaN(ct) || isNaN(weight) || isNaN(thickness)) {
-                showAlert('error', 'Please fill all required fields.');
-                return;
-            }
-
-            // Calculate impacts from selected layers
-            let gwp = 0, ap = 0, ep = 0, pocp = 0, odp = 0, adpnf = 0, adpf = 0, ced = 0;
+            let gwp = 0, ap = 0, ep = 0, pocp = 0, odp = 0, ced = 0;
+            const totalThickness = builderLayers.reduce((s, l) => s + l.thickness, 0);
             const compList = [];
-            selectedLayers.forEach(layer => {
-                gwp += layer.gwp || 0;
-                ap += layer.ap || 0;
-                ep += layer.ep || 0;
-                pocp += layer.pocp || 0;
-                odp += layer.odp || 0;
-                adpnf += layer.adpnf || 0;
-                adpf += layer.adpf || 0;
-                ced += layer.consumo_componente || layer.ced || 0;
-                compList.push({
-                    componente: layer.componente || layer.nome || 'Layer',
-                    consumo_componente: layer.consumo_componente || layer.ced || 0,
-                    gwp: layer.gwp || 0,
-                    ap: layer.ap || 0
-                });
+
+            builderLayers.forEach(l => {
+                const imp = l.comp?.Impactos || l.comp?.impactos || {};
+                gwp += imp.gwp || 0;
+                ap += imp.ap || 0;
+                ep += imp.ep || 0;
+                pocp += imp.pocp || 0;
+                odp += imp.odp || 0;
+                ced += imp.ced || l.comp?.consumo?.total || 0;
+                compList.push({ componente: l.name, espessura: l.thickness });
             });
 
             const system = {
                 nome: name,
-                tipo: type,
-                transmitancia: uVal,
-                capacidade_termica: ct,
+                tipo: 'Personalizado',
+                transmitancia: null,
+                capacidade_termica: null,
                 identificacao: {
-                    descricao: { peso: weight, espessura: thickness, sistema_leve: lightSystem, isolante_termico: thermalIns },
-                    camadas: selectedLayers.map(l => l.componente || l.nome || 'Layer'),
+                    descricao: { peso: null, espessura: totalThickness, sistema_leve: false, isolante_termico: false },
+                    camadas: builderLayers.map(l => `${l.name} (${l.thickness}cm)`),
                     unidade: 'm²',
                     fronteira: 'Sistema Personalizado',
                     validade: new Date().toLocaleDateString()
                 },
-                impactos: { gwp, ap, ep, pocp, odp, adpnf, adpf },
+                impactos: { gwp, ap, ep, pocp, odp },
                 consumo: { total: ced, componentes: compList },
                 custom: true
             };
@@ -1225,13 +1352,21 @@
             }
 
             showAlert('success', i18n.t('alert.systemCreated'));
-            document.getElementById('createSystemForm')?.reset();
-            selectedLayers = [];
-            renderSelectedLayers();
+            builderLayers = [];
+            document.getElementById('builderSystemName').value = '';
+            renderBuilderLayers();
+            renderBuilderPreview();
             displayUserSystems();
             renderSystems();
         });
-    }
+    };
+
+    window.builderCompare = function () {
+        if (builderLayers.length === 0) return;
+        // Save first, then navigate to compare
+        builderSave();
+        setTimeout(() => navigateTo('compare'), 300);
+    };
 
     // ===================================================================
     //  Utility

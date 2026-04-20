@@ -486,38 +486,52 @@
         <section class="create-section">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title" data-i18n="create.title">Criar Sistema Personalizado</h2>
-                    <p class="section-description" data-i18n="create.description">Projete seu próprio sistema de vedação</p>
+                    <h2 class="section-title" data-i18n="create.title">Crie e Avalie</h2>
+                    <p class="section-description" data-i18n="create.description">Crie seu sistema construtivo personalizado, definindo os materiais e a espessura de cada camada da vedação. Acompanhe o desempenho térmico e os impactos ambientais do sistema em tempo real e avalie sua adequação ao projeto.</p>
                 </div>
-                <div class="create-form-container">
-                    <form id="createSystemForm" class="create-form">
-                        <div class="form-row">
-                            <div class="form-group"><label for="systemName" class="tooltip-label" data-i18n-tooltip="tooltip.create.name"><span data-i18n="create.name">Nome do Sistema *</span><span class="info-icon">?</span></label><input type="text" id="systemName" required placeholder="Digite o nome do sistema"></div>
-                            <div class="form-group"><label for="systemType" class="tooltip-label" data-i18n-tooltip="tooltip.create.type"><span data-i18n="create.type">Tipo *</span><span class="info-icon">?</span></label><select id="systemType" required><option value="">Selecione o tipo</option><option value="Concreto">Concreto</option><option value="Cerâmico">Cerâmico</option><option value="Drywall">Drywall</option><option value="Outro">Outro</option></select></div>
+
+                <div class="builder-layout">
+                    <!-- Left: Layer builder -->
+                    <div class="builder-panel">
+                        <div class="form-group">
+                            <label data-i18n="create.name">Nome do Sistema</label>
+                            <input type="text" id="builderSystemName" class="search-input" placeholder="Meu sistema personalizado" data-i18n-placeholder="create.namePlaceholder">
                         </div>
-                        <div class="form-row">
-                            <div class="form-group"><label for="uValue" class="tooltip-label" data-i18n-tooltip="tooltip.create.uValue"><span data-i18n="create.uValue">Valor U (W/m²K) *</span><span class="info-icon">?</span></label><input type="number" id="uValue" step="0.01" required placeholder="0,00"></div>
-                            <div class="form-group"><label for="thermalCapacity" class="tooltip-label" data-i18n-tooltip="tooltip.create.thermalCapacity"><span data-i18n="create.thermalCapacity">Capacidade Térmica (kJ/m²K) *</span><span class="info-icon">?</span></label><input type="number" id="thermalCapacity" step="1" required placeholder="0"></div>
+
+                        <h3 class="builder-subtitle"><span data-i18n="create.layersTitle">Camadas</span> <small data-i18n="create.layersDir">(de fora → para dentro)</small></h3>
+
+                        <div id="builderLayersList" class="builder-layers-list">
+                            <div class="empty-state" data-i18n="create.noLayers">Nenhuma camada adicionada</div>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group"><label for="weight" class="tooltip-label" data-i18n-tooltip="tooltip.create.weight"><span data-i18n="create.weight">Peso (kg/m²) *</span><span class="info-icon">?</span></label><input type="number" id="weight" step="0.1" required placeholder="0,0"></div>
-                            <div class="form-group"><label for="thickness" class="tooltip-label" data-i18n-tooltip="tooltip.create.thickness"><span data-i18n="create.thickness">Espessura (cm) *</span><span class="info-icon">?</span></label><input type="number" id="thickness" step="0.1" required placeholder="0,0"></div>
+
+                        <div class="builder-add-layer">
+                            <select id="builderMaterial" class="filter-select">
+                                <option value="" data-i18n="create.selectMaterial">Selecione o material...</option>
+                            </select>
+                            <div class="builder-thickness-input">
+                                <input type="number" id="builderThickness" class="search-input" placeholder="0.0" step="0.1" min="0.1">
+                                <span>cm</span>
+                            </div>
+                            <button class="btn btn-primary btn-small" onclick="builderAddLayer()" data-i18n="create.addLayer">Adicionar camada</button>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group checkbox-group"><label class="tooltip-label" data-i18n-tooltip="tooltip.create.lightSystem"><input type="checkbox" id="lightSystem"><span data-i18n="create.lightSystem">Sistema Leve</span><span class="info-icon">?</span></label></div>
-                            <div class="form-group checkbox-group"><label class="tooltip-label" data-i18n-tooltip="tooltip.create.thermalInsulation"><input type="checkbox" id="thermalInsulation"><span data-i18n="create.thermalInsulation">Isolamento Térmico</span><span class="info-icon">?</span></label></div>
+
+                        <div class="builder-actions">
+                            <button class="btn btn-secondary btn-large" data-i18n="create.calculate">Calcular</button>
                         </div>
-                        <div class="form-section-title" data-i18n="create.componentsTitle">Componentes do Sistema</div>
-                        <p class="form-help-text" data-i18n="create.componentsDesc">Selecione os componentes que compõem o sistema de vedação.</p>
-                        <div class="components-selector" id="componentsSelector">
-                            <div class="form-group"><label class="tooltip-label" data-i18n-tooltip="tooltip.create.components"><span data-i18n="create.available">Componentes Disponíveis</span><span class="info-icon">?</span></label><div class="components-search"><input type="text" id="componentSearch" placeholder="Buscar componente..." class="search-input"></div><div class="components-list" id="componentsList"></div></div>
-                            <div class="form-group"><label class="tooltip-label" data-i18n-tooltip="tooltip.create.selectedLayers"><span data-i18n="create.selectedLayers">Camadas Selecionadas</span><span class="info-icon">?</span></label><div class="selected-layers" id="selectedLayers"><div class="empty-state" data-i18n="create.noLayers">Nenhuma camada selecionada</div></div></div>
+
+                        <div class="builder-actions">
+                            <button class="btn btn-primary btn-large" onclick="builderSave()" data-i18n="create.save">Salvar sistema</button>
+                            <button class="btn btn-outline btn-large" onclick="builderCompare()" data-i18n="create.compare">Comparar</button>
                         </div>
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-primary btn-large" data-i18n="create.save" data-i18n-tooltip="tooltip.create.save">Salvar Sistema</button>
-                            <button type="button" class="btn btn-outline btn-large" id="clearForm" data-i18n="create.clear" data-i18n-tooltip="tooltip.create.clear">Limpar Formulário</button>
+                    </div>
+
+                    <!-- Right: Visual preview -->
+                    <div class="builder-preview-panel">
+                        <h3 class="builder-subtitle" data-i18n="create.previewTitle">Pré-visualização</h3>
+                        <div class="builder-preview-card" id="builderPreviewCard">
+                            <div class="builder-preview-empty" data-i18n="create.previewEmpty">Adicione camadas para visualizar o sistema</div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </section>
