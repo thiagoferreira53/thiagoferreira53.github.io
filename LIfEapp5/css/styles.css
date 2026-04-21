@@ -275,6 +275,9 @@ body {
 .home-partner-logos { padding: var(--space-2xl) 0 var(--space-3xl); }
 .home-partner-logos .partner-logos-row { justify-content: center; align-items: center; gap: var(--space-3xl); margin-right: 240px; }
 .partner-logos-stacked { display: flex; flex-direction: column; align-items: center; gap: var(--space-lg); }
+.partner-logo-life-secondary { max-width: 150px; }
+.partner-logo-ppgci { max-width: 180px; }
+.partner-logo-ufrgs-home { max-width: 200px; }
 
 .feature-cards-title {
     font-size: 1.5rem; font-weight: 800; color: var(--gray-900);
@@ -781,6 +784,9 @@ section { padding: var(--space-3xl) 0; }
     .builder-add-layer select { min-width: 100%; }
     .builder-preview-card .preview-wall-layers { height: 120px; }
     .builder-preview-card .preview-specs { grid-template-columns: 1fr; }
+    .partner-logo-life-secondary { max-width: 120px; }
+    .partner-logo-ppgci { max-width: 150px; }
+    .partner-logo-ufrgs-home { max-width: 170px; }
 }
 
 /* ===== History Section ===== */
