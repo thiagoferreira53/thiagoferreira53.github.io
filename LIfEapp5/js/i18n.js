@@ -54,7 +54,7 @@ const translations = {
         'feature.compare.desc': 'Selecione os sistemas para comparar e avaliar a melhor opção para o seu projeto.',
         'feature.create.title': 'Crie e Calcule',
         'feature.create.desc': 'Monte um sistema de vedação vertical externa opaca e calcule automaticamente os impactos.',
-        'feature.history.title': 'Histórico',
+        'feature.history.title': 'Meus Projetos',
         'feature.history.desc': 'Salve seus projetos e comparações para também ter como revisar.',
 
         // Systems Section
@@ -224,7 +224,7 @@ const translations = {
         'create.interior': 'Interior',
 
         // History Section
-        'history.title': 'Histórico',
+        'history.title': 'Meus Projetos',
         'history.description': 'Acesse os sistemas que você criou e o seu histórico de comparações.',
         'history.createdTab': 'Sistemas Criados',
         'history.comparisonsTab': 'Histórico de Comparações',
@@ -235,6 +235,25 @@ const translations = {
         'history.viewPDF': 'Ver PDF',
         'history.print': 'Imprimir',
         'history.delete': 'Deletar',
+
+        // Notes Tab
+        'notes.tab': 'Notas',
+        'notes.titlePlaceholder': 'Título da nota',
+        'notes.contentPlaceholder': 'Escreva sua anotação aqui...',
+        'notes.add': 'Adicionar nota',
+        'notes.save': 'Salvar alterações',
+        'notes.edit': 'Editar',
+        'notes.delete': 'Deletar',
+        'notes.cancel': 'Cancelar',
+        'notes.empty': 'Nenhuma nota criada ainda.',
+        'notes.empty.error': 'Preencha o título ou conteúdo da nota.',
+        'notes.saved': 'Nota salva com sucesso',
+        'notes.updated': 'Nota atualizada com sucesso',
+        'notes.deleted': 'Nota deletada com sucesso',
+        'notes.confirmDelete': 'Tem certeza que deseja deletar esta nota?',
+        'notes.untitled': '(Sem título)',
+        'notes.createdAt': 'Criada em',
+        'notes.updatedAt': 'Atualizada em',
 
         // About / Saiba Mais Section
         'about.title': 'Saiba Mais',
@@ -311,14 +330,24 @@ const translations = {
         'about.ref8': 'INMETRO. Regulamento Técnico da Qualidade para o Nível de Eficiência Energética de Edificações Residenciais (RTQ-R). 2012.',
 
         // Login Modal
-        'login.title': 'Bem-vindo ao E³ Build',
+        'login.title': 'Login',
         'login.subtitle': 'Plataforma de Análise de Sistemas Construtivos',
+        'login.welcomeBack': 'Seja bem-vindo ao E³ Build',
+        'login.welcomeSub': 'Seja bem-vindo ao E³ Build',
+        'login.welcomeDesc': 'Uma ferramenta para apoiar a tomada de decisão em projeto com base em desempenho ambiental e térmico de sistemas construtivos da envoltória.',
+        'login.saibaMais': 'SAIBA MAIS',
+        'login.formSubtitle': 'Entre com suas credenciais para acessar o E³ Build.',
         'login.username': 'Usuário',
         'login.usernamePlaceholder': 'Digite seu usuário',
+        'login.email': 'E-mail',
+        'login.emailPlaceholder': 'seu@email.com',
         'login.password': 'Senha',
-        'login.passwordPlaceholder': 'Digite sua senha',
+        'login.passwordPlaceholder': '••••••••',
+        'login.forgot': 'Esqueci minha senha',
+        'login.forgotMsg': 'Funcionalidade em desenvolvimento. Por favor, contate o administrador.',
+        'login.or': 'ou',
         'login.submit': 'Entrar',
-        'login.register': 'Criar Conta',
+        'login.register': 'Criar conta',
         'login.help': 'Login: usuário: <strong>ecowallcheck</strong> | senha: <strong>sistemamelhornaoha</strong>',
         'login.error': 'Usuário ou senha inválidos',
         'login.welcome': 'Bem-vindo de volta,',
@@ -453,7 +482,7 @@ const translations = {
         'feature.compare.desc': 'Select systems to compare and evaluate the best option for your project.',
         'feature.create.title': 'Create & Calculate',
         'feature.create.desc': 'Build an external wall system and automatically calculate its impacts.',
-        'feature.history.title': 'History',
+        'feature.history.title': 'My Projects',
         'feature.history.desc': 'Save your projects and comparisons for future review.',
 
         // Systems Section
@@ -623,7 +652,7 @@ const translations = {
         'create.interior': 'Interior',
 
         // History Section
-        'history.title': 'History',
+        'history.title': 'My Projects',
         'history.description': 'Access the systems you created and your comparison history.',
         'history.createdTab': 'Created Systems',
         'history.comparisonsTab': 'Comparison History',
@@ -634,6 +663,25 @@ const translations = {
         'history.viewPDF': 'View PDF',
         'history.print': 'Print',
         'history.delete': 'Delete',
+
+        // Notes Tab
+        'notes.tab': 'Notes',
+        'notes.titlePlaceholder': 'Note title',
+        'notes.contentPlaceholder': 'Write your note here...',
+        'notes.add': 'Add note',
+        'notes.save': 'Save changes',
+        'notes.edit': 'Edit',
+        'notes.delete': 'Delete',
+        'notes.cancel': 'Cancel',
+        'notes.empty': 'No notes created yet.',
+        'notes.empty.error': 'Please fill in the title or content of the note.',
+        'notes.saved': 'Note saved successfully',
+        'notes.updated': 'Note updated successfully',
+        'notes.deleted': 'Note deleted successfully',
+        'notes.confirmDelete': 'Are you sure you want to delete this note?',
+        'notes.untitled': '(Untitled)',
+        'notes.createdAt': 'Created at',
+        'notes.updatedAt': 'Updated at',
 
         // About / Learn More Section
         'about.title': 'Learn More',
@@ -710,14 +758,24 @@ const translations = {
         'about.ref8': 'INMETRO. Technical Quality Regulation for Energy Efficiency Level of Residential Buildings (RTQ-R). 2012.',
 
         // Login Modal
-        'login.title': 'Welcome to E³ Build',
+        'login.title': 'Login',
         'login.subtitle': 'Building Systems Analysis Platform',
+        'login.welcomeBack': 'Welcome to E³ Build',
+        'login.welcomeSub': 'Welcome to E³ Build',
+        'login.welcomeDesc': 'A tool to support design decision-making based on the environmental and thermal performance of building envelope systems.',
+        'login.saibaMais': 'LEARN MORE',
+        'login.formSubtitle': 'Enter your credentials to access E³ Build.',
         'login.username': 'Username',
         'login.usernamePlaceholder': 'Enter your username',
+        'login.email': 'E-mail',
+        'login.emailPlaceholder': 'you@email.com',
         'login.password': 'Password',
-        'login.passwordPlaceholder': 'Enter your password',
+        'login.passwordPlaceholder': '••••••••',
+        'login.forgot': 'Forgot my password',
+        'login.forgotMsg': 'Feature under development. Please contact the administrator.',
+        'login.or': 'or',
         'login.submit': 'Sign In',
-        'login.register': 'Create Account',
+        'login.register': 'Create account',
         'login.help': 'Login: user: <strong>ecowallcheck</strong> | password: <strong>sistemamelhornaoha</strong>',
         'login.error': 'Invalid username or password',
         'login.welcome': 'Welcome back,',

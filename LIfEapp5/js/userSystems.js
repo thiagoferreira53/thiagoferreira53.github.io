@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof isLoggedIn === 'function' && isLoggedIn()) {
         displayUserSystems();
         displayUserComparisons();
+        displayUserNotes();
     }
 });
 
@@ -92,6 +93,8 @@ function initializeTabs() {
             btn.classList.add('active');
             if (tabName === 'created') {
                 document.getElementById('createdTab').classList.add('active');
+            } else if (tabName === 'notes') {
+                document.getElementById('notesTab').classList.add('active');
             } else {
                 document.getElementById('comparisonsTab').classList.add('active');
             }
@@ -255,6 +258,145 @@ function confirmDeleteComparison(comparisonId) {
         displayUserComparisons();
         showAlert('success', 'Comparação deletada com sucesso');
     }
+}
+
+// ===================================================================
+// ===== Notas do Usuário (CRUD) =====
+// ===================================================================
+let editingNoteId = null;
+
+function getUserNotes(username) {
+    const data = localStorage.getItem(`userNotes_${username}`);
+    return data ? JSON.parse(data) : [];
+}
+
+function saveUserNotes(username, notes) {
+    localStorage.setItem(`userNotes_${username}`, JSON.stringify(notes));
+}
+
+function _t(key, fallback) {
+    return (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback;
+}
+
+function escapeHTML(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function displayUserNotes() {
+    const currentUser = getCurrentUser();
+    if (!currentUser) return;
+    const list = document.getElementById('myNotesList');
+    if (!list) return;
+
+    const notes = getUserNotes(currentUser);
+    if (notes.length === 0) {
+        list.innerHTML = `<div class="empty-state">${_t('notes.empty', 'Nenhuma nota criada ainda.')}</div>`;
+        return;
+    }
+
+    const editLabel = _t('notes.edit', 'Editar');
+    const deleteLabel = _t('notes.delete', 'Deletar');
+
+    list.innerHTML = notes.map(n => {
+        const date = new Date(n.updatedAt || n.createdAt).toLocaleString('pt-BR');
+        const updatedLabel = n.updatedAt && n.updatedAt !== n.createdAt ? _t('notes.updatedAt', 'Atualizada em') : _t('notes.createdAt', 'Criada em');
+        return `
+            <div class="note-card" id="note_${n.id}">
+                <div class="note-header">
+                    <h4 class="note-title">${escapeHTML(n.title || _t('notes.untitled', '(Sem título)'))}</h4>
+                    <div class="note-actions">
+                        <button type="button" class="btn btn-small btn-outline" onclick="startEditNote('${n.id}')">${editLabel}</button>
+                        <button type="button" class="btn btn-small btn-outline" onclick="confirmDeleteNote('${n.id}')">${deleteLabel}</button>
+                    </div>
+                </div>
+                <p class="note-content">${escapeHTML(n.content || '')}</p>
+                <div class="note-meta">${updatedLabel}: ${date}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+function saveNoteFromForm() {
+    const currentUser = getCurrentUser();
+    if (!currentUser) {
+        if (typeof showLoginModal === 'function') showLoginModal(_t('login.actionRequired', 'É necessário fazer login.'));
+        return;
+    }
+    const titleEl = document.getElementById('noteTitleInput');
+    const contentEl = document.getElementById('noteContentInput');
+    if (!titleEl || !contentEl) return;
+    const title = titleEl.value.trim();
+    const content = contentEl.value.trim();
+    if (!title && !content) {
+        showAlert('error', _t('notes.empty.error', 'Preencha o título ou conteúdo da nota.'));
+        return;
+    }
+
+    const notes = getUserNotes(currentUser);
+    const now = new Date().toISOString();
+    if (editingNoteId) {
+        const n = notes.find(x => x.id === editingNoteId);
+        if (n) {
+            n.title = title;
+            n.content = content;
+            n.updatedAt = now;
+        }
+        showAlert('success', _t('notes.updated', 'Nota atualizada com sucesso'));
+    } else {
+        notes.unshift({ id: `note_${Date.now()}`, title, content, createdAt: now, updatedAt: now });
+        showAlert('success', _t('notes.saved', 'Nota salva com sucesso'));
+    }
+    saveUserNotes(currentUser, notes);
+    resetNoteForm();
+    displayUserNotes();
+}
+
+function startEditNote(noteId) {
+    const currentUser = getCurrentUser();
+    if (!currentUser) return;
+    const notes = getUserNotes(currentUser);
+    const n = notes.find(x => x.id === noteId);
+    if (!n) return;
+    editingNoteId = noteId;
+    const titleEl = document.getElementById('noteTitleInput');
+    const contentEl = document.getElementById('noteContentInput');
+    const saveBtn = document.getElementById('noteSaveBtn');
+    const cancelBtn = document.getElementById('noteCancelBtn');
+    if (titleEl) titleEl.value = n.title || '';
+    if (contentEl) contentEl.value = n.content || '';
+    if (saveBtn) saveBtn.textContent = _t('notes.save', 'Salvar alterações');
+    if (cancelBtn) cancelBtn.style.display = '';
+    if (titleEl) titleEl.focus();
+    titleEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cancelEditNote() {
+    resetNoteForm();
+}
+
+function resetNoteForm() {
+    editingNoteId = null;
+    const titleEl = document.getElementById('noteTitleInput');
+    const contentEl = document.getElementById('noteContentInput');
+    const saveBtn = document.getElementById('noteSaveBtn');
+    const cancelBtn = document.getElementById('noteCancelBtn');
+    if (titleEl) titleEl.value = '';
+    if (contentEl) contentEl.value = '';
+    if (saveBtn) saveBtn.textContent = _t('notes.add', 'Adicionar nota');
+    if (cancelBtn) cancelBtn.style.display = 'none';
+}
+
+function confirmDeleteNote(noteId) {
+    const msg = _t('notes.confirmDelete', 'Tem certeza que deseja deletar esta nota?');
+    if (!confirm(msg)) return;
+    const currentUser = getCurrentUser();
+    if (!currentUser) return;
+    let notes = getUserNotes(currentUser);
+    notes = notes.filter(n => n.id !== noteId);
+    saveUserNotes(currentUser, notes);
+    if (editingNoteId === noteId) resetNoteForm();
+    displayUserNotes();
+    showAlert('success', _t('notes.deleted', 'Nota deletada com sucesso'));
 }
 
 // ===== Mostrar Alerta =====

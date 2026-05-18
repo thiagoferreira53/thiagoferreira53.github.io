@@ -21,6 +21,13 @@
         'rgba(143, 170, 181, 0.85)'
     ];
 
+    // Chart.js global font defaults (larger, readable)
+    if (typeof Chart !== 'undefined' && Chart.defaults) {
+        Chart.defaults.font.size = 14;
+        Chart.defaults.font.family = "'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif";
+        Chart.defaults.color = '#374151';
+    }
+
     // ===================================================================
     //  SPA Navigation
     // ===================================================================
@@ -814,7 +821,7 @@
             new Chart(ctxGWP, {
                 type: 'bar',
                 data: { labels, datasets: [{ label: 'GWP (kg CO₂ eq)', data: systems.map(s => s.impactos?.gwp || 0), backgroundColor: chartColors.concat(chartColors).slice(0, systems.length) }] },
-                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { ticks: { maxRotation: 90, minRotation: 45, font: { size: 10 } } } } }
+                options: { responsive: true, plugins: { legend: { display: false }, title: { display: true, text: 'GWP (kg CO₂ eq)', font: { size: 18, weight: '600' } } }, scales: { y: { beginAtZero: true, ticks: { font: { size: 14 } } }, x: { ticks: { maxRotation: 30, minRotation: 0, font: { size: 16, weight: '500' }, autoSkip: false } } } }
             });
         }
 
@@ -824,7 +831,7 @@
             new Chart(ctxCED, {
                 type: 'bar',
                 data: { labels, datasets: [{ label: 'CED (MJ)', data: systems.map(s => s.consumo?.total || 0), backgroundColor: chartColors.concat(chartColors).slice(0, systems.length) }] },
-                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { ticks: { maxRotation: 90, minRotation: 45, font: { size: 10 } } } } }
+                options: { responsive: true, plugins: { legend: { display: false }, title: { display: true, text: 'CED (MJ)', font: { size: 18, weight: '600' } } }, scales: { y: { beginAtZero: true, ticks: { font: { size: 14 } } }, x: { ticks: { maxRotation: 30, minRotation: 0, font: { size: 16, weight: '500' }, autoSkip: false } } } }
             });
         }
 
@@ -834,7 +841,7 @@
             new Chart(ctxAP, {
                 type: 'bar',
                 data: { labels, datasets: [{ label: 'AP (kg SO₂ eq)', data: systems.map(s => s.impactos?.ap || 0), backgroundColor: chartColors.concat(chartColors).slice(0, systems.length) }] },
-                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { ticks: { maxRotation: 90, minRotation: 45, font: { size: 10 } } } } }
+                options: { responsive: true, plugins: { legend: { display: false }, title: { display: true, text: 'AP (kg SO₂ eq)', font: { size: 18, weight: '600' } } }, scales: { y: { beginAtZero: true, ticks: { font: { size: 14 } } }, x: { ticks: { maxRotation: 30, minRotation: 0, font: { size: 16, weight: '500' }, autoSkip: false } } } }
             });
         }
     }
@@ -1066,7 +1073,7 @@
             new Chart(ctxGWP, {
                 type: 'doughnut',
                 data: { labels, datasets: [{ data: comps.map(c => c.gwp || 0), backgroundColor: chartColors }] },
-                options: { responsive: true, plugins: { title: { display: true, text: gwpChartTitle } } }
+                options: { responsive: true, plugins: { title: { display: true, text: gwpChartTitle, font: { size: 16, weight: '600' } }, legend: { labels: { font: { size: 13 } } } } }
             });
         }
 
@@ -1076,7 +1083,7 @@
             new Chart(ctxCED, {
                 type: 'doughnut',
                 data: { labels, datasets: [{ data: comps.map(c => c.consumo_componente || 0), backgroundColor: chartColors }] },
-                options: { responsive: true, plugins: { title: { display: true, text: cedChartTitle } } }
+                options: { responsive: true, plugins: { title: { display: true, text: cedChartTitle, font: { size: 16, weight: '600' } }, legend: { labels: { font: { size: 13 } } } } }
             });
         }
     }
