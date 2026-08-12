@@ -12,7 +12,7 @@ LocalStorage é uma tecnologia de armazenamento web que permite que sites armaze
 
 Os dados ficam salvos em:
 ```
-localStorage do navegador → chave: "registeredUsers"
+localStorage do navegador → chave: "e3build_registeredUsers"
 ```
 
 ### Como visualizar os dados salvos?
@@ -21,54 +21,50 @@ localStorage do navegador → chave: "registeredUsers"
 2. Vá para a aba **Application** (Chrome) ou **Storage** (Firefox)
 3. No menu lateral, expanda **Local Storage**
 4. Clique no domínio do site (ex: `http://localhost:8000`)
-5. Procure pela chave `registeredUsers`
+5. Procure pela chave `e3build_registeredUsers`
 
 ### Estrutura dos Dados
 
-Os dados são salvos em formato JSON:
+Os dados são salvos em formato JSON, em uma lista de usuários:
 
 ```json
-{
-  "username1": {
+[
+  {
+    "username": "joao@email.com",
     "password": "senha123",
     "fullName": "João Silva",
     "email": "joao@email.com",
-    "usage": "professional",
-    "education": "master",
+    "institution": "UFRGS",
     "field": "Arquitetura",
-    "registeredAt": "2025-12-16T10:30:00.000Z"
-  },
-  "username2": {
-    "password": "outrasenha",
-    "fullName": "Maria Santos",
-    "email": "maria@email.com",
-    "usage": "academic",
-    "education": "phd",
-    "field": "Engenharia Civil",
-    "registeredAt": "2025-12-16T11:45:00.000Z"
+    "source": "professor",
+    "newsletter": true,
+    "terms": true,
+    "registeredAt": "2026-08-06T10:30:00.000Z"
   }
-}
+]
 ```
 
 ### Campos Armazenados
 
 Para cada usuário, são salvos os seguintes campos:
-- **username**: Nome de usuário escolhido
+- **username**: identificador de acesso (é o próprio e-mail, em minúsculas)
 - **password**: Senha (⚠️ em texto plano - não recomendado para produção)
-- **fullName**: Nome completo
-- **email**: Endereço de e-mail
-- **usage**: Finalidade de uso (academic, professional, education, personal, other)
-- **education**: Nível de formação (undergraduate, graduate, bachelor, master, phd, other)
-- **field**: Área de formação/trabalho
+- **fullName**: Nome
+- **email**: Endereço de e-mail (usado para fazer login)
+- **institution**: Instituição (universidade, escritório, empresa)
+- **field**: Ramo de atuação
+- **source**: Como ficou sabendo do E³ Build (professor, colleague, social, event, publication, search, other)
+- **newsletter**: Se aceitou receber novidades (true/false)
+- **terms**: Aceite dos termos da plataforma (obrigatório para concluir o cadastro)
 - **registeredAt**: Data e hora do registro
 
 ### Validações Implementadas
 
-1. **Username único**: Não permite criar dois usuários com o mesmo username
-2. **Email único**: Não permite cadastrar o mesmo email duas vezes
-3. **Confirmação de senha**: Valida se as senhas digitadas são iguais
-4. **Username válido**: Apenas letras, números e underscores (mínimo 3 caracteres)
-5. **Senha segura**: Mínimo de 6 caracteres
+1. **E-mail único**: Não permite cadastrar o mesmo e-mail duas vezes (comparação sem diferenciar maiúsculas/minúsculas)
+2. **Confirmação de senha**: Valida se as senhas digitadas são iguais
+3. **Senha mínima**: Mínimo de 6 caracteres
+4. **Termos da plataforma**: O cadastro só é concluído com o aceite marcado
+5. **Campos obrigatórios**: Nome, e-mail, instituição, ramo de atuação e origem da indicação
 
 ### Limitações do Armazenamento Local
 
@@ -101,7 +97,7 @@ Em um ambiente de produção, você deveria:
 
 No Console do Desenvolvedor, execute:
 ```javascript
-localStorage.removeItem('registeredUsers');
+localStorage.removeItem('e3build_registeredUsers');
 ```
 
 Ou para limpar todos os dados:
@@ -113,7 +109,7 @@ localStorage.clear();
 
 No Console do Desenvolvedor:
 ```javascript
-console.log(localStorage.getItem('registeredUsers'));
+console.log(localStorage.getItem('e3build_registeredUsers'));
 // ou
-copy(localStorage.getItem('registeredUsers')); // copia para área de transferência
+copy(localStorage.getItem('e3build_registeredUsers')); // copia para área de transferência
 ```

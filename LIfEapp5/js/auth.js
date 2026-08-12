@@ -20,6 +20,8 @@ function getCurrentUserFullName() {
 }
 
 function login(username, password) {
+    const id = (username || '').trim().toLowerCase();
+
     // Check hardcoded users
     if (hardcodedUsers[username] && hardcodedUsers[username].password === password) {
         sessionStorage.setItem('e3build_loggedIn', 'true');
@@ -28,12 +30,13 @@ function login(username, password) {
         return { success: true, user: hardcodedUsers[username] };
     }
 
-    // Check registered users
+    // Check registered users (login pelo e-mail ou pelo identificador salvo)
     const registeredUsers = JSON.parse(localStorage.getItem('e3build_registeredUsers') || '[]');
-    const found = registeredUsers.find(u => u.username === username && u.password === password);
+    const found = registeredUsers.find(u =>
+        ((u.email || '').toLowerCase() === id || (u.username || '').toLowerCase() === id) && u.password === password);
     if (found) {
         sessionStorage.setItem('e3build_loggedIn', 'true');
-        sessionStorage.setItem('e3build_currentUser', username);
+        sessionStorage.setItem('e3build_currentUser', found.username);
         sessionStorage.setItem('e3build_fullName', found.fullName);
         return { success: true, user: found };
     }
@@ -42,15 +45,24 @@ function login(username, password) {
 }
 
 function register(data) {
-    const { username, password, fullName, email, usage, education, field } = data;
+    const { password, fullName, email, institution, field, source, newsletter, terms } = data;
 
-    // Check if username already exists
+    // O e-mail é o identificador de acesso
+    const username = (email || '').trim().toLowerCase();
+    if (!username) return { success: false, error: 'register.errorEmail' };
     if (hardcodedUsers[username]) return { success: false, error: 'register.errorExists' };
-    const registeredUsers = JSON.parse(localStorage.getItem('e3build_registeredUsers') || '[]');
-    if (registeredUsers.find(u => u.username === username)) return { success: false, error: 'register.errorExists' };
-    if (registeredUsers.find(u => u.email === email)) return { success: false, error: 'register.errorEmail' };
 
-    const newUser = { username, password, fullName, email, usage, education, field, registeredAt: new Date().toISOString() };
+    const registeredUsers = JSON.parse(localStorage.getItem('e3build_registeredUsers') || '[]');
+    if (registeredUsers.find(u => (u.email || '').toLowerCase() === username || u.username === username)) {
+        return { success: false, error: 'register.errorEmail' };
+    }
+
+    const newUser = {
+        username, password, fullName, email,
+        institution, field, source,
+        newsletter: !!newsletter, terms: !!terms,
+        registeredAt: new Date().toISOString()
+    };
     registeredUsers.push(newUser);
     localStorage.setItem('e3build_registeredUsers', JSON.stringify(registeredUsers));
 
@@ -228,23 +240,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const pw = document.getElementById('regPassword').value;
             const cpw = document.getElementById('regConfirmPassword').value;
             if (pw !== cpw) { showAlert('error', i18n.t('register.errorPasswords')); return; }
+            if (!document.getElementById('regTerms').checked) { showAlert('error', i18n.t('register.errorTerms')); return; }
 
             const data = {
                 fullName: document.getElementById('regFullName').value.trim(),
                 email: document.getElementById('regEmail').value.trim(),
-                username: document.getElementById('regUsername').value.trim(),
                 password: pw,
-                usage: document.getElementById('regUsage').value,
-                education: document.getElementById('regEducation').value,
-                field: document.getElementById('regField').value.trim()
+                institution: document.getElementById('regInstitution').value.trim(),
+                field: document.getElementById('regField').value.trim(),
+                source: document.getElementById('regSource').value,
+                newsletter: document.getElementById('regNewsletter').checked,
+                terms: document.getElementById('regTerms').checked
             };
 
             const result = register(data);
             if (result.success) {
                 registerPopup.style.display = 'none';
+                registerForm.reset();
                 updateAuthUI();
                 showAlert('success', `${i18n.t('register.success')} ${result.user.fullName}!`);
                 loadUserSystemsIntoDataManager();
+                if (typeof displayUserSystems === 'function') displayUserSystems();
+                if (typeof displayUserComparisons === 'function') displayUserComparisons();
+                if (typeof displayUserNotes === 'function') displayUserNotes();
                 if (pendingLoginCallback) {
                     const cb = pendingLoginCallback;
                     pendingLoginCallback = null;

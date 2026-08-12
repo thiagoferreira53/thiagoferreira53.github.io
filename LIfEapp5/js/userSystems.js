@@ -106,57 +106,58 @@ function initializeTabs() {
 function displayUserSystems() {
     const currentUser = getCurrentUser();
     if (!currentUser) return;
-    
+
     const systems = getUserSystems(currentUser);
     const grid = document.getElementById('mySystemsGrid');
-    
+    if (!grid) return;
+
     if (systems.length === 0) {
-        grid.innerHTML = '<div class="empty-state">Nenhum sistema criado ainda. Crie seu primeiro sistema acima!</div>';
+        grid.innerHTML = `<div class="empty-state">${_t('history.noSystems2', 'Nenhum sistema criado ainda.')}</div>`;
         return;
     }
-    
+
+    const num = (v, digits) => (typeof v === 'number' ? v.toFixed(digits) : '—');
+
     grid.innerHTML = systems.map(system => {
-        const typeClass = system.tipo === 'Concreto' ? 'concrete' : 
-                         system.tipo === 'Cerâmico' ? 'ceramic' : 'other';
-        
+        const desc = system.identificacao?.descricao || {};
         return `
-            <div class="system-card ${typeClass}">
+            <div class="system-card other">
                 <div class="system-header">
-                    <h3 class="system-name">${system.nome}</h3>
+                    <h3 class="system-name">${escapeHTML(system.nome)}</h3>
                     <span class="badge-custom">Custom</span>
                 </div>
                 <div class="system-specs">
                     <div class="spec-item">
-                        <span class="spec-label">Valor U:</span>
-                        <span class="spec-value">${system.transmitancia.toFixed(2)} W/m²K</span>
+                        <span class="spec-label">U:</span>
+                        <span class="spec-value">${num(system.transmitancia, 2)} W/m²K</span>
                     </div>
                     <div class="spec-item">
-                        <span class="spec-label">Capacidade Térmica:</span>
-                        <span class="spec-value">${system.capacidade_termica.toFixed(0)} kJ/m²K</span>
+                        <span class="spec-label">CT:</span>
+                        <span class="spec-value">${num(system.capacidade_termica, 0)} kJ/m²K</span>
                     </div>
                     <div class="spec-item">
-                        <span class="spec-label">Peso:</span>
-                        <span class="spec-value">${system.identificacao.descricao.peso.toFixed(1)} kg/m²</span>
+                        <span class="spec-label">${_t('card.weight', 'Peso')}:</span>
+                        <span class="spec-value">${num(desc.peso, 1)} kg/m²</span>
                     </div>
                     <div class="spec-item">
-                        <span class="spec-label">Espessura:</span>
-                        <span class="spec-value">${system.identificacao.descricao.espessura} cm</span>
+                        <span class="spec-label">${_t('card.thickness', 'Espessura')}:</span>
+                        <span class="spec-value">${desc.espessura != null ? desc.espessura : '—'} cm</span>
                     </div>
                 </div>
                 <div class="system-impacts">
                     <div class="impact-item">
                         <span class="impact-label">GWP:</span>
-                        <span class="impact-value">${formatScientific(system.impactos.gwp)} kg CO₂ eq</span>
+                        <span class="impact-value">${formatScientific(system.impactos?.gwp)} kg CO₂ eq</span>
                     </div>
                     <div class="impact-item">
                         <span class="impact-label">CED:</span>
-                        <span class="impact-value">${formatScientific(system.consumo.total)} MJ</span>
+                        <span class="impact-value">${formatScientific(system.consumo?.total)} MJ</span>
                     </div>
                 </div>
                 <div class="system-actions">
-                    <button class="btn btn-small btn-secondary" onclick="viewSystemDetail('${system.id}', true)">Ver Detalhes</button>
-                    <button class="btn btn-small btn-outline" onclick="viewSystemCartilha('${system.id}')">📖 Cartilha</button>
-                    <button class="btn btn-small btn-danger" onclick="event.stopPropagation(); confirmDeleteSystem('${system.id}')">Deletar</button>
+                    <button class="btn btn-small btn-secondary" onclick="viewSystemDetail('${system.id}', true)">${_t('history.details', 'Ver Detalhes')}</button>
+                    <button class="btn btn-small btn-outline" onclick="viewSystemCartilha('${system.id}')">${_t('history.cartilha', '📖 Cartilha')}</button>
+                    <button class="btn btn-small btn-danger" onclick="event.stopPropagation(); confirmDeleteSystem('${system.id}')">${_t('history.delete', 'Deletar')}</button>
                 </div>
             </div>
         `;
@@ -167,28 +168,32 @@ function displayUserSystems() {
 function displayUserComparisons() {
     const currentUser = getCurrentUser();
     if (!currentUser) return;
-    
+
     const comparisons = getUserComparisons(currentUser);
     const container = document.getElementById('myComparisons');
-    
+    if (!container) return;
+
     if (comparisons.length === 0) {
-        container.innerHTML = '<div class="empty-state">Nenhuma comparação realizada ainda. Compare sistemas para ver o histórico aqui!</div>';
+        container.innerHTML = `<div class="empty-state">${_t('history.noComparisons', 'Nenhuma comparação salva ainda.')}</div>`;
         return;
     }
-    
+
     container.innerHTML = comparisons.map(comp => {
         const date = new Date(comp.performedAt).toLocaleString('pt-BR');
         const systemNames = comp.systems || [];
         return `
             <div class="comparison-history-card">
+                <div class="comparison-card-top">
+                    <button class="btn btn-small btn-primary" onclick="openSavedComparison('${comp.id}')">${_t('history.open', 'Abrir')}</button>
+                </div>
                 <div class="comparison-header">
                     <span class="comparison-date">${date}</span>
                     <div class="comparison-actions">
-                        <button class="btn btn-small btn-outline" onclick="event.stopPropagation(); confirmDeleteComparison('${comp.id}')">Deletar</button>
+                        <button class="btn btn-small btn-outline" onclick="event.stopPropagation(); confirmDeleteComparison('${comp.id}')">${_t('history.delete', 'Deletar')}</button>
                     </div>
                 </div>
                 <div class="comparison-systems">
-                    ${systemNames.map(name => `<strong>${name}</strong>`).join('<span class="comparison-arrow">vs</span>')}
+                    ${systemNames.map(name => `<strong>${escapeHTML(name)}</strong>`).join('<span class="comparison-arrow">vs</span>')}
                 </div>
             </div>
         `;
@@ -214,7 +219,7 @@ function viewSystemCartilha(systemId) {
 
 // ===== Deletar Sistema =====
 function confirmDeleteSystem(systemId) {
-    if (confirm('Tem certeza que deseja deletar este sistema?')) {
+    if (confirm(_t('history.confirmDeleteSystem', 'Tem certeza que deseja deletar este sistema?'))) {
         const currentUser = getCurrentUser();
         
         // Remove from localStorage
@@ -246,17 +251,17 @@ function confirmDeleteSystem(systemId) {
             renderSystems();
         }
         
-        showAlert('success', 'Sistema deletado com sucesso');
+        showAlert('success', _t('history.systemDeleted', 'Sistema deletado com sucesso'));
     }
 }
 
 // ===== Deletar Comparação =====
 function confirmDeleteComparison(comparisonId) {
-    if (confirm('Tem certeza que deseja deletar esta comparação?')) {
+    if (confirm(_t('history.confirmDeleteComparison', 'Tem certeza que deseja deletar esta comparação?'))) {
         const currentUser = getCurrentUser();
         deleteUserComparison(currentUser, comparisonId);
         displayUserComparisons();
-        showAlert('success', 'Comparação deletada com sucesso');
+        showAlert('success', _t('history.comparisonDeleted', 'Comparação deletada com sucesso'));
     }
 }
 

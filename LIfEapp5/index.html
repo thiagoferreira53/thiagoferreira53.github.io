@@ -14,7 +14,7 @@
     <title>E³ Build - Análise de Sistemas Construtivos</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="assets/logo_e3build.png?v=20260517i">
+    <link rel="icon" type="image/png" href="assets/logo_e3build.png?v=20260806">
     
     <!-- Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -25,7 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="css/styles.css?v=20260517i">
+    <link rel="stylesheet" href="css/styles.css?v=20260806">
 </head>
 <body>
     <!-- Login Modal (popup, NOT a gate) -->
@@ -38,7 +38,7 @@
             <div class="login-panel login-panel-brand">
                 <span class="login-deco login-deco-tr"></span>
                 <span class="login-deco login-deco-bl"></span>
-                <img src="assets/logo_e3build.png?v=20260517i" alt="E³ Build" class="login-brand-logo">
+                <img src="assets/logo_e3build.png?v=20260806" alt="E³ Build" class="login-brand-logo">
                 <h2 class="login-brand-welcome" data-i18n="login.welcomeSub">Seja bem-vindo ao E³ Build</h2>
                 <p class="login-brand-desc" data-i18n="login.welcomeDesc">Uma ferramenta para apoiar a tomada de decisão em projeto com base em desempenho ambiental e térmico de sistemas construtivos da envoltória.</p>
                 <a href="#" class="btn btn-outline login-brand-saiba" id="loginSaibaMaisBtn"><span data-i18n="login.saibaMais">SAIBA MAIS</span> <span aria-hidden="true">→</span></a>
@@ -77,7 +77,6 @@
                     <button type="submit" class="btn btn-primary btn-large btn-block login-submit-btn"><span data-i18n="login.submit">Entrar</span> <span aria-hidden="true">→</span></button>
                     <div class="login-divider"><span data-i18n="login.or">ou</span></div>
                     <button type="button" class="btn btn-outline btn-large btn-block" id="showRegisterBtn" data-i18n="login.register">Criar conta</button>
-                    <p class="login-help" data-i18n="login.help">Login: usuário: <strong>ecowallcheck</strong> | senha: <strong>sistemamelhornaoha</strong></p>
                 </form>
             </div>
         </div>
@@ -92,17 +91,13 @@
             </div>
             <form class="popup-form" id="registerForm">
                 <div class="form-group">
-                    <label for="regFullName" data-i18n="register.fullName">Nome Completo *</label>
+                    <label for="regFullName" data-i18n="register.fullName">Nome *</label>
                     <input type="text" id="regFullName" name="fullName" required data-i18n-placeholder="register.fullNamePlaceholder" placeholder="Digite seu nome completo">
                 </div>
                 <div class="form-group">
                     <label for="regEmail" data-i18n="register.email">E-mail *</label>
                     <input type="email" id="regEmail" name="email" required data-i18n-placeholder="register.emailPlaceholder" placeholder="Digite seu e-mail">
-                </div>
-                <div class="form-group">
-                    <label for="regUsername" data-i18n="register.username">Nome de Usuário *</label>
-                    <input type="text" id="regUsername" name="username" required data-i18n-placeholder="register.usernamePlaceholder" placeholder="Escolha um nome de usuário" minlength="3" pattern="[a-zA-Z0-9_]+" title="Apenas letras, números e underscores">
-                    <small data-i18n="register.usernameHint">Apenas letras, números e underscores (mín. 3 caracteres)</small>
+                    <small data-i18n="register.emailHint">O e-mail será utilizado para acessar a plataforma.</small>
                 </div>
                 <div class="form-group">
                     <label for="regPassword" data-i18n="register.password">Senha *</label>
@@ -113,31 +108,35 @@
                     <input type="password" id="regConfirmPassword" name="confirmPassword" required data-i18n-placeholder="register.confirmPasswordPlaceholder" placeholder="Confirme sua senha" minlength="6">
                 </div>
                 <div class="form-group">
-                    <label for="regUsage" data-i18n="register.usage">Para que vai usar? *</label>
-                    <select id="regUsage" name="usage" required>
-                        <option value="" data-i18n="register.usageSelect">Selecione uma opção</option>
-                        <option value="academic" data-i18n="register.usageAcademic">Pesquisa Acadêmica</option>
-                        <option value="professional" data-i18n="register.usageProfessional">Trabalho Profissional</option>
-                        <option value="education" data-i18n="register.usageEducation">Educação/Ensino</option>
-                        <option value="personal" data-i18n="register.usagePersonal">Projetos Pessoais</option>
-                        <option value="other" data-i18n="register.usageOther">Outro</option>
-                    </select>
+                    <label for="regInstitution" data-i18n="register.institution">Instituição *</label>
+                    <input type="text" id="regInstitution" name="institution" required data-i18n-placeholder="register.institutionPlaceholder" placeholder="ex: UFRGS, escritório, empresa">
                 </div>
                 <div class="form-group">
-                    <label for="regEducation" data-i18n="register.education">Formação *</label>
-                    <select id="regEducation" name="education" required>
-                        <option value="" data-i18n="register.educationSelect">Selecione sua formação</option>
-                        <option value="undergraduate" data-i18n="register.educationUndergrad">Graduando</option>
-                        <option value="graduate" data-i18n="register.educationGrad">Pós-Graduando</option>
-                        <option value="bachelor" data-i18n="register.educationBachelor">Graduação Completa</option>
-                        <option value="master" data-i18n="register.educationMaster">Mestrado</option>
-                        <option value="phd" data-i18n="register.educationPhd">Doutorado</option>
-                        <option value="other" data-i18n="register.educationOther">Outro</option>
-                    </select>
+                    <label for="regField" data-i18n="register.field">Ramo de atuação *</label>
+                    <input type="text" id="regField" name="field" required data-i18n-placeholder="register.fieldPlaceholder" placeholder="ex: Arquitetura, Engenharia Civil, Ensino/Pesquisa">
                 </div>
                 <div class="form-group">
-                    <label for="regField" data-i18n="register.field">Área de Formação *</label>
-                    <input type="text" id="regField" name="field" required data-i18n-placeholder="register.fieldPlaceholder" placeholder="ex: Arquitetura, Engenharia Civil">
+                    <label for="regSource" data-i18n="register.source">Como ficou sabendo do E³ Build? *</label>
+                    <select id="regSource" name="source" required>
+                        <option value="" data-i18n="register.sourceSelect">Selecione uma opção</option>
+                        <option value="professor" data-i18n="register.sourceProfessor">Indicação de professor(a)</option>
+                        <option value="colleague" data-i18n="register.sourceColleague">Indicação de colega ou amigo(a)</option>
+                        <option value="social" data-i18n="register.sourceSocial">Redes sociais</option>
+                        <option value="event" data-i18n="register.sourceEvent">Evento, curso ou congresso</option>
+                        <option value="publication" data-i18n="register.sourcePublication">Publicação científica</option>
+                        <option value="search" data-i18n="register.sourceSearch">Busca na internet</option>
+                        <option value="other" data-i18n="register.sourceOther">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group form-check-group">
+                    <label class="form-check">
+                        <input type="checkbox" id="regNewsletter" name="newsletter">
+                        <span data-i18n="register.newsletter">Quero receber novidades sobre o E³ Build</span>
+                    </label>
+                    <label class="form-check">
+                        <input type="checkbox" id="regTerms" name="terms" required>
+                        <span data-i18n="register.terms">Aceito os termos da plataforma *</span>
+                    </label>
                 </div>
                 <div class="popup-actions">
                     <button type="submit" class="btn btn-primary btn-large" data-i18n="register.submit">Criar Conta</button>
@@ -160,7 +159,7 @@
     <nav class="navbar">
         <div class="nav-container">
             <a class="nav-brand" href="#" data-nav="home">
-                <img src="assets/logo_e3build.png?v=20260517i" alt="E³ Build" class="brand-logo">
+                <img src="assets/logo_e3build.png?v=20260806" alt="E³ Build" class="brand-logo">
             </a>
             <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
                 <span></span><span></span><span></span>
@@ -203,7 +202,6 @@
         <section class="hero">
             <div class="container hero-content">
                 <div class="hero-text">
-                    <span class="hero-badge" data-i18n="hero.badge">Avaliação de Ciclo de Vida para Edificações</span>
                     <h1 class="hero-title">
                         <span data-i18n="hero.title">Desempenho ambiental de sistemas construtivos de</span>
                         <span class="hero-highlight" data-i18n="hero.titleHighlight">Vedação Vertical Externa</span>
@@ -217,7 +215,6 @@
                     <div class="hero-buttons">
                         <button class="btn btn-primary btn-large" id="startAnalysis">
                             <span data-i18n="hero.cta">Ver Sistemas</span>
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
                         <button class="btn btn-outline btn-large" id="learnMore">
                             <span data-i18n="hero.learnMore">Saiba Mais</span>
@@ -227,7 +224,7 @@
                 </div>
                 <div class="hero-image">
                     <div class="logos-container">
-                        <img src="assets/logo_e3build.png?v=20260517i" alt="E³ Build" class="partner-logo partner-logo-main">
+                        <img src="assets/logo_e3build.png?v=20260806" alt="E³ Build" class="partner-logo partner-logo-main">
                     </div>
                 </div>
             </div>
@@ -237,7 +234,6 @@
                 <div class="home-info-grid">
                     <div class="home-info-block">
                         <h3 data-i18n="home.whatIsTitle">O que é</h3>
-                        <p data-i18n="home.whatIsP1">O E³ Build é um aplicativo voltado à escolha consciente de sistemas de vedação vertical externa no processo de projeto.</p>
                         <p data-i18n="home.whatIsP2">A ferramenta permite avaliar e comparar o desempenho térmico e os impactos ambientais de diferentes soluções construtivas, apoiando decisões mais eficientes, sustentáveis e fundamentadas em dados. Além disso, possibilita a criação de sistemas personalizados, adaptados às necessidades específicas de cada projeto.</p>
                     </div>
                     <div class="home-info-block">
@@ -267,13 +263,13 @@
                         <div class="home-indicator-card">
                             <div class="indicator-card-icon">🌡️</div>
                             <h4 data-i18n="home.thermalLabel">Desempenho térmico</h4>
-                            <p data-i18n="home.thermalDesc">Entenda como o valor U e a capacidade térmica influenciam o conforto.</p>
+                            <p data-i18n="home.thermalDesc">Entenda como a transmitância térmica (U) e a capacidade térmica (CT) influenciam o desempenho térmico.</p>
                             <a href="#" class="btn btn-outline btn-small" onclick="event.preventDefault(); navigateTo('about'); setTimeout(()=>{ document.getElementById('aboutThermal')?.scrollIntoView({behavior:'smooth'}); }, 300);" data-i18n="home.learnMoreBtn">Saiba mais</a>
                         </div>
                         <div class="home-indicator-card">
-                            <div class="indicator-card-icon">♻️</div>
+                            <div class="indicator-card-icon indicator-card-icon-svg"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4.5 0-8-3.2-8-7.5C4 8 8.5 3.6 12 2c3.5 1.6 8 6 8 11.5 0 4.3-3.5 7.5-8 7.5z"></path><path d="M12 21V9"></path><path d="M12 13.5 8.7 10.2"></path><path d="M12 16.8l3.3-3.3"></path></svg></div>
                             <h4 data-i18n="home.lcaLabel">Impacto ambiental</h4>
-                            <p data-i18n="home.lcaDesc">O que é GWP, CED e como interpretar os resultados.</p>
+                            <p data-i18n="home.lcaDesc">O que é o GWP (<em>Global Warming Potential</em> — Potencial de Aquecimento Global), o CED (<em>Cumulative Energy Demand</em> — Demanda Cumulativa de Energia) e como interpretar os resultados.</p>
                             <a href="#" class="btn btn-outline btn-small" onclick="event.preventDefault(); navigateTo('about'); setTimeout(()=>{ document.getElementById('aboutLCA')?.scrollIntoView({behavior:'smooth'}); }, 300);" data-i18n="home.learnMoreBtn">Saiba mais</a>
                         </div>
                     </div>
@@ -284,12 +280,12 @@
                 <h3 class="feature-cards-title" data-i18n="home.featuresTitle">Explore as funcionalidades</h3>
                 <div class="feature-cards-grid">
                     <div class="feature-card" data-nav="systems">
-                        <div class="feature-icon icon-catalog"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg></div>
+                        <div class="feature-icon icon-catalog"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line><line x1="8" y1="9" x2="10" y2="9"></line></svg></div>
                         <h3 data-i18n="feature.catalog.title">Cartilha de Sistemas</h3>
                         <p data-i18n="feature.catalog.desc">Verifique a cartilha com informações de desempenho térmico e impactos ambientais dos sistemas.</p>
                     </div>
                     <div class="feature-card" data-nav="compare">
-                        <div class="feature-icon icon-compare"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
+                        <div class="feature-icon icon-compare"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="21" x2="21" y2="21"></line><rect x="5" y="11" width="4" height="7"></rect><rect x="11" y="6" width="4" height="12"></rect><rect x="17" y="14" width="4" height="4"></rect></svg></div>
                         <h3 data-i18n="feature.compare.title">Comparativo de Impactos</h3>
                         <p data-i18n="feature.compare.desc">Selecione os sistemas para comparar e avaliar a melhor opção para o seu projeto.</p>
                     </div>
@@ -308,12 +304,9 @@
             <!-- Partner logos -->
             <div class="container home-partner-logos">
                 <div class="partner-logos-row">
-                    <img src="assets/logo_life.png" alt="LIfE Logo" class="partner-logo">
-                    <div class="partner-logos-stacked">
-                        <img src="assets/Logo_2306.png" alt="LIfE Sustainability Logo" class="partner-logo partner-logo-life-secondary">
-                        <img src="assets/images (2).png" alt="PPGCI Logo" class="partner-logo partner-logo-ppgci">
-                        <img src="assets/Logo_UFRGS_formato_SVG-01.svg.png" alt="UFRGS Logo" class="partner-logo partner-logo-ufrgs-home">
-                    </div>
+                    <a href="https://www.ufrgs.br/life-sustainability/" target="_blank" rel="noopener" class="partner-logo-link" title="LIfE — Life Cycle Innovation for the Built Environment"><img src="assets/Logo_2306.png" alt="LIfE Sustainability" class="partner-logo partner-logo-life-secondary"></a>
+                    <a href="https://www.ufrgs.br/ppgec-ci/" target="_blank" rel="noopener" class="partner-logo-link" title="PPGCI — UFRGS"><img src="assets/images (2).png" alt="PPGCI" class="partner-logo partner-logo-ppgci"></a>
+                    <a href="https://www.ufrgs.br/site/" target="_blank" rel="noopener" class="partner-logo-link" title="Universidade Federal do Rio Grande do Sul"><img src="assets/Logo_UFRGS_formato_SVG-01.svg.png" alt="UFRGS" class="partner-logo partner-logo-ufrgs-home"></a>
                 </div>
             </div>
         </section>
@@ -325,38 +318,34 @@
             <div class="container">
                 <div class="section-header">
                     <h2 class="section-title" data-i18n="systems.title">Biblioteca de Sistemas Construtivos</h2>
+                    <p class="section-description" data-i18n="systems.expandP1">Consulte diferentes sistemas construtivos de vedação vertical opaca, como paredes de concreto maciço, blocos de concreto, blocos cerâmicos e sistemas em drywall.</p>
+                    <p class="section-description" data-i18n="systems.expandP2">Para cada sistema, são apresentadas informações de desempenho térmico e impactos ambientais, auxiliando na comparação e na tomada de decisão em projeto.</p>
                     <p class="section-description" data-i18n="systems.subtitle">Sistemas de Vedação Vertical Externa são partes da edificação habitacional que limitam verticalmente a edificação e seus ambientes.</p>
-                    <details class="systems-expand">
-                        <summary class="systems-expand-toggle" data-i18n="systems.expandTitle">Explorar Sistemas de vedação vertical</summary>
-                        <div class="systems-expand-content">
-                            <p data-i18n="systems.expandP1">Consulte diferentes sistemas construtivos de vedação vertical opaca, como paredes de concreto maciço, blocos de concreto, blocos cerâmicos e sistemas em drywall.</p>
-                            <p data-i18n="systems.expandP2">Para cada sistema, são apresentadas informações de desempenho térmico e impactos ambientais, auxiliando na comparação e na tomada de decisão em projeto.</p>
-                        </div>
-                    </details>
                     <p class="section-description" style="margin-top: var(--space-xl);" data-i18n="systems.cta">Verifique as informações de desempenho térmico e os impactos ambientais do sistema construtivo.</p>
                     <div class="color-legend">
                         <div class="legend-item"><span class="legend-color legend-concrete"></span><span data-i18n="systems.concrete">Bloco de concreto</span></div>
                         <div class="legend-item"><span class="legend-color legend-ceramic"></span><span data-i18n="systems.ceramic">Bloco de cerâmica</span></div>
                         <div class="legend-item"><span class="legend-color legend-steelframe"></span><span data-i18n="systems.steelframe">Steel Frame</span></div>
-                        <div class="legend-item"><span class="legend-color legend-other"></span><span data-i18n="systems.other">Outros</span></div>
+                        <div class="legend-item"><span class="legend-color legend-concretewall"></span><span data-i18n="systems.concretewall">Parede de concreto</span></div>
                     </div>
                 </div>
                 <div class="search-container"><input type="text" id="searchSystem" class="search-input" data-i18n-placeholder="systems.search" placeholder="Buscar sistemas por nome..."></div>
                 <div class="filters-container">
                     <div class="filter-group">
                         <label data-i18n="systems.filterType">Tipo:</label>
-                        <select id="filterType" class="filter-select"><option value="" data-i18n="systems.allTypes">Todos os Tipos</option><option value="Bloco de concreto" data-i18n="filter.concreteBlock">Bloco de concreto</option><option value="Parede de concreto" data-i18n="filter.concreteWall">Parede de concreto</option><option value="Bloco cerâmico" data-i18n="filter.ceramicBlock">Bloco cerâmico</option><option value="Steel frame (leve)" data-i18n="filter.steelFrame">Steel frame (leve)</option></select>
+                        <select id="filterType" class="filter-select"><option value="" data-i18n="systems.allTypes">Todos os Tipos</option><option value="Bloco de concreto" data-i18n="filter.concreteBlock">Bloco de concreto</option><option value="Parede de concreto" data-i18n="filter.concreteWall">Parede de concreto</option><option value="Bloco cerâmico" data-i18n="filter.ceramicBlock">Bloco cerâmico</option><option value="Steel frame (leve)" data-i18n="filter.steelFrame">Steel Frame</option></select>
                     </div>
                     <div class="filter-group">
                         <label data-i18n="systems.filterInsulation">Isolamento Térmico:</label>
                         <select id="filterInsulation" class="filter-select"><option value="" data-i18n="systems.all">Todos</option><option value="true" data-i18n="systems.yes">Sim</option><option value="false" data-i18n="systems.no">Não</option></select>
                     </div>
+                    <!-- Filtro "Origem" desativado a pedido (mantido comentado para uso futuro)
                     <div class="filter-group">
                         <label data-i18n="systems.filterOrigin">Origem:</label>
                         <select id="filterOrigin" class="filter-select"><option value="" data-i18n="systems.allSystems">Todos os Sistemas</option><option value="custom" data-i18n="systems.mySystems">Meus Sistemas</option><option value="database" data-i18n="systems.database">Sistema da Biblioteca</option></select>
                     </div>
+                    -->
                     <button class="btn btn-outline" id="clearFilters" data-i18n="systems.clearFilters">Limpar Filtros</button>
-                    <button class="btn btn-primary" id="printCatalog" style="margin-left: auto;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg><span data-i18n="systems.print">Imprimir</span></button>
                 </div>
                 <div class="systems-grid" id="systemsGrid"><div class="loading-message" data-i18n="systems.loading">Carregando sistemas...</div></div>
                 <div class="pagination" id="pagination"></div>
@@ -378,21 +367,29 @@
                     <h3 class="compare-step-title" data-i18n="compare.stepMethod">1. Escolha o método de comparação</h3>
                     <div class="compare-method-cards">
                         <div class="compare-method-card" id="methodThermal" onclick="selectCompareMethod('thermal')">
-                            <div class="method-icon">🌡️</div>
+                            <div class="method-icon method-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="1.5"></rect><line x1="2" y1="9.33" x2="22" y2="9.33"></line><line x1="2" y1="14.67" x2="22" y2="14.67"></line><line x1="8.67" y1="4" x2="8.67" y2="9.33"></line><line x1="15.33" y1="4" x2="15.33" y2="9.33"></line><line x1="5.33" y1="9.33" x2="5.33" y2="14.67"></line><line x1="12" y1="9.33" x2="12" y2="14.67"></line><line x1="18.67" y1="9.33" x2="18.67" y2="14.67"></line><line x1="8.67" y1="14.67" x2="8.67" y2="20"></line><line x1="15.33" y1="14.67" x2="15.33" y2="20"></line></svg></div>
                             <h4 data-i18n="compare.methodThermal">Desempenho Térmico</h4>
                             <p data-i18n="compare.methodThermalDesc">Compare todos os sistemas com base em normas de desempenho térmico (NBR, ASHRAE, RTQ-C, RTQ-R)</p>
                         </div>
                         <div class="compare-method-card" id="methodGroups" onclick="selectCompareMethod('groups')">
-                            <div class="method-icon">📊</div>
+                            <div class="method-icon method-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="6" height="11" rx="1"></rect><rect x="9" y="4" width="6" height="16" rx="1"></rect><rect x="16" y="12" width="6" height="8" rx="1"></rect><line x1="2" y1="14.5" x2="8" y2="14.5"></line><line x1="9" y1="9.5" x2="15" y2="9.5"></line><line x1="9" y1="15" x2="15" y2="15"></line><line x1="16" y1="16" x2="22" y2="16"></line></svg></div>
                             <h4 data-i18n="compare.methodGroups">Grupos de Sistemas</h4>
-                            <p data-i18n="compare.methodGroupsDesc">Compare impactos ambientais entre sistemas — selecione individualmente ou compare todos de uma vez</p>
+                            <p data-i18n="compare.methodGroupsDesc">Compare os impactos ambientais entre sistemas selecionados individualmente</p>
+                        </div>
+                        <div class="compare-method-card" id="methodFinder" onclick="selectCompareMethod('finder')">
+                            <div class="method-icon method-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M8 11.5l2.2 2.2L15 9"></path><line x1="16.2" y1="16.2" x2="21" y2="21"></line></svg></div>
+                            <h4 data-i18n="finder.title">Encontrar Sistema Ideal</h4>
+                            <p data-i18n="compare.methodFinderDesc">Defina norma e zona bioclimática e veja quais sistemas atendem aos requisitos de desempenho</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Finder: Encontrar sistema ideal -->
-                <div class="finder-section" id="finderSection">
-                    <h3 class="compare-step-title" data-i18n="finder.title">Encontrar Sistema Ideal</h3>
+                <div class="compare-panel finder-section" id="finderSection" style="display:none;">
+                    <div class="compare-panel-header">
+                        <button class="btn btn-outline btn-small" onclick="selectCompareMethod(null)">← <span data-i18n="compare.back">Voltar</span></button>
+                        <h3 data-i18n="finder.title">Encontrar Sistema Ideal</h3>
+                    </div>
                     <p class="finder-description" data-i18n="finder.description">Defina os critérios do seu projeto, como norma e zona bioclimática, e identifique os sistemas construtivos que atendem aos requisitos de desempenho. Os resultados indicam os níveis de desempenho alcançados e os impactos ambientais associados, auxiliando na escolha da solução mais adequada.</p>
                     <div class="finder-controls">
                         <div class="finder-control-group">
@@ -432,6 +429,7 @@
                         <h3 data-i18n="compare.thermalTitle">Comparação por Desempenho Térmico</h3>
                     </div>
                     <p class="compare-panel-desc" data-i18n="compare.thermalDesc">Selecione uma norma técnica para verificar a conformidade de todos os sistemas:</p>
+                    <p class="finder-summary" id="thermalSystemsCount"></p>
                     <div class="norm-cards-grid">
                         <div class="norm-card" onclick="runThermalComparison('nbr15575')">
                             <div class="norm-card-header"><span class="norm-badge">Brasil</span><h4>NBR 15575</h4></div>
@@ -463,15 +461,6 @@
                         <button class="btn btn-outline btn-small" onclick="selectCompareMethod(null)">← <span data-i18n="compare.back">Voltar</span></button>
                         <h3 data-i18n="compare.groupsTitle">Comparação por Grupos de Sistemas</h3>
                     </div>
-                    <div class="groups-approach-selector">
-                        <button class="btn btn-outline approach-btn active" id="approachIndividual" onclick="selectGroupApproach('individual')">
-                            <span data-i18n="compare.approachIndividual">Seleção Individual</span>
-                        </button>
-                        <button class="btn btn-outline approach-btn" id="approachAll" onclick="selectGroupApproach('all')">
-                            <span data-i18n="compare.approachAll">Comparar Todos</span>
-                        </button>
-                    </div>
-
                     <!-- Individual selection sub-panel -->
                     <div class="groups-subpanel" id="subpanelIndividual">
                         <p class="compare-panel-desc" data-i18n="compare.individualDesc">Selecione até 5 sistemas para comparar seus impactos ambientais:</p>
@@ -484,26 +473,31 @@
                                     <option value="Bloco de concreto" data-i18n="filter.concreteBlock">Bloco de concreto</option>
                                     <option value="Parede de concreto" data-i18n="filter.concreteWall">Parede de concreto</option>
                                     <option value="Bloco cerâmico" data-i18n="filter.ceramicBlock">Bloco cerâmico</option>
-                                    <option value="Steel frame (leve)" data-i18n="filter.steelFrame">Steel frame (leve)</option>
+                                    <option value="Steel frame (leve)" data-i18n="filter.steelFrame">Steel Frame</option>
                                 </select>
                             </div>
                         </div>
                         <div class="compare-selected-bar">
                             <div class="selected-systems" id="selectedSystems"><div class="empty-state" data-i18n="compare.empty">Nenhum sistema selecionado</div></div>
-                            <button class="btn btn-primary" id="compareBtn" disabled data-i18n="compare.btn">Comparar</button>
+                            <div class="compare-actions-group">
+                                <button class="btn btn-primary" id="compareBtn" disabled data-i18n="compare.btn">Comparar</button>
+                                <button class="btn btn-secondary" id="saveComparisonBtn" disabled onclick="saveCurrentComparison()" data-i18n="compare.save">Salvar comparação</button>
+                                <button class="btn btn-outline" id="printComparisonBtn" disabled onclick="printComparison()" data-i18n="compare.print">🖨️ Imprimir</button>
+                            </div>
                         </div>
                         <div class="compare-system-grid" id="compareSystemGrid"></div>
                     </div>
 
-                    <!-- Compare All sub-panel -->
+                    <!-- Sub-painel "Comparar Todos" desativado a pedido (mantido comentado para uso futuro)
                     <div class="groups-subpanel" id="subpanelAll" style="display:none;">
-                        <p class="compare-panel-desc" data-i18n="compare.allDesc">Compare todos os 42 sistemas da biblioteca de uma vez, visualizando impactos ambientais e desempenho térmico de toda a base de dados.</p>
+                        <p class="compare-panel-desc" data-i18n="compare.allDesc">Compare todos os 42 sistemas da biblioteca de uma vez.</p>
                         <div style="text-align:center;">
                             <button class="btn btn-primary btn-large" id="compareAllBtn" onclick="runCompareAll()">
                                 <span data-i18n="compare.compareAllBtn">Comparar Todos os Sistemas</span>
                             </button>
                         </div>
                     </div>
+                    -->
 
                     <div class="comparison-results" id="groupComparisonResults" style="display:none;"></div>
                 </div>
@@ -535,18 +529,23 @@
                         </div>
 
                         <div class="builder-add-layer">
-                            <select id="builderMaterial" class="filter-select">
+                            <select id="builderMaterial" class="filter-select" onchange="builderMaterialChanged()">
                                 <option value="" data-i18n="create.selectMaterial">Selecione o material...</option>
                             </select>
                             <div class="builder-thickness-input">
                                 <input type="number" id="builderThickness" class="search-input" placeholder="0.0" step="0.1" min="0.1">
+                                <select id="builderThicknessOptions" class="filter-select" style="display:none;">
+                                    <option value="2">2,0</option>
+                                    <option value="2.5" selected>2,5</option>
+                                    <option value="3">3,0</option>
+                                </select>
                                 <span>cm</span>
                             </div>
                             <button class="btn btn-primary btn-small" onclick="builderAddLayer()" data-i18n="create.addLayer">Adicionar camada</button>
                         </div>
 
                         <div class="builder-actions">
-                            <button class="btn btn-secondary btn-large" data-i18n="create.calculate">Calcular</button>
+                            <button class="btn btn-secondary btn-large" onclick="builderCalculate()" data-i18n="create.calculate">Calcular</button>
                         </div>
 
                         <div class="builder-actions">
@@ -580,7 +579,6 @@
                         <button class="tab-btn active" data-tab="created" data-i18n="history.createdTab" data-i18n-tooltip="tooltip.history.createdTab">Sistemas Criados</button>
                         <button class="tab-btn" data-tab="comparisons" data-i18n="history.comparisonsTab" data-i18n-tooltip="tooltip.history.comparisonsTab">Histórico de Comparações</button>
                         <button class="tab-btn" data-tab="notes" data-i18n="notes.tab">Notas</button>
-                        <button class="btn btn-outline btn-small" id="printHistory" style="margin-left:auto;" onclick="window.print()" data-i18n-tooltip="tooltip.history.print"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg> <span data-i18n="history.print">Imprimir</span></button>
                     </div>
                     <div class="tab-content active" id="createdTab"><div class="systems-grid" id="mySystemsGrid"><div class="empty-state" data-i18n="history.noSystems">Nenhum sistema criado ainda.</div></div></div>
                     <div class="tab-content" id="comparisonsTab"><div class="comparisons-list" id="myComparisons"><div class="empty-state" data-i18n="history.noComparisons">Nenhuma comparação realizada ainda.</div></div></div>
@@ -612,7 +610,7 @@
                             <h3 data-i18n="about.introTitle">Sobre o E³ Build</h3>
                             <p data-i18n="about.text1">E³ Build (Energy, Environment, Envelope) é uma ferramenta de pesquisa desenvolvida para avaliar impactos ambientais e desempenho térmico de sistemas de vedação vertical externa opaca.</p>
                             <p data-i18n="about.text2">O banco de dados inclui dados completos de avaliação de ciclo de vida para sistemas construtivos, cobrindo impactos da fase de produção (A1-A3) e métricas de desempenho térmico.</p>
-                            <p data-i18n="about.text3">A ferramenta foi desenvolvida no Laboratório de Inovação e Fabricação — LIfE, vinculado ao Programa de Pós-Graduação em Engenharia Civil (PPGCI) da Universidade Federal do Rio Grande do Sul (UFRGS).</p>
+                            <p data-i18n="about.text3">A ferramenta foi desenvolvida no LIfE — <em>Life Cycle Innovation for the Built Environment</em>, grupo vinculado ao Programa de Pós-Graduação em Engenharia Civil (PPGCI) da Universidade Federal do Rio Grande do Sul (UFRGS).</p>
                         </div>
                         <div class="about-image">
                             <div class="about-card"><div class="about-card-icon">📊</div><h4 data-i18n="about.card1.title">Baseado em Evidências</h4><p data-i18n="about.card1.desc">Construído com metodologia ACV rigorosa e dados verificados</p></div>
@@ -624,7 +622,7 @@
 
                 <!-- Section 2: LCA Concepts -->
                 <div class="about-block" id="aboutLCA">
-                    <h3 class="about-block-title" data-i18n="about.lcaTitle">Avaliação do Ciclo de Vida (ACV)</h3>
+                    <h3 class="about-block-title" data-i18n="about.lcaTitle">Desempenho ambiental</h3>
                     <div class="about-block-content">
                         <p data-i18n="about.lcaText1">A Avaliação do Ciclo de Vida (ACV) é uma técnica que estuda os aspectos ambientais e os impactos potenciais ao longo da vida de um produto ou serviço, desde a extração da matéria-prima até a destinação final. A ACV é regida pela série de Normas ISO 14040.</p>
                         <p data-i18n="about.lcaText2">No contexto da construção civil, permite comparar diferentes sistemas construtivos em termos de emissões de gases de efeito estufa (GWP), acidificação (AP), eutrofização (EP), criação de ozônio fotoquímico (POCP), depleção da camada de ozônio (ODP) e demanda cumulativa de energia (CED).</p>
@@ -696,6 +694,18 @@
                             <p data-i18n="about.iniCDesc4">A avaliação pode ser realizada pelos métodos simplificado ou de simulação computacional, conforme os critérios estabelecidos pelo Inmetro e normas técnicas aplicáveis da ABNT.</p>
                         </div>
                         <div class="standard-detail-card">
+                            <div class="standard-detail-header"><h4 data-i18n="about.rtqRTitle">RTQ-R — Regulamento Técnico da Qualidade para o Nível de Eficiência Energética de Edificações Residenciais</h4><span class="regulation-badge">Brasil</span></div>
+                            <p data-i18n="about.rtqRDesc1">O RTQ-R (2012) estabeleceu os critérios para a classificação do nível de eficiência energética de edificações residenciais no Brasil, sendo a base do sistema de etiquetagem do Inmetro/PBE Edifica antes da atualização promovida pela INI-R.</p>
+                            <p data-i18n="about.rtqRDesc2">A avaliação da envoltória é feita pelo método prescritivo — com equações específicas por zona bioclimática — ou por simulação computacional, considerando transmitância térmica, capacidade térmica e absortância das paredes externas e da cobertura.</p>
+                            <p data-i18n="about.rtqRDesc3">Os níveis de eficiência vão de A (mais eficiente) a E (menos eficiente). O regulamento continua sendo referência em avaliações e pesquisas realizadas antes da vigência da INI-R, e é uma das normas disponíveis para comparação nesta ferramenta.</p>
+                        </div>
+                        <div class="standard-detail-card">
+                            <div class="standard-detail-header"><h4 data-i18n="about.rtqCTitle">RTQ-C — Regulamento Técnico da Qualidade para o Nível de Eficiência Energética de Edificações Comerciais, de Serviços e Públicas</h4><span class="regulation-badge">Brasil</span></div>
+                            <p data-i18n="about.rtqCDesc1">O RTQ-C (2010, revisado em 2013) estabeleceu os requisitos para a classificação da eficiência energética de edificações comerciais, de serviços e públicas, avaliando envoltória, sistema de iluminação e sistema de condicionamento de ar.</p>
+                            <p data-i18n="about.rtqCDesc2">Para a envoltória, o regulamento define valores máximos de transmitância térmica por zona bioclimática associados às classes de eficiência A, B, C e D, considerando também a capacidade térmica e a absortância das superfícies.</p>
+                            <p data-i18n="about.rtqCDesc3">Assim como o RTQ-R, foi substituído pela INI-C, mas segue como referência para comparação de resultados e é utilizado nesta ferramenta na avaliação por classes de eficiência.</p>
+                        </div>
+                        <div class="standard-detail-card">
                             <div class="standard-detail-header"><h4 data-i18n="about.ashrae901Title">ASHRAE 90.1 — Energy Standard for Buildings</h4><span class="regulation-badge">Internacional</span></div>
                             <p data-i18n="about.ashrae901Desc1">A ASHRAE 90.1 estabelece requisitos mínimos de eficiência energética para edificações comerciais e residenciais, sendo amplamente utilizada como referência internacional para avaliação de desempenho térmico e energético.</p>
                             <p data-i18n="about.ashrae901Desc2">A norma define critérios para sistemas da edificação, incluindo envoltória, iluminação, condicionamento de ar e aquecimento.</p>
@@ -708,18 +718,35 @@
                 <!-- Section: Developers (anchor target from 'Orientado por Pesquisa' card) -->
                 <div class="about-block" id="aboutDevelopers">
                     <h3 class="about-block-title" data-i18n="about.developersTitle">Desenvolvedores</h3>
-                    <p class="about-block-desc" data-i18n="about.developersDisclaimer"><em>⚠️ Os nomes abaixo são apenas um exemplo provisório — serão substituídos pelas informações reais dos desenvolvedores.</em></p>
+                    <p class="about-block-desc" data-i18n="about.developersDesc">Ferramenta desenvolvida no LIfE — Life Cycle Innovation for the Built Environment (PPGCI/UFRGS).</p>
+
+                    <div class="version-info">
+                        <div class="version-item">
+                            <span class="version-label" data-i18n="about.versionLabel">Versão</span>
+                            <span class="version-value" id="appVersion">5.0</span>
+                        </div>
+                        <div class="version-item">
+                            <span class="version-label" data-i18n="about.codeLabel">Código-fonte</span>
+                            <a class="version-value version-link" href="https://github.com/thiagoferreira53/thiagoferreira53.github.io" target="_blank" rel="noopener">github.com/thiagoferreira53</a>
+                        </div>
+                        <div class="version-item">
+                            <span class="version-label" data-i18n="about.previousVersionLabel">Versão anterior</span>
+                            <a class="btn btn-outline btn-small" href="../LIfEapp4/index.html" target="_blank" rel="noopener" data-i18n="about.previousVersionBtn">Acessar versão 4.0</a>
+                        </div>
+                    </div>
+
+                    <p class="about-block-desc" data-i18n="about.developersDisclaimer"><em>⚠️ Os nomes abaixo são apenas um exemplo provisório — serão substituídos pelas informações reais da equipe.</em></p>
                     <div class="standards-detail-grid">
                         <div class="standard-detail-card">
-                            <div class="standard-detail-header"><h4>Fulano da Silva (exemplo)</h4><span class="regulation-badge">Coordenação</span></div>
+                            <div class="standard-detail-header"><h4>Fulano da Silva (exemplo)</h4><span class="regulation-badge" data-i18n="about.roleCoordination">Coordenação</span></div>
                             <p data-i18n="about.developer1Desc">Professor(a) do PPGCI — UFRGS. Pesquisa em desempenho térmico e avaliação de ciclo de vida de sistemas construtivos.</p>
                         </div>
                         <div class="standard-detail-card">
-                            <div class="standard-detail-header"><h4>Beltrano de Souza (exemplo)</h4><span class="regulation-badge">Desenvolvimento</span></div>
-                            <p data-i18n="about.developer2Desc">Mestrando(a) no PPGCI — UFRGS. Responsável pelo desenvolvimento do aplicativo e modelagem dos sistemas construtivos.</p>
+                            <div class="standard-detail-header"><h4>Beltrano de Souza (exemplo)</h4><span class="regulation-badge" data-i18n="about.roleDevelopment">Desenvolvimento</span></div>
+                            <p data-i18n="about.developer2Desc">Mestrando(a) no PPGCI — UFRGS. Responsável pelo desenvolvimento da ferramenta de pesquisa e modelagem dos sistemas construtivos.</p>
                         </div>
                         <div class="standard-detail-card">
-                            <div class="standard-detail-header"><h4>Ciclano Pereira (exemplo)</h4><span class="regulation-badge">Pesquisa</span></div>
+                            <div class="standard-detail-header"><h4>Ciclano Pereira (exemplo)</h4><span class="regulation-badge" data-i18n="about.roleResearch">Pesquisa</span></div>
                             <p data-i18n="about.developer3Desc">Bolsista de iniciação científica no LIfE — UFRGS. Coleta de dados e validação dos indicadores ambientais.</p>
                         </div>
                     </div>
@@ -729,14 +756,16 @@
                 <div class="about-block">
                     <h3 class="about-block-title" data-i18n="about.referencesTitle">Referências</h3>
                     <div class="references-list">
-                        <p data-i18n="about.ref1">ABNT NBR 15575:2021 — Edificações Habitacionais — Desempenho.</p>
-                        <p data-i18n="about.ref2">ABNT NBR 15220:2005 — Desempenho Térmico de Edificações.</p>
-                        <p data-i18n="about.ref3">ASHRAE Standard 90.1-2022 — Energy Standard for Buildings Except Low-Rise Residential Buildings.</p>
-                        <p data-i18n="about.ref4">ISO 14040:2006 — Environmental Management — Life Cycle Assessment — Principles and Framework.</p>
-                        <p data-i18n="about.ref5">ISO 14044:2006 — Environmental Management — Life Cycle Assessment — Requirements and Guidelines.</p>
-                        <p data-i18n="about.ref6">EN 15978:2011 — Sustainability of Construction Works — Assessment of Environmental Performance of Buildings.</p>
-                        <p data-i18n="about.ref7">INMETRO. Regulamento Técnico da Qualidade para o Nível de Eficiência Energética de Edifícios Comerciais, de Serviço e Públicos (RTQ-C). 2021.</p>
-                        <p data-i18n="about.ref8">INMETRO. Regulamento Técnico da Qualidade para o Nível de Eficiência Energética de Edificações Residenciais (RTQ-R). 2012.</p>
+                        <p data-i18n="about.ref1">ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS. <strong>NBR 15575</strong>: edificações habitacionais — desempenho. Rio de Janeiro: ABNT, 2021.</p>
+                        <p data-i18n="about.ref2">ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS. <strong>NBR 15220</strong>: desempenho térmico de edificações. Rio de Janeiro: ABNT, 2005.</p>
+                        <p data-i18n="about.ref3">ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS. <strong>NBR ISO 14040</strong>: gestão ambiental — avaliação do ciclo de vida — princípios e estrutura. Rio de Janeiro: ABNT, 2009.</p>
+                        <p data-i18n="about.ref4">ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS. <strong>NBR ISO 14044</strong>: gestão ambiental — avaliação do ciclo de vida — requisitos e orientações. Rio de Janeiro: ABNT, 2009.</p>
+                        <p data-i18n="about.ref5">ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS. <strong>NBR ISO 21930</strong>: sustentabilidade em edificações e obras de engenharia civil — regras básicas para declarações ambientais de produtos de construção e serviços. Rio de Janeiro: ABNT, 2022.</p>
+                        <p data-i18n="about.ref6">AMERICAN SOCIETY OF HEATING, REFRIGERATING AND AIR-CONDITIONING ENGINEERS. <strong>ANSI/ASHRAE/IES Standard 90.1-2022</strong>: energy standard for sites and buildings except low-rise residential buildings. Atlanta: ASHRAE, 2022.</p>
+                        <p data-i18n="about.ref7">EUROPEAN COMMITTEE FOR STANDARDIZATION. <strong>EN 15978</strong>: sustainability of construction works — assessment of environmental performance of buildings — calculation method. Bruxelas: CEN, 2011.</p>
+                        <p data-i18n="about.ref8">INSTITUTO NACIONAL DE METROLOGIA, QUALIDADE E TECNOLOGIA. <strong>Portaria n.º 42, de 24 de fevereiro de 2021</strong>: instrução normativa Inmetro para a classificação de eficiência energética de edificações comerciais, de serviços e públicas (INI-C). Brasília: Inmetro, 2021.</p>
+                        <p data-i18n="about.ref9">INSTITUTO NACIONAL DE METROLOGIA, QUALIDADE E TECNOLOGIA. <strong>Portaria n.º 50, de 1.º de fevereiro de 2013</strong>: regulamento técnico da qualidade para o nível de eficiência energética de edificações residenciais (RTQ-R). Rio de Janeiro: Inmetro, 2012.</p>
+                        <p data-i18n="about.ref10">INSTITUTO NACIONAL DE METROLOGIA, QUALIDADE E TECNOLOGIA. <strong>Portaria n.º 372, de 17 de setembro de 2010</strong>: regulamento técnico da qualidade para o nível de eficiência energética de edifícios comerciais, de serviços e públicos (RTQ-C). Rio de Janeiro: Inmetro, 2010.</p>
                     </div>
                 </div>
             </div>
@@ -747,17 +776,17 @@
     <div class="modal" id="systemModal"><div class="modal-overlay"></div><div class="modal-content"><button class="modal-close" id="modalClose">&times;</button><div class="modal-body" id="modalBody"></div></div></div>
 
     <!-- Modal Cartilha -->
-    <div class="cartilha-modal" id="cartilhaModal"><div class="cartilha-container"><div class="cartilha-header"><div class="cartilha-header-logos"><img src="assets/logo_ufrgs.png" alt="UFRGS" class="cartilha-logo"><img src="assets/logo_life.png" alt="LIfE" class="cartilha-logo"></div><h2 id="cartilhaTitulo">Cartilha do Sistema</h2><div class="cartilha-actions"><button class="btn btn-outline" onclick="exportCartilhaToPDF()">📄 Exportar para PDF</button><button class="btn-close" onclick="closeCartilhaModal()">✕</button></div></div><div class="cartilha-content" id="cartilhaContent"></div></div></div>
+    <div class="cartilha-modal" id="cartilhaModal"><div class="cartilha-container"><div class="cartilha-header"><div class="cartilha-header-logos"><img src="assets/logo_ufrgs.png" alt="UFRGS" class="cartilha-logo"><img src="assets/logo_life.png" alt="LIfE" class="cartilha-logo"></div><h2 id="cartilhaTitulo">Cartilha do Sistema</h2><div class="cartilha-actions"><button class="btn btn-outline" onclick="printCartilha()" data-i18n="cartilha.print">🖨️ Imprimir</button><button class="btn btn-outline" onclick="exportCartilhaToPDF()" data-i18n="cartilha.exportPDF">📄 Exportar para PDF</button><button class="btn-close" onclick="closeCartilhaModal()">✕</button></div></div><div class="cartilha-content" id="cartilhaContent"></div></div></div>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-brand"><img src="assets/logo_e3build.png?v=20260517i" alt="E³ Build" class="footer-logo"></div>
+                <div class="footer-brand"><img src="assets/logo_e3build.png?v=20260806" alt="E³ Build" class="footer-logo"></div>
                 <div class="footer-partners">
-                    <img src="assets/Logo_2306.png" alt="LIfE Sustainability" class="footer-partner-logo">
-                    <img src="assets/images (2).png" alt="PPGCI" class="footer-partner-logo">
-                    <img src="assets/Logo_UFRGS_formato_SVG-01.svg.png" alt="UFRGS" class="footer-partner-logo">
+                    <a href="https://www.ufrgs.br/life-sustainability/" target="_blank" rel="noopener" class="partner-logo-link"><img src="assets/Logo_2306.png" alt="LIfE Sustainability" class="footer-partner-logo"></a>
+                    <a href="https://www.ufrgs.br/ppgec-ci/" target="_blank" rel="noopener" class="partner-logo-link"><img src="assets/images (2).png" alt="PPGCI" class="footer-partner-logo"></a>
+                    <a href="https://www.ufrgs.br/site/" target="_blank" rel="noopener" class="partner-logo-link"><img src="assets/Logo_UFRGS_formato_SVG-01.svg.png" alt="UFRGS" class="footer-partner-logo"></a>
                 </div>
                 <div class="footer-text"><p data-i18n="footer.copy">&copy; 2025 E³ Build - UFRGS/PPGCI. Energy, Environment, Envelope for Buildings.</p></div>
             </div>
@@ -767,10 +796,10 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="js/i18n.js?v=20260517i"></script>
-    <script src="js/auth.js?v=20260517i"></script>
-    <script src="js/data.js?v=20260517i"></script>
-    <script src="js/userSystems.js?v=20260517i"></script>
-    <script src="js/app.js?v=20260419"></script>
+    <script src="js/i18n.js?v=20260806"></script>
+    <script src="js/auth.js?v=20260806"></script>
+    <script src="js/data.js?v=20260806"></script>
+    <script src="js/userSystems.js?v=20260806"></script>
+    <script src="js/app.js?v=20260806"></script>
 </body>
 </html>
