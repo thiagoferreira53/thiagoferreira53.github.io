@@ -14,7 +14,7 @@
     <title>E³ Build - Análise de Sistemas Construtivos</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="assets/logo_e3build.png?v=20260806">
+    <link rel="icon" type="image/png" href="assets/logo_e3build.png?v=20260811">
     
     <!-- Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -25,7 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="css/styles.css?v=20260806">
+    <link rel="stylesheet" href="css/styles.css?v=20260811">
 </head>
 <body>
     <!-- Login Modal (popup, NOT a gate) -->
@@ -38,7 +38,7 @@
             <div class="login-panel login-panel-brand">
                 <span class="login-deco login-deco-tr"></span>
                 <span class="login-deco login-deco-bl"></span>
-                <img src="assets/logo_e3build.png?v=20260806" alt="E³ Build" class="login-brand-logo">
+                <img src="assets/logo_e3build.png?v=20260811" alt="E³ Build" class="login-brand-logo">
                 <h2 class="login-brand-welcome" data-i18n="login.welcomeSub">Seja bem-vindo ao E³ Build</h2>
                 <p class="login-brand-desc" data-i18n="login.welcomeDesc">Uma ferramenta para apoiar a tomada de decisão em projeto com base em desempenho ambiental e térmico de sistemas construtivos da envoltória.</p>
                 <a href="#" class="btn btn-outline login-brand-saiba" id="loginSaibaMaisBtn"><span data-i18n="login.saibaMais">SAIBA MAIS</span> <span aria-hidden="true">→</span></a>
@@ -90,45 +90,60 @@
                 <button type="button" class="popup-close" id="closeRegisterPopup">&times;</button>
             </div>
             <form class="popup-form" id="registerForm">
-                <div class="form-group">
-                    <label for="regFullName" data-i18n="register.fullName">Nome *</label>
-                    <input type="text" id="regFullName" name="fullName" required data-i18n-placeholder="register.fullNamePlaceholder" placeholder="Digite seu nome completo">
+                <p class="popup-intro" data-i18n="register.intro">Crie sua conta para salvar sistemas personalizados, comparações e notas de projeto.</p>
+
+                <div class="popup-section">
+                    <h3 class="popup-section-title" data-i18n="register.sectionAccess">Dados de acesso</h3>
+                    <div class="popup-grid">
+                        <div class="form-group popup-col-full">
+                            <label for="regFullName" data-i18n="register.fullName">Nome *</label>
+                            <input type="text" id="regFullName" name="fullName" required data-i18n-placeholder="register.fullNamePlaceholder" placeholder="Digite seu nome completo">
+                        </div>
+                        <div class="form-group popup-col-full">
+                            <label for="regEmail" data-i18n="register.email">E-mail *</label>
+                            <input type="email" id="regEmail" name="email" required data-i18n-placeholder="register.emailPlaceholder" placeholder="Digite seu e-mail">
+                            <small data-i18n="register.emailHint">O e-mail será utilizado para acessar a plataforma.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword" data-i18n="register.password">Senha *</label>
+                            <input type="password" id="regPassword" name="password" required data-i18n-placeholder="register.passwordPlaceholder" placeholder="Crie uma senha" minlength="6">
+                            <small data-i18n="register.passwordHint">Mínimo de 6 caracteres.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="regConfirmPassword" data-i18n="register.confirmPassword">Confirmar Senha *</label>
+                            <input type="password" id="regConfirmPassword" name="confirmPassword" required data-i18n-placeholder="register.confirmPasswordPlaceholder" placeholder="Confirme sua senha" minlength="6">
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="regEmail" data-i18n="register.email">E-mail *</label>
-                    <input type="email" id="regEmail" name="email" required data-i18n-placeholder="register.emailPlaceholder" placeholder="Digite seu e-mail">
-                    <small data-i18n="register.emailHint">O e-mail será utilizado para acessar a plataforma.</small>
+
+                <div class="popup-section">
+                    <h3 class="popup-section-title" data-i18n="register.sectionProfile">Perfil</h3>
+                    <div class="popup-grid">
+                        <div class="form-group">
+                            <label for="regInstitution" data-i18n="register.institution">Instituição *</label>
+                            <input type="text" id="regInstitution" name="institution" required data-i18n-placeholder="register.institutionPlaceholder" placeholder="ex: UFRGS, escritório, empresa">
+                        </div>
+                        <div class="form-group">
+                            <label for="regField" data-i18n="register.field">Ramo de atuação *</label>
+                            <input type="text" id="regField" name="field" required data-i18n-placeholder="register.fieldPlaceholder" placeholder="ex: Arquitetura, Engenharia Civil">
+                        </div>
+                        <div class="form-group popup-col-full">
+                            <label for="regSource" data-i18n="register.source">Como ficou sabendo do E³ Build? *</label>
+                            <select id="regSource" name="source" required>
+                                <option value="" data-i18n="register.sourceSelect">Selecione uma opção</option>
+                                <option value="professor" data-i18n="register.sourceProfessor">Indicação de professor(a)</option>
+                                <option value="colleague" data-i18n="register.sourceColleague">Indicação de colega ou amigo(a)</option>
+                                <option value="social" data-i18n="register.sourceSocial">Redes sociais</option>
+                                <option value="event" data-i18n="register.sourceEvent">Evento, curso ou congresso</option>
+                                <option value="publication" data-i18n="register.sourcePublication">Publicação científica</option>
+                                <option value="search" data-i18n="register.sourceSearch">Busca na internet</option>
+                                <option value="other" data-i18n="register.sourceOther">Outro</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="regPassword" data-i18n="register.password">Senha *</label>
-                    <input type="password" id="regPassword" name="password" required data-i18n-placeholder="register.passwordPlaceholder" placeholder="Crie uma senha" minlength="6">
-                </div>
-                <div class="form-group">
-                    <label for="regConfirmPassword" data-i18n="register.confirmPassword">Confirmar Senha *</label>
-                    <input type="password" id="regConfirmPassword" name="confirmPassword" required data-i18n-placeholder="register.confirmPasswordPlaceholder" placeholder="Confirme sua senha" minlength="6">
-                </div>
-                <div class="form-group">
-                    <label for="regInstitution" data-i18n="register.institution">Instituição *</label>
-                    <input type="text" id="regInstitution" name="institution" required data-i18n-placeholder="register.institutionPlaceholder" placeholder="ex: UFRGS, escritório, empresa">
-                </div>
-                <div class="form-group">
-                    <label for="regField" data-i18n="register.field">Ramo de atuação *</label>
-                    <input type="text" id="regField" name="field" required data-i18n-placeholder="register.fieldPlaceholder" placeholder="ex: Arquitetura, Engenharia Civil, Ensino/Pesquisa">
-                </div>
-                <div class="form-group">
-                    <label for="regSource" data-i18n="register.source">Como ficou sabendo do E³ Build? *</label>
-                    <select id="regSource" name="source" required>
-                        <option value="" data-i18n="register.sourceSelect">Selecione uma opção</option>
-                        <option value="professor" data-i18n="register.sourceProfessor">Indicação de professor(a)</option>
-                        <option value="colleague" data-i18n="register.sourceColleague">Indicação de colega ou amigo(a)</option>
-                        <option value="social" data-i18n="register.sourceSocial">Redes sociais</option>
-                        <option value="event" data-i18n="register.sourceEvent">Evento, curso ou congresso</option>
-                        <option value="publication" data-i18n="register.sourcePublication">Publicação científica</option>
-                        <option value="search" data-i18n="register.sourceSearch">Busca na internet</option>
-                        <option value="other" data-i18n="register.sourceOther">Outro</option>
-                    </select>
-                </div>
-                <div class="form-group form-check-group">
+
+                <div class="form-check-group">
                     <label class="form-check">
                         <input type="checkbox" id="regNewsletter" name="newsletter">
                         <span data-i18n="register.newsletter">Quero receber novidades sobre o E³ Build</span>
@@ -138,6 +153,7 @@
                         <span data-i18n="register.terms">Aceito os termos da plataforma *</span>
                     </label>
                 </div>
+
                 <div class="popup-actions">
                     <button type="submit" class="btn btn-primary btn-large" data-i18n="register.submit">Criar Conta</button>
                     <button type="button" class="btn btn-outline btn-large" id="cancelRegisterBtn" data-i18n="register.cancel">Cancelar</button>
@@ -159,7 +175,7 @@
     <nav class="navbar">
         <div class="nav-container">
             <a class="nav-brand" href="#" data-nav="home">
-                <img src="assets/logo_e3build.png?v=20260806" alt="E³ Build" class="brand-logo">
+                <img src="assets/logo_e3build.png?v=20260811" alt="E³ Build" class="brand-logo">
             </a>
             <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
                 <span></span><span></span><span></span>
@@ -224,7 +240,7 @@
                 </div>
                 <div class="hero-image">
                     <div class="logos-container">
-                        <img src="assets/logo_e3build.png?v=20260806" alt="E³ Build" class="partner-logo partner-logo-main">
+                        <img src="assets/logo_e3build.png?v=20260811" alt="E³ Build" class="partner-logo partner-logo-main">
                     </div>
                 </div>
             </div>
@@ -301,14 +317,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Partner logos -->
-            <div class="container home-partner-logos">
-                <div class="partner-logos-row">
-                    <a href="https://www.ufrgs.br/life-sustainability/" target="_blank" rel="noopener" class="partner-logo-link" title="LIfE — Life Cycle Innovation for the Built Environment"><img src="assets/Logo_2306.png" alt="LIfE Sustainability" class="partner-logo partner-logo-life-secondary"></a>
-                    <a href="https://www.ufrgs.br/ppgec-ci/" target="_blank" rel="noopener" class="partner-logo-link" title="PPGCI — UFRGS"><img src="assets/images (2).png" alt="PPGCI" class="partner-logo partner-logo-ppgci"></a>
-                    <a href="https://www.ufrgs.br/site/" target="_blank" rel="noopener" class="partner-logo-link" title="Universidade Federal do Rio Grande do Sul"><img src="assets/Logo_UFRGS_formato_SVG-01.svg.png" alt="UFRGS" class="partner-logo partner-logo-ufrgs-home"></a>
-                </div>
-            </div>
         </section>
     </div>
 
@@ -321,7 +329,6 @@
                     <p class="section-description" data-i18n="systems.expandP1">Consulte diferentes sistemas construtivos de vedação vertical opaca, como paredes de concreto maciço, blocos de concreto, blocos cerâmicos e sistemas em drywall.</p>
                     <p class="section-description" data-i18n="systems.expandP2">Para cada sistema, são apresentadas informações de desempenho térmico e impactos ambientais, auxiliando na comparação e na tomada de decisão em projeto.</p>
                     <p class="section-description" data-i18n="systems.subtitle">Sistemas de Vedação Vertical Externa são partes da edificação habitacional que limitam verticalmente a edificação e seus ambientes.</p>
-                    <p class="section-description" style="margin-top: var(--space-xl);" data-i18n="systems.cta">Verifique as informações de desempenho térmico e os impactos ambientais do sistema construtivo.</p>
                     <div class="color-legend">
                         <div class="legend-item"><span class="legend-color legend-concrete"></span><span data-i18n="systems.concrete">Bloco de concreto</span></div>
                         <div class="legend-item"><span class="legend-color legend-ceramic"></span><span data-i18n="systems.ceramic">Bloco de cerâmica</span></div>
@@ -782,7 +789,7 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-brand"><img src="assets/logo_e3build.png?v=20260806" alt="E³ Build" class="footer-logo"></div>
+                <div class="footer-brand"><img src="assets/logo_e3build.png?v=20260811" alt="E³ Build" class="footer-logo"></div>
                 <div class="footer-partners">
                     <a href="https://www.ufrgs.br/life-sustainability/" target="_blank" rel="noopener" class="partner-logo-link"><img src="assets/Logo_2306.png" alt="LIfE Sustainability" class="footer-partner-logo"></a>
                     <a href="https://www.ufrgs.br/ppgec-ci/" target="_blank" rel="noopener" class="partner-logo-link"><img src="assets/images (2).png" alt="PPGCI" class="footer-partner-logo"></a>
@@ -796,10 +803,10 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="js/i18n.js?v=20260806"></script>
-    <script src="js/auth.js?v=20260806"></script>
-    <script src="js/data.js?v=20260806"></script>
-    <script src="js/userSystems.js?v=20260806"></script>
-    <script src="js/app.js?v=20260806"></script>
+    <script src="js/i18n.js?v=20260811"></script>
+    <script src="js/auth.js?v=20260811"></script>
+    <script src="js/data.js?v=20260811"></script>
+    <script src="js/userSystems.js?v=20260811"></script>
+    <script src="js/app.js?v=20260811"></script>
 </body>
 </html>

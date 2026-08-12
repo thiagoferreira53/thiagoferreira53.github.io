@@ -224,6 +224,9 @@
     }
     window.renderSystems = renderSystems;
 
+    // Ícone "abrir em nova aba" — usado nos cards e nas tabelas de comparação
+    const NEW_TAB_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"></path><path d="M20 4l-8.5 8.5"></path><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"></path></svg>';
+
     function createSystemCard(system) {
         const idx = dataManager.systems.indexOf(system);
         const isCustom = system.custom === true;
@@ -241,8 +244,8 @@
 
         return `
         <div class="system-card ${typeClass}" onclick="showSystemDetail(${idx})">
-            <button class="card-expand-btn" data-tooltip="${i18n.t('tooltip.moreInfo')}" aria-label="${i18n.t('tooltip.moreInfo')}" onclick="event.stopPropagation(); openCartilhaModal(${idx})">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+            <button class="card-expand-btn" data-tooltip="${i18n.t('tooltip.moreInfo')}" title="${i18n.t('tooltip.moreInfo')}" aria-label="${i18n.t('tooltip.moreInfo')}" onclick="event.stopPropagation(); openCartilhaModal(${idx})">
+                ${NEW_TAB_ICON}
             </button>
             ${isCustom ? `<span class="badge-custom">Custom</span>` : ''}
             ${imageHtml}
@@ -588,15 +591,66 @@
     function thermalSystemCell(sys) {
         const idx = dataManager.systems.indexOf(sys);
         const tip = i18n.t('tooltip.moreInfo');
-        const preview = sys.imagem
-            ? `<span class="row-preview"><button class="row-preview-expand" data-tooltip="${tip}" aria-label="${tip}" onclick="event.stopPropagation(); openCartilhaModal(${idx})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg></button><img src="${sys.imagem}" alt="${tData(sys.nome)}" loading="lazy"></span>`
-            : '';
-        return `<td class="system-name-cell">
+        return `<td class="system-name-cell" data-system-idx="${idx}">
             <span class="row-name" onclick="showSystemDetail(${idx})">${tData(sys.nome)}</span>
-            <button class="row-expand-btn" data-tooltip="${tip}" aria-label="${tip}" onclick="event.stopPropagation(); openCartilhaModal(${idx})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg></button>
-            ${preview}
+            <button class="row-expand-btn" title="${tip}" aria-label="${tip}" onclick="event.stopPropagation(); openCartilhaModal(${idx})">${NEW_TAB_ICON}</button>
         </td>`;
     }
+
+    // ---- Painel flutuante com a figura do sistema (fora do container da tabela) ----
+    let hoverPreviewEl = null;
+
+    function getHoverPreviewEl() {
+        if (!hoverPreviewEl) {
+            hoverPreviewEl = document.createElement('div');
+            hoverPreviewEl.className = 'floating-preview';
+            hoverPreviewEl.innerHTML = '<img alt=""><span class="floating-preview-caption"></span>';
+            document.body.appendChild(hoverPreviewEl);
+        }
+        return hoverPreviewEl;
+    }
+
+    function showHoverPreview(cell) {
+        const idx = parseInt(cell.dataset.systemIdx);
+        const sys = dataManager.systems[idx];
+        if (!sys?.imagem) return;
+
+        const el = getHoverPreviewEl();
+        const img = el.querySelector('img');
+        if (img.getAttribute('src') !== sys.imagem) img.src = sys.imagem;
+        el.querySelector('.floating-preview-caption').textContent = tData(sys.nome);
+        el.classList.add('visible');
+
+        const place = () => {
+            const r = cell.getBoundingClientRect();
+            const width = el.offsetWidth || 280;
+            const height = el.offsetHeight || 220;
+            let left = r.right + 12;
+            if (left + width > window.innerWidth - 12) left = Math.max(12, r.left - width - 12);
+            let top = r.top + r.height / 2 - height / 2;
+            top = Math.min(Math.max(12, top), window.innerHeight - height - 12);
+            el.style.left = `${left}px`;
+            el.style.top = `${top}px`;
+        };
+        place();
+        // Reposiciona depois que a imagem carrega (a altura muda)
+        if (!img.complete) img.onload = place; else requestAnimationFrame(place);
+    }
+    window.hideSystemPreview = () => hideHoverPreview();
+
+    function hideHoverPreview() {
+        hoverPreviewEl?.classList.remove('visible');
+    }
+
+    document.addEventListener('mouseover', (e) => {
+        const cell = e.target.closest('.system-name-cell[data-system-idx]');
+        if (cell) showHoverPreview(cell);
+    });
+    document.addEventListener('mouseout', (e) => {
+        const cell = e.target.closest('.system-name-cell[data-system-idx]');
+        if (cell && !cell.contains(e.relatedTarget)) hideHoverPreview();
+    });
+    window.addEventListener('scroll', hideHoverPreview, true);
 
     function buildThermalTable(systems, norm, normName, numZones, evaluateFn) {
         let html = `<h3 style="text-align:center;margin:2rem 0 1rem;">${i18n.t('compare.thermalResultsTitle')} — ${normName}</h3>`;
@@ -840,7 +894,7 @@
         // Cabeçalho com logos (o logo da UFRGS não vai para a impressão/PDF)
         html += `<div class="cartilha-logos-row">
             <img src="assets/logo_ufrgs.png" alt="UFRGS" class="cartilha-inline-logo no-print">
-            <img src="assets/logo_e3build.png?v=20260806" alt="E³ Build" class="cartilha-inline-logo">
+            <img src="assets/logo_e3build.png?v=20260811" alt="E³ Build" class="cartilha-inline-logo">
             <img src="assets/Logo_2306.png" alt="LIfE" class="cartilha-inline-logo">
         </div>`;
 
@@ -893,6 +947,9 @@
         html += `<h3 class="sheet-section-title">${i18n.t('cartilha.standards')}</h3>`;
         html += buildComplianceMatrix(system);
 
+        // Rodapé: propriedade intelectual e forma de citação
+        html += buildSheetFooter(system);
+
         html += `</div>`;
 
         if (opts.showActions && opts.idx != null) {
@@ -902,6 +959,22 @@
         }
 
         return html;
+    }
+
+    /** Rodapé da ficha: direitos autorais, uso permitido e como citar. */
+    function buildSheetFooter(system) {
+        const today = new Date().toLocaleDateString(i18n.getLang() === 'en' ? 'en-GB' : 'pt-BR');
+        const year = new Date().getFullYear();
+        const url = 'https://thiagoferreira53.github.io/LIfEapp5/';
+        const citation = i18n.getLang() === 'en'
+            ? `LIfE — Life Cycle Innovation for the Built Environment. <strong>E³ Build</strong>: environmental and thermal performance of opaque external wall systems — ${tData(system.nome)}. Version 5.0. Porto Alegre: PPGCI/UFRGS, ${year}. Available at: ${url}. Accessed on: ${today}.`
+            : `LIfE — Life Cycle Innovation for the Built Environment. <strong>E³ Build</strong>: desempenho ambiental e térmico de sistemas de vedação vertical externa opaca — ${tData(system.nome)}. Versão 5.0. Porto Alegre: PPGCI/UFRGS, ${year}. Disponível em: ${url}. Acesso em: ${today}.`;
+
+        return `<div class="sheet-footer">
+            <div class="sheet-citation"><strong>${i18n.t('cartilha.howToCite')}</strong><p>${citation}</p></div>
+            <p class="sheet-copyright">${i18n.t('cartilha.copyright')}</p>
+            <p class="sheet-ip">${i18n.t('cartilha.ipNotice')}</p>
+        </div>`;
     }
 
     // ---- Gráficos da ficha (barras empilhadas 100% por categoria) ----
@@ -987,14 +1060,27 @@
         lastComparisonSystems = systems;
 
         // Tabela 1: características do sistema · Tabela 2: impacto ambiental
+        const today = new Date().toLocaleDateString(i18n.getLang() === 'en' ? 'en-GB' : 'pt-BR');
         let html = `<div id="comparisonPrintArea">`;
-        html += `<h3>${i18n.t('compare.results')}</h3>`;
+        html += `<div class="print-only print-header">
+            <img src="assets/logo_e3build.png?v=20260811" alt="E³ Build" class="print-header-logo">
+            <div class="print-header-text">
+                <strong>${i18n.t('compare.results')}</strong>
+                <span>${systems.map(s => tData(s.nome)).join('  ·  ')}</span>
+                <span>${i18n.t('compare.printedOn')} ${today}</span>
+            </div>
+        </div>`;
+        html += `<h3 class="no-print-title">${i18n.t('compare.results')}</h3>`;
         html += createComparisonTable(systems);
         html += `<h3 class="comparison-subtitle">${i18n.t('compare.envTitle')}</h3>`;
         html += createEnvironmentalTable(systems);
         html += buildAcronymsLegend();
         html += `<div class="comparison-charts">${createComparisonCharts(systems, 'ind')}</div>`;
         html += createStandardsComplianceTable(systems);
+        html += `<div class="print-only sheet-footer">
+            <p class="sheet-copyright">${i18n.t('cartilha.copyright')}</p>
+            <p class="sheet-ip">${i18n.t('cartilha.ipNotice')}</p>
+        </div>`;
         html += `</div>`;
         resultsDiv.innerHTML = html;
 
@@ -1028,13 +1114,8 @@
     window.printComparison = function () {
         const results = document.getElementById('groupComparisonResults');
         if (!results || results.style.display === 'none') return;
-        document.body.classList.add('printing-compare');
-        const cleanup = () => {
-            document.body.classList.remove('printing-compare');
-            window.removeEventListener('afterprint', cleanup);
-        };
-        window.addEventListener('afterprint', cleanup);
-        setTimeout(() => { window.print(); setTimeout(cleanup, 1000); }, 100);
+        // Paisagem: as tabelas de comparação são largas
+        runPrint('printing-compare', '@page { size: A4 landscape; margin: 10mm; }');
     };
 
     /** Meus Projetos 2: reabrir uma comparação salva já configurada. */
@@ -1319,53 +1400,81 @@
     // ===================================================================
     //  Impressão e exportação da cartilha
     // ===================================================================
-    window.printCartilha = function () {
-        document.body.classList.add('printing-cartilha');
+    /** Define a orientação da folha durante a impressão (removida ao final). */
+    function setPrintPageStyle(css) {
+        let el = document.getElementById('printPageStyle');
+        if (!el) {
+            el = document.createElement('style');
+            el.id = 'printPageStyle';
+            document.head.appendChild(el);
+        }
+        el.textContent = css;
+    }
+    function clearPrintPageStyle() {
+        document.getElementById('printPageStyle')?.remove();
+    }
+
+    function runPrint(bodyClass, pageCss) {
+        document.body.classList.add(bodyClass);
+        setPrintPageStyle(pageCss);
         const cleanup = () => {
-            document.body.classList.remove('printing-cartilha');
+            document.body.classList.remove(bodyClass);
+            clearPrintPageStyle();
             window.removeEventListener('afterprint', cleanup);
         };
         window.addEventListener('afterprint', cleanup);
-        setTimeout(() => { window.print(); setTimeout(cleanup, 1000); }, 100);
+        setTimeout(() => { window.print(); setTimeout(cleanup, 1000); }, 150);
+    }
+
+    window.printCartilha = function () {
+        runPrint('printing-cartilha', '@page { size: A4 portrait; margin: 12mm; }');
     };
 
+    /**
+     * Gera o PDF a partir de uma cópia da ficha renderizada em um container
+     * com largura fixa de A4 — evita o desalinhamento causado pelo modal.
+     * Os gráficos (canvas) são convertidos em imagem, pois um canvas clonado
+     * seria exportado em branco.
+     */
     window.exportCartilhaToPDF = function () {
-        const content = document.getElementById('cartilhaContent');
-        if (!content) return;
+        const source = document.getElementById('cartilhaContent');
+        if (!source) return;
 
-        // Elementos marcados como .no-print (ex.: logo da UFRGS) ficam fora do PDF
-        const hidden = Array.from(content.querySelectorAll('.no-print'));
-        hidden.forEach(el => { el.dataset.prevDisplay = el.style.display; el.style.display = 'none'; });
+        const wrapper = document.createElement('div');
+        wrapper.className = 'pdf-render-root';
 
-        // Tamanho fixo dos gráficos no PDF (largura útil do A4 retrato)
-        content.classList.add('pdf-export');
-        try { sheetChartRegistry['cartilha']?.resize(); } catch (e) { /* noop */ }
+        const clone = source.cloneNode(true);
+        clone.classList.add('pdf-export');
+        clone.querySelectorAll('.no-print').forEach(el => el.remove());
+
+        // canvas -> imagem (mantendo a proporção do gráfico)
+        const sourceCanvases = source.querySelectorAll('canvas');
+        clone.querySelectorAll('canvas').forEach((canvas, i) => {
+            const original = sourceCanvases[i];
+            if (!original) { canvas.remove(); return; }
+            const img = document.createElement('img');
+            try { img.src = original.toDataURL('image/png', 1.0); } catch (e) { canvas.remove(); return; }
+            img.className = 'pdf-chart-img';
+            canvas.parentNode.replaceChild(img, canvas);
+        });
+
+        wrapper.appendChild(clone);
+        document.body.appendChild(wrapper);
 
         const name = currentCartilhaSystem ? tData(currentCartilhaSystem.nome).replace(/[^\w\-]+/g, '_') : 'sistema';
         const opt = {
-            margin: [10, 10, 12, 10],
+            margin: [12, 12, 14, 12],
             filename: `cartilha_${name}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true, windowWidth: 900 },
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', scrollX: 0, scrollY: 0, windowWidth: 794 },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['css', 'legacy'], avoid: ['table', '.sheet-chart-wrap', '.cartilha-image', 'tr'] }
+            pagebreak: { mode: ['css', 'legacy'], avoid: ['table', 'tr', '.pdf-chart-img', '.cartilha-image', '.sheet-footer', '.sheet-grid'] }
         };
 
-        // Aguarda o redesenho do gráfico no novo tamanho antes de capturar
-        const restore = () => {
-            content.classList.remove('pdf-export');
-            hidden.forEach(el => { el.style.display = el.dataset.prevDisplay || ''; delete el.dataset.prevDisplay; });
-            try { sheetChartRegistry['cartilha']?.resize(); } catch (e) { /* noop */ }
-        };
-
-        setTimeout(() => {
-            html2pdf().set(opt).from(content).save().then(restore).catch(restore);
-        }, 300);
+        const cleanup = () => wrapper.remove();
+        html2pdf().set(opt).from(clone).save().then(cleanup).catch(cleanup);
     };
 
-    // ===================================================================
-    //  Create System – Component Selector
-    // ===================================================================
     // ===================================================================
     //  Create System – Builder
     // ===================================================================
