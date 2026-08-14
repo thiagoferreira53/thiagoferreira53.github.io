@@ -297,8 +297,8 @@ const translations = {
 
         // About / Saiba Mais Section
         'about.title': 'Saiba Mais',
-        'about.introTitle': 'Sobre o E³ Build',
-        'about.text1': 'E³ Build (Energy, Environment, Envelope) é uma ferramenta de pesquisa desenvolvida para avaliar impactos ambientais e desempenho térmico de sistemas de vedação vertical externa opaca.',
+        'about.introTitle': 'Sobre o BE³ Build',
+        'about.text1': 'BE³ Build (Energy, Environment, Envelope) é uma ferramenta de pesquisa desenvolvida para avaliar impactos ambientais e desempenho térmico de sistemas de vedação vertical externa opaca.',
         'about.text2': 'O banco de dados inclui dados completos de avaliação de ciclo de vida para sistemas construtivos, cobrindo impactos da fase de produção (A1-A3) e métricas de desempenho térmico incluindo valores de transmitância térmica (U) e capacidade térmica (CT).',
         'about.text3': 'A ferramenta foi desenvolvida no LIfE — <em>Life Cycle Innovation for the Built Environment</em>, grupo vinculado ao Programa de Pós-Graduação em Engenharia Civil (PPGCI) da Universidade Federal do Rio Grande do Sul (UFRGS).',
         'about.lcaTitle': 'Desempenho ambiental',
@@ -390,11 +390,11 @@ const translations = {
         // Login Modal
         'login.title': 'Login',
         'login.subtitle': 'Plataforma de Análise de Sistemas Construtivos',
-        'login.welcomeBack': 'Seja bem-vindo ao E³ Build',
-        'login.welcomeSub': 'Seja bem-vindo ao E³ Build',
+        'login.welcomeBack': 'Seja bem-vindo ao BE³ Build',
+        'login.welcomeSub': 'Seja bem-vindo ao BE³ Build',
         'login.welcomeDesc': 'Uma ferramenta para apoiar a tomada de decisão em projeto com base em desempenho ambiental e térmico de sistemas construtivos da envoltória.',
         'login.saibaMais': 'SAIBA MAIS',
-        'login.formSubtitle': 'Entre com suas credenciais para acessar o E³ Build.',
+        'login.formSubtitle': 'Entre com suas credenciais para acessar o BE³ Build.',
         'login.username': 'Usuário',
         'login.usernamePlaceholder': 'Digite seu usuário',
         'login.email': 'E-mail',
@@ -429,7 +429,7 @@ const translations = {
         'register.institutionPlaceholder': 'ex: UFRGS, escritório, empresa',
         'register.field': 'Ramo de atuação *',
         'register.fieldPlaceholder': 'ex: Arquitetura, Engenharia Civil, Ensino/Pesquisa',
-        'register.source': 'Como ficou sabendo do E³ Build? *',
+        'register.source': 'Como ficou sabendo do BE³ Build? *',
         'register.sourceSelect': 'Selecione uma opção',
         'register.sourceProfessor': 'Indicação de professor(a)',
         'register.sourceColleague': 'Indicação de colega ou amigo(a)',
@@ -438,7 +438,7 @@ const translations = {
         'register.sourcePublication': 'Publicação científica',
         'register.sourceSearch': 'Busca na internet',
         'register.sourceOther': 'Outro',
-        'register.newsletter': 'Quero receber novidades sobre o E³ Build',
+        'register.newsletter': 'Quero receber novidades sobre o BE³ Build',
         'register.terms': 'Aceito os termos da plataforma *',
         'register.errorTerms': 'É necessário aceitar os termos da plataforma.',
         'register.submit': 'Criar Conta',
@@ -449,10 +449,10 @@ const translations = {
         'register.errorEmail': 'E-mail já cadastrado',
 
         // Footer
-        'footer.copy': '© 2025 E³ Build - UFRGS/PPGCI. Energy, Environment, Envelope for Buildings.',
+        'footer.copy': '© 2025 BE³ Build - UFRGS/PPGCI. Energy, Environment, Envelope for Buildings.',
 
         // Misc
-        'loading.title': 'E³ Build',
+        'loading.title': 'BE³ Build',
         'loading.subtitle': 'Carregando dados...',
         'loading.error': 'Erro ao carregar dados',
         'loading.retry': 'Por favor, recarregue a página',
@@ -783,8 +783,8 @@ const translations = {
 
         // About / Learn More Section
         'about.title': 'Learn More',
-        'about.introTitle': 'About E³ Build',
-        'about.text1': 'E³ Build (Energy, Environment, Envelope) is a research tool developed to evaluate environmental impacts and thermal performance of opaque external vertical cladding systems.',
+        'about.introTitle': 'About BE³ Build',
+        'about.text1': 'BE³ Build (Energy, Environment, Envelope) is a research tool developed to evaluate environmental impacts and thermal performance of opaque external vertical cladding systems.',
         'about.text2': 'The database includes complete life cycle assessment data for building systems, covering production phase impacts (A1-A3) and thermal performance metrics including thermal transmittance (U-value) and thermal capacity (CT).',
         'about.text3': 'The tool was developed at LIfE — <em>Life Cycle Innovation for the Built Environment</em>, a research group linked to the Graduate Program in Civil Engineering (PPGCI) at the Federal University of Rio Grande do Sul (UFRGS).',
         'about.lcaTitle': 'Environmental performance',
@@ -876,11 +876,11 @@ const translations = {
         // Login Modal
         'login.title': 'Login',
         'login.subtitle': 'Building Systems Analysis Platform',
-        'login.welcomeBack': 'Welcome to E³ Build',
-        'login.welcomeSub': 'Welcome to E³ Build',
+        'login.welcomeBack': 'Welcome to BE³ Build',
+        'login.welcomeSub': 'Welcome to BE³ Build',
         'login.welcomeDesc': 'A tool to support design decision-making based on the environmental and thermal performance of building envelope systems.',
         'login.saibaMais': 'LEARN MORE',
-        'login.formSubtitle': 'Enter your credentials to access E³ Build.',
+        'login.formSubtitle': 'Enter your credentials to access BE³ Build.',
         'login.username': 'Username',
         'login.usernamePlaceholder': 'Enter your username',
         'login.email': 'E-mail',
@@ -915,7 +915,7 @@ const translations = {
         'register.institutionPlaceholder': 'e.g. UFRGS, office, company',
         'register.field': 'Field of work *',
         'register.fieldPlaceholder': 'e.g. Architecture, Civil Engineering, Teaching/Research',
-        'register.source': 'How did you hear about E³ Build? *',
+        'register.source': 'How did you hear about BE³ Build? *',
         'register.sourceSelect': 'Select an option',
         'register.sourceProfessor': 'Recommended by a professor',
         'register.sourceColleague': 'Recommended by a colleague or friend',
@@ -924,7 +924,7 @@ const translations = {
         'register.sourcePublication': 'Scientific publication',
         'register.sourceSearch': 'Internet search',
         'register.sourceOther': 'Other',
-        'register.newsletter': 'I want to receive news about E³ Build',
+        'register.newsletter': 'I want to receive news about BE³ Build',
         'register.terms': 'I accept the platform terms *',
         'register.errorTerms': 'You must accept the platform terms.',
         'register.submit': 'Create Account',
@@ -935,10 +935,10 @@ const translations = {
         'register.errorEmail': 'Email already registered',
 
         // Footer
-        'footer.copy': '© 2025 E³ Build - UFRGS/PPGCI. Energy, Environment, Envelope for Buildings.',
+        'footer.copy': '© 2025 BE³ Build - UFRGS/PPGCI. Energy, Environment, Envelope for Buildings.',
 
         // Misc
-        'loading.title': 'E³ Build',
+        'loading.title': 'BE³ Build',
         'loading.subtitle': 'Loading data...',
         'loading.error': 'Error loading data',
         'loading.retry': 'Please reload the page',

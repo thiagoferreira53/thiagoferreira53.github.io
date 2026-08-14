@@ -1,4 +1,4 @@
-// ===== E³ Build – Main Application =====
+// ===== BE³ Build – Main Application =====
 // SPA router, system rendering, comparison, cartilha, charts, PDF export
 
 (function () {
@@ -894,7 +894,7 @@
         // Cabeçalho com logos (o logo da UFRGS não vai para a impressão/PDF)
         html += `<div class="cartilha-logos-row">
             <img src="assets/logo_ufrgs.png" alt="UFRGS" class="cartilha-inline-logo no-print">
-            <img src="assets/logo_e3build.png?v=20260811" alt="E³ Build" class="cartilha-inline-logo">
+            <img src="assets/logo_e3build.png?v=20260811" alt="BE³ Build" class="cartilha-inline-logo">
             <img src="assets/Logo_2306.png" alt="LIfE" class="cartilha-inline-logo">
         </div>`;
 
@@ -967,8 +967,8 @@
         const year = new Date().getFullYear();
         const url = 'https://thiagoferreira53.github.io/LIfEapp5/';
         const citation = i18n.getLang() === 'en'
-            ? `LIfE — Life Cycle Innovation for the Built Environment. <strong>E³ Build</strong>: environmental and thermal performance of opaque external wall systems — ${tData(system.nome)}. Version 5.0. Porto Alegre: PPGCI/UFRGS, ${year}. Available at: ${url}. Accessed on: ${today}.`
-            : `LIfE — Life Cycle Innovation for the Built Environment. <strong>E³ Build</strong>: desempenho ambiental e térmico de sistemas de vedação vertical externa opaca — ${tData(system.nome)}. Versão 5.0. Porto Alegre: PPGCI/UFRGS, ${year}. Disponível em: ${url}. Acesso em: ${today}.`;
+            ? `LIfE — Life Cycle Innovation for the Built Environment. <strong>BE³ Build</strong>: environmental and thermal performance of opaque external wall systems — ${tData(system.nome)}. Version 5.0. Porto Alegre: PPGCI/UFRGS, ${year}. Available at: ${url}. Accessed on: ${today}.`
+            : `LIfE — Life Cycle Innovation for the Built Environment. <strong>BE³ Build</strong>: desempenho ambiental e térmico de sistemas de vedação vertical externa opaca — ${tData(system.nome)}. Versão 5.0. Porto Alegre: PPGCI/UFRGS, ${year}. Disponível em: ${url}. Acesso em: ${today}.`;
 
         return `<div class="sheet-footer">
             <div class="sheet-citation"><strong>${i18n.t('cartilha.howToCite')}</strong><p>${citation}</p></div>
@@ -1063,7 +1063,7 @@
         const today = new Date().toLocaleDateString(i18n.getLang() === 'en' ? 'en-GB' : 'pt-BR');
         let html = `<div id="comparisonPrintArea">`;
         html += `<div class="print-only print-header">
-            <img src="assets/logo_e3build.png?v=20260811" alt="E³ Build" class="print-header-logo">
+            <img src="assets/logo_e3build.png?v=20260811" alt="BE³ Build" class="print-header-logo">
             <div class="print-header-text">
                 <strong>${i18n.t('compare.results')}</strong>
                 <span>${systems.map(s => tData(s.nome)).join('  ·  ')}</span>

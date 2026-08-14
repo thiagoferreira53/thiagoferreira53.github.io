@@ -53,7 +53,7 @@ Para cada usuário, são salvos os seguintes campos:
 - **email**: Endereço de e-mail (usado para fazer login)
 - **institution**: Instituição (universidade, escritório, empresa)
 - **field**: Ramo de atuação
-- **source**: Como ficou sabendo do E³ Build (professor, colleague, social, event, publication, search, other)
+- **source**: Como ficou sabendo do BE³ Build (professor, colleague, social, event, publication, search, other)
 - **newsletter**: Se aceitou receber novidades (true/false)
 - **terms**: Aceite dos termos da plataforma (obrigatório para concluir o cadastro)
 - **registeredAt**: Data e hora do registro
