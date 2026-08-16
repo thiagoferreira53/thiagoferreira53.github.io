@@ -961,11 +961,21 @@
         return html;
     }
 
+    /**
+     * Endereço público onde o app está publicado — usado na citação.
+     * Lido da própria URL, então acompanha qualquer mudança de hospedagem.
+     */
+    function getAppUrl() {
+        const { origin, pathname } = window.location;
+        if (!/^https?:/.test(origin || '')) return 'https://be3-app.github.io/';
+        return origin + pathname.replace(/[^/]*$/, '');
+    }
+
     /** Rodapé da ficha: direitos autorais, uso permitido e como citar. */
     function buildSheetFooter(system) {
         const today = new Date().toLocaleDateString(i18n.getLang() === 'en' ? 'en-GB' : 'pt-BR');
         const year = new Date().getFullYear();
-        const url = 'https://thiagoferreira53.github.io/LIfEapp5/';
+        const url = getAppUrl();
         const citation = i18n.getLang() === 'en'
             ? `LIfE — Life Cycle Innovation for the Built Environment. <strong>BE³ Build</strong>: environmental and thermal performance of opaque external wall systems — ${tData(system.nome)}. Version 5.0. Porto Alegre: PPGCI/UFRGS, ${year}. Available at: ${url}. Accessed on: ${today}.`
             : `LIfE — Life Cycle Innovation for the Built Environment. <strong>BE³ Build</strong>: desempenho ambiental e térmico de sistemas de vedação vertical externa opaca — ${tData(system.nome)}. Versão 5.0. Porto Alegre: PPGCI/UFRGS, ${year}. Disponível em: ${url}. Acesso em: ${today}.`;
