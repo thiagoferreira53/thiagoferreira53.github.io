@@ -8,7 +8,9 @@ class DataManager {
             ashrae_commercial: null,
             nbr15575: null,
             rtqc: null,
-            rtqr: null
+            rtqr: null,
+            inir: null,
+            inic: null
         };
         this.loaded = false;
     }
@@ -39,6 +41,9 @@ class DataManager {
                 this.regulations.nbr15575 = nbr;
                 this.regulations.rtqc = rtqc;
                 this.regulations.rtqr = rtqr;
+                // INI-R usa os limites da NBR 15575; INI-C, as classes do RTQ-C (sem arquivo próprio)
+                this.regulations.inir = nbr;
+                this.regulations.inic = rtqc;
             } catch (e) {
                 console.warn('Some regulations data could not be loaded:', e);
             }

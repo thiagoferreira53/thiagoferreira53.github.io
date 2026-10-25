@@ -244,7 +244,7 @@
 
         return `
         <div class="system-card ${typeClass}" onclick="showSystemDetail(${idx})">
-            <button class="card-expand-btn" data-tooltip="${i18n.t('tooltip.moreInfo')}" title="${i18n.t('tooltip.moreInfo')}" aria-label="${i18n.t('tooltip.moreInfo')}" onclick="event.stopPropagation(); openCartilhaModal(${idx})">
+            <button class="card-expand-btn" data-fly-tip="${i18n.t('tooltip.moreInfo')}" aria-label="${i18n.t('tooltip.moreInfo')}" onclick="event.stopPropagation(); openCartilhaModal(${idx})">
                 ${NEW_TAB_ICON}
             </button>
             ${isCustom ? `<span class="badge-custom">Custom</span>` : ''}
@@ -467,7 +467,7 @@
 
         const systems = dataManager.systems.filter(s => !s.custom);
         const isASHRAE = normKey.startsWith('ashrae');
-        const isRTQC = normKey === 'rtqc';
+        const isRTQC = normKey === 'rtqc' || normKey === 'inic';
 
         const results = systems.map(sys => {
             let status = '';
@@ -564,6 +564,14 @@
                 const minCT = zona.capacidade_minima || 0;
                 return sys.transmitancia <= maxU && sys.capacidade_termica >= minCT;
             });
+        } else if (normKey === 'inir' && regs.inir) {
+            html = buildThermalTable(systems, regs.inir, 'INI-R', 8, (sys, zona) => {
+                const maxU = zona.transmitancia_maxima?.inferior_limite || 999;
+                const minCT = zona.capacidade_minima || 0;
+                return sys.transmitancia <= maxU && sys.capacidade_termica >= minCT;
+            });
+        } else if (normKey === 'inic' && regs.inic) {
+            html = buildRTQCTable(systems, regs.inic, 'INI-C');
         } else if (normKey === 'rtqr' && regs.rtqr) {
             html = buildThermalTable(systems, regs.rtqr, 'RTQ-R', 8, (sys, zona) => {
                 const maxU = zona.transmitancia_maxima?.inferior_limite || 999;
@@ -593,7 +601,7 @@
         const tip = i18n.t('tooltip.moreInfo');
         return `<td class="system-name-cell" data-system-idx="${idx}">
             <span class="row-name" onclick="showSystemDetail(${idx})">${tData(sys.nome)}</span>
-            <button class="row-expand-btn" title="${tip}" aria-label="${tip}" onclick="event.stopPropagation(); openCartilhaModal(${idx})">${NEW_TAB_ICON}</button>
+            <button class="row-expand-btn" data-fly-tip="${tip}" aria-label="${tip}" onclick="event.stopPropagation(); openCartilhaModal(${idx})">${NEW_TAB_ICON}</button>
         </td>`;
     }
 
@@ -652,6 +660,31 @@
     });
     window.addEventListener('scroll', hideHoverPreview, true);
 
+    // Tooltip imediato em posição fixa: não é cortado por cards/células com overflow:hidden
+    let flyTipEl = null;
+    function hideFlyTip() { flyTipEl?.classList.remove('visible'); }
+    document.addEventListener('mouseover', (e) => {
+        const btn = e.target.closest('[data-fly-tip]');
+        if (!btn) return;
+        if (!flyTipEl) {
+            flyTipEl = document.createElement('div');
+            flyTipEl.className = 'fly-tip';
+            document.body.appendChild(flyTipEl);
+        }
+        flyTipEl.textContent = btn.dataset.flyTip;
+        flyTipEl.classList.add('visible');
+        const r = btn.getBoundingClientRect();
+        const w = flyTipEl.offsetWidth;
+        const left = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), window.innerWidth - w - 8);
+        flyTipEl.style.left = `${left}px`;
+        flyTipEl.style.top = `${r.bottom + 8}px`;
+    });
+    document.addEventListener('mouseout', (e) => {
+        const btn = e.target.closest('[data-fly-tip]');
+        if (btn && !btn.contains(e.relatedTarget)) hideFlyTip();
+    });
+    window.addEventListener('scroll', hideFlyTip, true);
+
     function buildThermalTable(systems, norm, normName, numZones, evaluateFn) {
         let html = `<h3 style="text-align:center;margin:2rem 0 1rem;">${i18n.t('compare.thermalResultsTitle')} — ${normName}</h3>`;
         html += `<div class="thermal-results-table"><table><thead><tr><th>${i18n.t('compare.system')}</th><th>U (W/m²K)</th><th>CT (kJ/m²K)</th>`;
@@ -671,8 +704,8 @@
         return html;
     }
 
-    function buildRTQCTable(systems, rtqc) {
-        let html = `<h3 style="text-align:center;margin:2rem 0 1rem;">${i18n.t('compare.thermalResultsTitle')} — RTQ-C</h3>`;
+    function buildRTQCTable(systems, rtqc, normName = 'RTQ-C') {
+        let html = `<h3 style="text-align:center;margin:2rem 0 1rem;">${i18n.t('compare.thermalResultsTitle')} — ${normName}</h3>`;
         html += `<p style="text-align:center;color:var(--gray-500);margin-bottom:1rem;">${i18n.t('compare.rtqcGrades')}</p>`;
         html += `<div class="thermal-results-table"><table><thead><tr><th>${i18n.t('compare.system')}</th><th>U (W/m²K)</th><th>CT (kJ/m²K)</th>`;
         for (let z = 1; z <= 8; z++) html += `<th>${i18n.t('compare.zone')} ${z}</th>`;
@@ -894,7 +927,7 @@
         // Cabeçalho com logos (o logo da UFRGS não vai para a impressão/PDF)
         html += `<div class="cartilha-logos-row">
             <img src="assets/logo_ufrgs.png" alt="UFRGS" class="cartilha-inline-logo no-print">
-            <img src="assets/logo_e3build.png?v=20260811" alt="BE³ Build" class="cartilha-inline-logo">
+            <img src="assets/logo_be3.png?v=20261025" alt="BE³ Build" class="cartilha-inline-logo">
             <img src="assets/Logo_2306.png" alt="LIfE" class="cartilha-inline-logo">
         </div>`;
 
@@ -977,8 +1010,8 @@
         const year = new Date().getFullYear();
         const url = getAppUrl();
         const citation = i18n.getLang() === 'en'
-            ? `LIfE — Life Cycle Innovation for the Built Environment. <strong>BE³ Build</strong>: environmental and thermal performance of opaque external wall systems — ${tData(system.nome)}. Version 5.0. Porto Alegre: PPGCI/UFRGS, ${year}. Available at: ${url}. Accessed on: ${today}.`
-            : `LIfE — Life Cycle Innovation for the Built Environment. <strong>BE³ Build</strong>: desempenho ambiental e térmico de sistemas de vedação vertical externa opaca — ${tData(system.nome)}. Versão 5.0. Porto Alegre: PPGCI/UFRGS, ${year}. Disponível em: ${url}. Acesso em: ${today}.`;
+            ? `LIfE — Life Cycle Innovation for the Built Environment. <strong>BE³ Build</strong>: environmental and thermal performance of wall systems — ${tData(system.nome)}. Version 5.0. Porto Alegre: PPGCI/UFRGS, ${year}. Available at: ${url}. Accessed on: ${today}.`
+            : `LIfE — Life Cycle Innovation for the Built Environment. <strong>BE³ Build</strong>: desempenho ambiental e térmico de sistemas de paredes — ${tData(system.nome)}. Versão 5.0. Porto Alegre: PPGCI/UFRGS, ${year}. Disponível em: ${url}. Acesso em: ${today}.`;
 
         return `<div class="sheet-footer">
             <div class="sheet-citation"><strong>${i18n.t('cartilha.howToCite')}</strong><p>${citation}</p></div>
@@ -1073,7 +1106,7 @@
         const today = new Date().toLocaleDateString(i18n.getLang() === 'en' ? 'en-GB' : 'pt-BR');
         let html = `<div id="comparisonPrintArea">`;
         html += `<div class="print-only print-header">
-            <img src="assets/logo_e3build.png?v=20260811" alt="BE³ Build" class="print-header-logo">
+            <img src="assets/logo_be3.png?v=20261025" alt="BE³ Build" class="print-header-logo">
             <div class="print-header-text">
                 <strong>${i18n.t('compare.results')}</strong>
                 <span>${systems.map(s => tData(s.nome)).join('  ·  ')}</span>
@@ -1440,49 +1473,55 @@
         runPrint('printing-cartilha', '@page { size: A4 portrait; margin: 12mm; }');
     };
 
-    /**
-     * Gera o PDF a partir de uma cópia da ficha renderizada em um container
-     * com largura fixa de A4 — evita o desalinhamento causado pelo modal.
-     * Os gráficos (canvas) são convertidos em imagem, pois um canvas clonado
-     * seria exportado em branco.
-     */
-    window.exportCartilhaToPDF = function () {
-        const source = document.getElementById('cartilhaContent');
-        if (!source) return;
+    // Gera e baixa o PDF direto (sem diálogo de impressão); cada seção numerada ocupa uma página.
+    window.exportCartilhaToPDF = async function () {
+        const system = currentCartilhaSystem;
+        if (!system) return;
+        if (typeof html2pdf === 'undefined') {
+            showAlert('error', i18n.t('cartilha.pdfError'));
+            return;
+        }
 
-        const wrapper = document.createElement('div');
-        wrapper.className = 'pdf-render-root';
+        const btn = document.querySelector('.cartilha-actions button[onclick="exportCartilhaToPDF()"]');
+        if (btn) btn.disabled = true;
 
-        const clone = source.cloneNode(true);
-        clone.classList.add('pdf-export');
-        clone.querySelectorAll('.no-print').forEach(el => el.remove());
+        // Cópia fora da tela, com a largura útil da página A4 (210mm - 2 x 12mm de margem)
+        const host = document.createElement('div');
+        host.style.cssText = 'position:fixed;left:-10000px;top:0;';
+        const root = document.createElement('div');
+        root.className = 'cartilha-content pdf-sheet';
+        root.style.cssText = 'width:186mm;padding:0;overflow:visible;background:#fff;';
+        root.innerHTML = buildSystemSheetHTML(system, 'pdf', {});
+        host.appendChild(root);
+        document.body.appendChild(host);
 
-        // canvas -> imagem (mantendo a proporção do gráfico)
-        const sourceCanvases = source.querySelectorAll('canvas');
-        clone.querySelectorAll('canvas').forEach((canvas, i) => {
-            const original = sourceCanvases[i];
-            if (!original) { canvas.remove(); return; }
-            const img = document.createElement('img');
-            try { img.src = original.toDataURL('image/png', 1.0); } catch (e) { canvas.remove(); return; }
-            img.className = 'pdf-chart-img';
-            canvas.parentNode.replaceChild(img, canvas);
-        });
+        try {
+            root.querySelectorAll('.no-print').forEach(el => el.remove());
+            root.querySelectorAll('.sheet-section-title').forEach((h, i) => {
+                if (i > 0) h.classList.add('pdf-break');
+            });
+            renderSheetCharts(system, 'pdf');
 
-        wrapper.appendChild(clone);
-        document.body.appendChild(wrapper);
+            await Promise.all([...root.querySelectorAll('img')].map(img =>
+                img.complete ? null : new Promise(res => { img.onload = img.onerror = res; })));
 
-        const name = currentCartilhaSystem ? tData(currentCartilhaSystem.nome).replace(/[^\w\-]+/g, '_') : 'sistema';
-        const opt = {
-            margin: [12, 12, 14, 12],
-            filename: `cartilha_${name}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', scrollX: 0, scrollY: 0, windowWidth: 794 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['css', 'legacy'], avoid: ['table', 'tr', '.pdf-chart-img', '.cartilha-image', '.sheet-footer', '.sheet-grid'] }
-        };
-
-        const cleanup = () => wrapper.remove();
-        html2pdf().set(opt).from(clone).save().then(cleanup).catch(cleanup);
+            const name = tData(system.nome).replace(/[^\p{L}\p{N}]+/gu, '_').replace(/^_+|_+$/g, '') || 'sistema';
+            await html2pdf().set({
+                margin: 12,
+                filename: `${name}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['css'], before: '.pdf-break', avoid: ['.cartilha-table', '.cartilha-image', '.sheet-chart-wrap'] }
+            }).from(root).save();
+        } catch (e) {
+            console.error('PDF export failed', e);
+            showAlert('error', i18n.t('cartilha.pdfError'));
+        } finally {
+            destroySheetCharts('pdf');
+            host.remove();
+            if (btn) btn.disabled = false;
+        }
     };
 
     // ===================================================================
@@ -1490,50 +1529,83 @@
     // ===================================================================
     let builderLayers = []; // {compIndex, name, thickness}
 
+    /**
+     * Agrupa os componentes pelo nome sem a espessura ("Alvenaria bloco cerâmico 9cm (6 furos)"
+     * -> "Alvenaria bloco cerâmico (6 furos)"). Cada grupo guarda as espessuras permitidas e o
+     * componente correspondente; componentes sem espessura no nome aceitam valor livre.
+     */
+    const EXTRA_THICKNESS = { 'Argamassa de revestimento': [2, 2.5, 3] };
+    let builderMaterialGroups = null;
+
+    function getBuilderMaterialGroups() {
+        if (builderMaterialGroups) return builderMaterialGroups;
+        const groups = [];
+        const byLabel = new Map();
+        dataManager.getComponents().forEach((c, i) => {
+            const desc = c.descricao || c.componente || c.nome || `Componente ${i + 1}`;
+            const m = desc.match(/\s*(\d+(?:[.,]\d+)?)\s*cm\b/i);
+            if (!m) { groups.push({ label: desc, compIndex: i }); return; }
+            const label = desc.replace(m[0], '').replace(/\s{2,}/g, ' ').trim();
+            const thickness = parseFloat(m[1].replace(',', '.'));
+            let g = byLabel.get(label);
+            if (!g) { g = { label, options: [] }; byLabel.set(label, g); groups.push(g); }
+            if (!g.options.some(o => o.thickness === thickness)) g.options.push({ thickness, compIndex: i });
+        });
+        groups.forEach(g => {
+            if (!g.options) return;
+            (EXTRA_THICKNESS[g.label] || []).forEach(t => {
+                if (!g.options.some(o => o.thickness === t)) g.options.push({ thickness: t, compIndex: g.options[0].compIndex });
+            });
+            g.options.sort((a, b) => a.thickness - b.thickness);
+        });
+        builderMaterialGroups = groups;
+        return groups;
+    }
+
+    function fillBuilderMaterialSelect(select) {
+        while (select.options.length > 1) select.remove(1);
+        getBuilderMaterialGroups().forEach((g, i) => {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = tData(g.label);
+            select.appendChild(opt);
+        });
+    }
+
     function initBuilder() {
         const select = document.getElementById('builderMaterial');
         if (!select || !dataManager.loaded) return;
-        const components = dataManager.getComponents();
         // Keep existing options if already populated
         if (select.options.length > 1) return;
-        components.forEach((c, i) => {
-            const opt = document.createElement('option');
-            opt.value = i;
-            opt.textContent = componentLabel(c, i);
-            select.appendChild(opt);
-        });
+        fillBuilderMaterialSelect(select);
         updateThicknessInputMode();
-    }
-
-    function componentLabel(c, i) {
-        return tData(c.descricao || c.componente || c.nome || `Componente ${i + 1}`);
-    }
-
-    /**
-     * Argamassa tem espessura pré-definida (2 / 2,5 / 3 cm) — o usuário escolhe
-     * entre as opções em vez de digitar um valor livre.
-     */
-    const FIXED_THICKNESS_MATERIALS = ['argamassa'];
-
-    function materialHasFixedThickness(name) {
-        const lower = (name || '').toLowerCase();
-        return FIXED_THICKNESS_MATERIALS.some(m => lower.includes(m));
     }
 
     window.builderMaterialChanged = function () { updateThicknessInputMode(); };
 
+    function formatThickness(v) {
+        return i18n.getLang() === 'en' ? String(v) : String(v).replace('.', ',');
+    }
+
+    // Materiais com espessuras definidas mostram a lista; os demais, um campo livre
     function updateThicknessInputMode() {
         const select = document.getElementById('builderMaterial');
         const input = document.getElementById('builderThickness');
         const options = document.getElementById('builderThicknessOptions');
         if (!select || !input || !options) return;
 
-        const comp = dataManager.getComponents()[parseInt(select.value)];
-        const name = comp ? (comp.componente || comp.nome || '') : '';
-        const fixed = materialHasFixedThickness(name);
+        const group = getBuilderMaterialGroups()[parseInt(select.value)];
+        const list = group?.options;
 
-        input.style.display = fixed ? 'none' : '';
-        options.style.display = fixed ? '' : 'none';
+        options.innerHTML = '';
+        (list || []).forEach(o => {
+            const opt = document.createElement('option');
+            opt.value = o.thickness;
+            opt.textContent = formatThickness(o.thickness);
+            options.appendChild(opt);
+        });
+        input.style.display = list ? 'none' : '';
+        options.style.display = list ? '' : 'none';
     }
 
     function getBuilderThickness() {
@@ -1549,16 +1621,12 @@
         const select = document.getElementById('builderMaterial');
         if (select && dataManager.loaded) {
             const savedVal = select.value;
-            const components = dataManager.getComponents();
-            // Clear all but first placeholder option
-            while (select.options.length > 1) select.remove(1);
-            components.forEach((c, i) => {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = componentLabel(c, i);
-                select.appendChild(opt);
-            });
+            const savedThickness = document.getElementById('builderThicknessOptions')?.value;
+            fillBuilderMaterialSelect(select);
             select.value = savedVal;
+            updateThicknessInputMode();
+            const opts = document.getElementById('builderThicknessOptions');
+            if (opts && savedThickness) opts.value = savedThickness;
         }
         // Re-render layers and preview with translated names
         renderBuilderLayers();
@@ -1568,19 +1636,21 @@
     window.builderAddLayer = function () {
         const matSelect = document.getElementById('builderMaterial');
         const thicknessInput = document.getElementById('builderThickness');
-        const compIndex = parseInt(matSelect?.value);
+        const group = getBuilderMaterialGroups()[parseInt(matSelect?.value)];
         const thickness = getBuilderThickness();
 
-        if (isNaN(compIndex) || compIndex < 0) return;
+        if (!group) return;
         if (isNaN(thickness) || thickness <= 0) { thicknessInput?.focus(); return; }
 
-        const components = dataManager.getComponents();
-        const comp = components[compIndex];
+        const compIndex = group.options
+            ? group.options.find(o => o.thickness === thickness)?.compIndex
+            : group.compIndex;
+        const comp = dataManager.getComponents()[compIndex];
         if (!comp) return;
 
         builderLayers.push({
             compIndex,
-            name: comp.componente || comp.nome || 'Camada',
+            name: group.label,
             thickness,
             comp
         });
@@ -1716,15 +1786,15 @@
             <h4 class="preview-system-name">${systemName}</h4>
             <div class="preview-specs">
                 <div class="spec-item"><span class="spec-label">${i18n.t('card.thickness')}:</span><span class="spec-value">${totalThickness.toFixed(1)} cm</span></div>
-                <div class="spec-item"><span class="spec-label">GWP:</span><span class="spec-value">${formatScientific(gwp)} kg CO₂ eq</span></div>
-                <div class="spec-item"><span class="spec-label">CED:</span><span class="spec-value">${formatScientific(ced)} MJ</span></div>
+                <div class="spec-item"><span class="spec-label">GWP:</span><span class="spec-value">${formatScientific(gwp)} kg CO₂ eq/m²</span></div>
+                <div class="spec-item"><span class="spec-label">CED:</span><span class="spec-value">${formatScientific(ced)} MJ/m²</span></div>
             </div>
         </div>`;
 
         // Resultado completo (exibido pelo botão "Calcular")
         let resultsHtml = '';
         if (showFullResults) {
-            resultsHtml = `<div class="preview-results"><h5>${i18n.t('create.resultsTitle')}</h5><table class="cartilha-table"><thead><tr><th>${i18n.t('cartilha.indicator')}</th><th>${i18n.t('cartilha.value')}</th><th>${i18n.t('cartilha.unitCol')}</th></tr></thead><tbody>`;
+            resultsHtml = `<div class="preview-results"><h5>${i18n.t('create.resultsTitle')}</h5><p class="preview-results-note">${i18n.t('create.resultsNote')}</p><table class="cartilha-table"><thead><tr><th>${i18n.t('cartilha.indicator')}</th><th>${i18n.t('cartilha.value')}</th><th>${i18n.t('cartilha.unitCol')}</th></tr></thead><tbody>`;
             IMPACT_CATEGORIES.forEach(cat => {
                 resultsHtml += `<tr><td>${impactFullLabel(cat)}</td><td>${formatScientific(totals[cat.key])}</td><td>${cat.unit}</td></tr>`;
             });
