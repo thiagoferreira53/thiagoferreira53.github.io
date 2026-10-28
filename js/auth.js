@@ -45,7 +45,7 @@ function login(username, password) {
 }
 
 function register(data) {
-    const { password, fullName, email, institution, field, source, newsletter, terms } = data;
+    const { password, fullName, email, institution, field, source, newsletter, terms, termsVersion, termsAcceptedAt } = data;
 
     // O e-mail é o identificador de acesso
     const username = (email || '').trim().toLowerCase();
@@ -60,7 +60,7 @@ function register(data) {
     const newUser = {
         username, password, fullName, email,
         institution, field, source,
-        newsletter: !!newsletter, terms: !!terms,
+        newsletter: !!newsletter, terms: !!terms, termsVersion, termsAcceptedAt,
         registeredAt: new Date().toISOString()
     };
     registeredUsers.push(newUser);
@@ -233,6 +233,67 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closeRegisterPopup) closeRegisterPopup.addEventListener('click', () => { registerPopup.style.display = 'none'; });
     if (cancelRegisterBtn) cancelRegisterBtn.addEventListener('click', () => { registerPopup.style.display = 'none'; });
 
+    // ===== Termos de Uso: o aceite só é liberado após a leitura até o final =====
+    const termsPopup = document.getElementById('termsPopup');
+    const termsBody = document.getElementById('termsBody');
+    const termsAcceptBtn = document.getElementById('termsAcceptBtn');
+    const termsScrollHint = document.getElementById('termsScrollHint');
+    const regTerms = document.getElementById('regTerms');
+    const regTermsHint = document.getElementById('regTermsHint');
+    let termsAcceptedAt = null;
+
+    function lockTermsConsent() {
+        termsAcceptedAt = null;
+        if (regTerms) { regTerms.checked = false; regTerms.disabled = true; }
+        if (regTermsHint) regTermsHint.style.display = '';
+    }
+
+    function termsReachedEnd() {
+        return termsBody.scrollTop + termsBody.clientHeight >= termsBody.scrollHeight - 8;
+    }
+
+    function updateTermsAcceptState() {
+        const done = termsReachedEnd();
+        termsAcceptBtn.disabled = !done;
+        if (termsScrollHint) termsScrollHint.style.visibility = done ? 'hidden' : 'visible';
+    }
+
+    function openTermsPopup() {
+        if (!termsPopup || !window.TERMS_OF_USE) return;
+        const T = window.TERMS_OF_USE;
+        const en = i18n.getLang() === 'en';
+        document.getElementById('termsContent').innerHTML = T.html;
+        document.getElementById('termsUpdated').textContent = `${i18n.t('terms.updated')} ${en ? T.updatedEn : T.updated}`;
+        termsPopup.style.display = 'flex';
+        termsBody.scrollTop = 0;
+        updateTermsAcceptState();
+        termsBody.focus();
+    }
+
+    function closeTermsPopup() { termsPopup.style.display = 'none'; }
+
+    if (termsPopup && termsBody && regTerms) {
+        document.getElementById('regTermsLabel').addEventListener('click', (e) => {
+            if (regTerms.disabled || e.target.closest('.terms-link')) {
+                e.preventDefault();
+                openTermsPopup();
+            }
+        });
+        termsBody.addEventListener('scroll', updateTermsAcceptState);
+        document.getElementById('closeTermsPopup').addEventListener('click', closeTermsPopup);
+        document.getElementById('termsBackBtn').addEventListener('click', closeTermsPopup);
+        termsAcceptBtn.addEventListener('click', () => {
+            if (!termsReachedEnd()) return;
+            termsAcceptedAt = new Date().toISOString();
+            regTerms.disabled = false;
+            regTerms.checked = true;
+            if (regTermsHint) regTermsHint.style.display = 'none';
+            closeTermsPopup();
+        });
+        registerForm.addEventListener('reset', lockTermsConsent);
+        regTerms.addEventListener('change', () => { if (!regTerms.checked) lockTermsConsent(); });
+    }
+
     // Handle register
     if (registerForm) {
         registerForm.addEventListener('submit', (e) => {
@@ -240,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const pw = document.getElementById('regPassword').value;
             const cpw = document.getElementById('regConfirmPassword').value;
             if (pw !== cpw) { showAlert('error', i18n.t('register.errorPasswords')); return; }
-            if (!document.getElementById('regTerms').checked) { showAlert('error', i18n.t('register.errorTerms')); return; }
+            if (!document.getElementById('regTerms').checked || !termsAcceptedAt) { showAlert('error', i18n.t('register.errorTerms')); return; }
 
             const data = {
                 fullName: document.getElementById('regFullName').value.trim(),
@@ -250,7 +311,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 field: document.getElementById('regField').value.trim(),
                 source: document.getElementById('regSource').value,
                 newsletter: document.getElementById('regNewsletter').checked,
-                terms: document.getElementById('regTerms').checked
+                terms: document.getElementById('regTerms').checked,
+                termsVersion: window.TERMS_OF_USE ? window.TERMS_OF_USE.version : null,
+                termsAcceptedAt
             };
 
             const result = register(data);

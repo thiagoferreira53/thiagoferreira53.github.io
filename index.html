@@ -25,7 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="css/styles.css?v=20261030">
+    <link rel="stylesheet" href="css/styles.css?v=20261103">
 </head>
 <body>
     <!-- Login Modal (popup, NOT a gate) -->
@@ -148,10 +148,11 @@
                         <input type="checkbox" id="regNewsletter" name="newsletter">
                         <span data-i18n="register.newsletter">Quero receber novidades sobre o BE³ Build</span>
                     </label>
-                    <label class="form-check">
-                        <input type="checkbox" id="regTerms" name="terms" required>
-                        <span data-i18n="register.terms">Aceito os termos da plataforma *</span>
+                    <label class="form-check" id="regTermsLabel">
+                        <input type="checkbox" id="regTerms" name="terms" disabled>
+                        <span data-i18n="register.terms">Li e concordo com os <a href="#" class="terms-link">Termos de Uso</a> *</span>
                     </label>
+                    <small class="form-check-hint" id="regTermsHint" data-i18n="register.termsHint">Abra e leia os Termos de Uso até o final para poder aceitá-los.</small>
                 </div>
 
                 <div class="popup-actions">
@@ -159,6 +160,28 @@
                     <button type="button" class="btn btn-outline btn-large" id="cancelRegisterBtn" data-i18n="register.cancel">Cancelar</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Terms of Use Popup -->
+    <div class="popup-overlay" id="termsPopup" style="display: none;">
+        <div class="popup-container terms-container" role="dialog" aria-modal="true" aria-labelledby="termsTitle">
+            <div class="popup-header">
+                <h2 id="termsTitle" data-i18n="terms.title">Termos de Uso – BE³</h2>
+                <button type="button" class="popup-close" id="closeTermsPopup" aria-label="Fechar">&times;</button>
+            </div>
+            <div class="terms-body" id="termsBody" tabindex="0">
+                <p class="terms-updated" id="termsUpdated"></p>
+                <p class="terms-lang-note" data-i18n="terms.langNote">Estes Termos de Uso estão disponíveis em português.</p>
+                <div id="termsContent"></div>
+            </div>
+            <div class="terms-footer">
+                <span class="terms-scroll-hint" id="termsScrollHint" data-i18n="terms.scrollHint">Role até o final do texto para habilitar o aceite.</span>
+                <div class="popup-actions">
+                    <button type="button" class="btn btn-outline" id="termsBackBtn" data-i18n="terms.back">Voltar</button>
+                    <button type="button" class="btn btn-primary" id="termsAcceptBtn" disabled data-i18n="terms.accept">Li e concordo</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -639,6 +662,163 @@
                     </div>
                 </div>
 
+                <!-- Section: Understand the concepts -->
+                <div class="about-block concepts-block" id="aboutConcepts">
+                    <h3 class="about-block-title" data-i18n="concepts.title">Entenda os conceitos</h3>
+                    <p class="about-block-desc" data-i18n="concepts.intro">Antes de explorar o desempenho térmico e ambiental dos sistemas construtivos, vale conhecer alguns conceitos essenciais, baseados na ABNT 15575-1:2025, ABNT 15575-4:2025, ABNT ISO 14040:2024. Reunimos aqui definições simples para ajudar você a compreender os indicadores apresentados na ferramenta e interpretar melhor os resultados das avaliações.</p>
+                    <details class="concepts-details" id="conceptsDetails">
+                        <summary>
+                            <span class="concepts-label-closed" data-i18n="concepts.expand">Expandir conceitos</span>
+                            <span class="concepts-label-open" data-i18n="concepts.collapse">Minimizar conceitos</span>
+                        </summary>
+                        <div class="concepts-details-body">
+                    <div class="glossary-grid">
+                        <div class="glossary-item">
+                            <h4 class="glossary-term" data-i18n="concepts.g.performance.term">desempenho</h4>
+                            <p class="glossary-def" data-i18n="concepts.g.performance.def">comportamento em uso de uma edificação e de seus sistemas</p>
+                        </div>
+                        <div class="glossary-item">
+                            <h4 class="glossary-term" data-i18n="concepts.g.envelope.term">envoltória</h4>
+                            <p class="glossary-def" data-i18n="concepts.g.envelope.def">conjunto de planos que separam o ambiente interno do ambiente externo</p>
+                            <p class="glossary-note" data-i18n="concepts.g.envelope.note"><strong>EXEMPLO</strong> Fachadas, empenas, cobertura, aberturas, pisos, assim como quaisquer elementos que os compõem.</p>
+                        </div>
+                        <div class="glossary-item">
+                            <h4 class="glossary-term" data-i18n="concepts.g.extWalls.term">paredes externas</h4>
+                            <p class="glossary-def" data-i18n="concepts.g.extWalls.def">superfícies opacas que delimitam o espaço interno da edificação em relação ao exterior</p>
+                            <p class="glossary-note" data-i18n="concepts.g.extWalls.note"><strong>NOTA</strong> A definição de paredes externas exclui as aberturas.</p>
+                        </div>
+                        <div class="glossary-item">
+                            <h4 class="glossary-term" data-i18n="concepts.g.intWalls.term">paredes internas</h4>
+                            <p class="glossary-def" data-i18n="concepts.g.intWalls.def">superfícies opacas que subdividem o espaço interno da edificação</p>
+                            <p class="glossary-note" data-i18n="concepts.g.intWalls.note"><strong>NOTA</strong> A definição de paredes internas exclui as aberturas.</p>
+                        </div>
+                        <div class="glossary-item">
+                            <h4 class="glossary-term" data-i18n="concepts.g.svve.term">sistemas de vedações verticais externas <span class="regulation-badge">SVVE</span></h4>
+                            <p class="glossary-def" data-i18n="concepts.g.svve.def">partes da edificação habitacional que limitam verticalmente a edificação, como as fachadas externas</p>
+                        </div>
+                        <div class="glossary-item">
+                            <h4 class="glossary-term" data-i18n="concepts.g.svvie.term">sistemas de vedação vertical interno e externo <span class="regulation-badge">SVVIE</span></h4>
+                            <p class="glossary-def" data-i18n="concepts.g.svvie.def">partes da edificação habitacional que limitam verticalmente a edificação e seus ambientes, como as fachadas e as paredes ou divisórias internas</p>
+                        </div>
+                        <div class="glossary-item">
+                            <h4 class="glossary-term" data-i18n="concepts.g.zb.term">zona bioclimática <span class="regulation-badge">ZB</span></h4>
+                            <p class="glossary-def" data-i18n="concepts.g.zb.def">região geográfica homogênea quanto aos elementos climáticos que interferem nas relações entre o ambiente construído e o conforto humano, de acordo com a ABNT NBR 15220-3</p>
+                        </div>
+                        <div class="glossary-item">
+                            <h4 class="glossary-term" data-i18n="concepts.g.lca.term">avaliação do ciclo de vida <span class="regulation-badge">ACV</span></h4>
+                            <p class="glossary-def" data-i18n="concepts.g.lca.def">compilação e avaliação das entradas, saídas e dos impactos ambientais potenciais de um sistema de produto ao longo do seu ciclo de vida</p>
+                        </div>
+                        <div class="glossary-item">
+                            <h4 class="glossary-term" data-i18n="concepts.g.lci.term">análise de inventário do ciclo de vida <span class="regulation-badge">ICV</span></h4>
+                            <p class="glossary-def" data-i18n="concepts.g.lci.def">fase da avaliação do ciclo de vida envolvendo a compilação e quantificação das entradas e saídas de um sistema de produto ao longo do seu ciclo de vida</p>
+                        </div>
+                        <div class="glossary-item">
+                            <h4 class="glossary-term" data-i18n="concepts.g.impactCat.term">categoria de impacto</h4>
+                            <p class="glossary-def" data-i18n="concepts.g.impactCat.def">classe que representa as questões ambientais relevantes às quais os resultados da análise do inventário do ciclo de vida podem ser associados</p>
+                        </div>
+                        <div class="glossary-item">
+                            <h4 class="glossary-term" data-i18n="concepts.g.lifeCycle.term">ciclo de vida</h4>
+                            <p class="glossary-def" data-i18n="concepts.g.lifeCycle.def">etapas consecutivas e interligadas, desde a aquisição ou geração de matéria-prima a partir de recursos naturais até a disposição final</p>
+                        </div>
+                        <div class="glossary-item">
+                            <h4 class="glossary-term" data-i18n="concepts.g.boundary.term">fronteira do sistema</h4>
+                            <p class="glossary-def" data-i18n="concepts.g.boundary.def">fronteira baseada em um conjunto de critérios que especificam quais processos unitários fazem parte do sistema em estudo</p>
+                            <p class="glossary-note" data-i18n="concepts.g.boundary.note">Nota 1 de entrada: Neste documento, “sistema em estudo” refere-se ao sistema do produto.</p>
+                        </div>
+                    </div>
+
+                <!-- Thermal performance (prescriptive method) -->
+                <div class="about-block concepts-block" id="conceptsThermal">
+                    <h3 class="about-block-title" data-i18n="concepts.thermalTitle">Desempenho térmico pelo método prescritivo</h3>
+                    <div class="about-block-content">
+                        <p data-i18n="concepts.thermalP1">O método prescritivo ou simplificado permite realizar uma avaliação do desempenho térmico mínimo através das propriedades térmicas dos sistemas construtivos a partir de critérios e limites estabelecidos por normas, como a NBR 15575 (ABNT, 2025) e a ASHRAE 90.1 (ASHRAE 90.1, 2016). Na ferramenta, são consideradas a transmitância térmica (U), a capacidade térmica (CT) e a absortância solar (α).</p>
+                        <p data-i18n="concepts.thermalP2">Essa abordagem permite verificar se um sistema de parede ou cobertura, atende a critérios prescritivos, sendo especialmente útil nas etapas iniciais do projeto, quando ainda não estão disponíveis todas as informações necessárias para avaliações mais detalhadas.</p>
+                        <p data-i18n="concepts.thermalP3">É importante destacar que essa verificação não representa uma avaliação completa do desempenho térmico e/ou energético da edificação. O atendimento aos limites das propriedades térmicas indica apenas que o sistema de parede satisfaz determinado critério prescritivo e não corresponde, por si só, a uma classificação de eficiência energética do edifício.</p>
+
+                        <h4 data-i18n="concepts.uTitle">Transmitância térmica (U)</h4>
+                        <p data-i18n="concepts.uText">A transmitância térmica, expressa em W/(m²·K), é a taxa de fluxo de calor, em estado estacionário, dividida pela área e pela diferença de temperatura entre os ambientes em cada lado do sistema uniforme plano, sendo o inverso da resistência térmica (ABNT, 2024). Na avaliação prescritiva, as normas e regulamentos estabelecem valores limites de transmitância térmica que podem variar de acordo com fatores como a zona bioclimática e, em determinados casos, a absortância da superfície externa. Por isso, a transmitância térmica é um parâmetro importante para verificar a adequação do sistema de parede aos critérios térmicos estabelecidos para o contexto em que será utilizado.</p>
+                        <div class="glossary-item">
+                            <h4 class="glossary-term" data-i18n="concepts.u.term">transmitância térmica <span class="regulation-badge">U</span></h4>
+                            <p class="glossary-def" data-i18n="concepts.u.def">transmissão de calor em unidade de tempo e através de uma área unitária de um elemento ou componente construtivo; neste caso, dos vidros e dos componentes opacos das paredes externas e coberturas, incluindo as resistências superficiais interna e externa, induzida pela diferença de temperatura entre dois ambientes</p>
+                            <p class="glossary-note" data-i18n="concepts.u.note"><strong>NOTA</strong> A transmitância térmica é calculada utilizando o método de cálculo da ABNT NBR 15220-2. Para a transmitância térmica de paredes externas, adota-se o termo U<sub>par</sub>. A transmitância térmica de coberturas é tratada pelo termo U<sub>cob</sub>.</p>
+                        </div>
+
+                        <h4 data-i18n="concepts.ctTitle">Capacidade térmica (CT)</h4>
+                        <p data-i18n="concepts.ctText">A capacidade térmica, expressa em kJ/(m²·K), é a propriedade que mede a quantidade de calor necessária para aumentar a temperatura de um sistema construtivo em 1 K (ABNT, 2024). Na NBR 15575 (ABNT, 2025), CT é outra propriedade considerada na avaliação prospectiva dos sistemas de paredes e deve atender aos valores estabelecidos para cada zona bioclimática.</p>
+                        <div class="glossary-item">
+                            <h4 class="glossary-term" data-i18n="concepts.ct.term">capacidade térmica <span class="regulation-badge">CT</span></h4>
+                            <p class="glossary-def" data-i18n="concepts.ct.def">quantidade de calor necessária para variar, em uma unidade, a temperatura de um sistema</p>
+                            <p class="glossary-note" data-i18n="concepts.ct.note"><strong>NOTA</strong> A capacidade térmica é calculada conforme a ABNT NBR 15220-2. Para a capacidade térmica de paredes externas, adota-se o termo CT<sub>par</sub>.</p>
+                        </div>
+
+                        <h4 data-i18n="concepts.absTitle">Absortância solar (α)</h4>
+                        <p data-i18n="concepts.absText1">A absortância solar é uma propriedade da superfície externa relacionada à absorção da radiação solar incidente. Na NBR 15575 (ABNT, 2025) a absortância atua como um fator condicionante dos limites de transmitância térmica em determinadas zonas bioclimáticas.</p>
+                        <p data-i18n="concepts.absText2">Dessa forma, diferentes características da superfície externa podem resultar em diferentes critérios prescritivos para um mesmo contexto climático.</p>
+
+                        <h4 data-i18n="concepts.whyPropsTitle">Por que essas propriedades são importantes?</h4>
+                        <p data-i18n="concepts.whyPropsText1">As características da envoltória influenciam o comportamento térmico da edificação e podem afetar seu consumo de energia. Por isso, propriedades como transmitância térmica, capacidade térmica e absortância solar são utilizadas por normas e regulamentos como parâmetros para a avaliação dos sistemas de parede da envoltória.</p>
+                        <p data-i18n="concepts.whyPropsText2">Na ferramenta, essas propriedades permitem comparar diferentes sistemas de paredes e verificar seu atendimento aos critérios prescritivos aplicáveis, integrando essas informações aos resultados de impactos ambientais. Essa análise auxilia a tomada de decisão nas etapas iniciais do projeto, sem substituir avaliações mais completas, como simulações térmicas e energéticas.</p>
+                    </div>
+                </div>
+
+                <!-- Environmental performance -->
+                <div class="about-block concepts-block" id="conceptsEnvironmental">
+                    <h3 class="about-block-title" data-i18n="concepts.envTitle">Desempenho ambiental</h3>
+                    <div class="about-block-content">
+                        <p data-i18n="concepts.envP1">A Avaliação do Ciclo de Vida (ACV) é uma técnica utilizada para avaliar os impactos ambientais associados a produtos e sistemas ao longo do seu ciclo de vida. A avaliação ambiental foi desenvolvida de acordo com as normas ABNT ISO 14040 (ABNT, 2025) e ABNT ISO 14044 (ABNT, 2025).</p>
+                        <p data-i18n="concepts.envP2">Para permitir a comparação entre os sistemas construtivos, foi adotada como unidade declarada 1 m² de sistema de parede externa. A avaliação considera os impactos ambientais incorporados nos estágios A1–A3, correspondentes à etapa de produção dos materiais de acordo com a EN 15978:2011 (CEN, 2026) e 15804:2012+A2:2019.</p>
+                        <div class="info-callout">
+                            <strong data-i18n="concepts.boundaryTitle">Fronteira do sistema: A1–A3 (Produto)</strong>
+                            <p data-i18n="concepts.boundaryList"><strong>A1</strong> — Extração e produção <em>upstream</em><br><strong>A2</strong> — Transporte até a fábrica<br><strong>A3</strong> — Fabricação dos produtos</p>
+                        </div>
+                        <p data-i18n="concepts.envP3">Os dados de primeiro plano foram obtidos a partir das quantidades e dos materiais dos sistemas construtivos, com base no SINAPI e em catálogos de fornecedores, enquanto os dados de segundo plano foram obtidos e adaptados da base de dados ecoinvent v.3.11. Os cálculos do inventário e da avaliação de impactos foram realizados no software OpenLCA v2.5.</p>
+
+                        <h4 data-i18n="concepts.indTitle">Indicadores ambientais</h4>
+                        <p data-i18n="concepts.indIntro">Os resultados ambientais são calculados na ferramenta de acordo com as categorias de impacto da <strong>EN 15804+A2</strong> (CEN, 2019). A ferramenta apresenta dez categorias:</p>
+                        <div class="indicators-grid">
+                            <div class="indicator-item"><div class="indicator-label">GWP-total</div><div class="indicator-name" data-i18n="concepts.ind.gwp"><strong>Potencial de Aquecimento Global</strong>Expresso em kg CO₂ equivalente. Mede a contribuição total para as mudanças climáticas decorrente das emissões de gases de efeito estufa ao longo do ciclo de vida.</div></div>
+                            <div class="indicator-item"><div class="indicator-label">ADPF</div><div class="indicator-name" data-i18n="concepts.ind.adpf"><strong>Potencial de Depleção de Recursos Abióticos – recursos fósseis</strong>Expresso em MJ. Mede o consumo de recursos fósseis não renováveis, como petróleo, gás natural e carvão, associado ao ciclo de vida do produto ou sistema.</div></div>
+                            <div class="indicator-item"><div class="indicator-label">ADPE</div><div class="indicator-name" data-i18n="concepts.ind.adpe"><strong>Potencial de Depleção de Recursos Abióticos – minerais e metais</strong>Expresso em kg Sb equivalente. Mede a contribuição para o esgotamento de recursos minerais e metálicos não renováveis em relação ao antimônio (Sb).</div></div>
+                            <div class="indicator-item"><div class="indicator-label">AP</div><div class="indicator-name" data-i18n="concepts.ind.ap"><strong>Potencial de Acidificação</strong>Expresso em mol H⁺ equivalente. Mede a contribuição de emissões atmosféricas para processos de acidificação do solo e da água.</div></div>
+                            <div class="indicator-item"><div class="indicator-label">ODP</div><div class="indicator-name" data-i18n="concepts.ind.odp"><strong>Potencial de Depleção da Camada de Ozônio Estratosférico</strong>Expresso em kg CFC-11 equivalente. Mede a contribuição das emissões para a redução da camada de ozônio estratosférico.</div></div>
+                            <div class="indicator-item"><div class="indicator-label">EP-freshwater</div><div class="indicator-name" data-i18n="concepts.ind.epFreshwater"><strong>Potencial de Eutrofização – água doce</strong>Expresso em kg P equivalente. Mede a contribuição para o enriquecimento excessivo de nutrientes em ecossistemas de água doce.</div></div>
+                            <div class="indicator-item"><div class="indicator-label">EP-marine</div><div class="indicator-name" data-i18n="concepts.ind.epMarine"><strong>Potencial de Eutrofização – marinha</strong>Expresso em kg N equivalente. Mede a contribuição para o enriquecimento excessivo de nutrientes em ecossistemas marinhos.</div></div>
+                            <div class="indicator-item"><div class="indicator-label">EP-terrestrial</div><div class="indicator-name" data-i18n="concepts.ind.epTerrestrial"><strong>Potencial de Eutrofização – terrestre</strong>Expresso em mol N equivalente. Mede a contribuição das emissões de compostos nitrogenados para o enriquecimento excessivo de nutrientes nos ecossistemas terrestres.</div></div>
+                            <div class="indicator-item"><div class="indicator-label">POCP</div><div class="indicator-name" data-i18n="concepts.ind.pocp"><strong>Potencial de Formação de Ozônio Fotoquímico</strong>Expresso em kg NMVOC equivalente. Mede a contribuição de emissões atmosféricas para a formação de ozônio troposférico.</div></div>
+                            <div class="indicator-item"><div class="indicator-label">WDP</div><div class="indicator-name" data-i18n="concepts.ind.wdp"><strong>Potencial de Privação de Água</strong>Expresso em m³ world equivalent deprived (m³ world eq.). Mede o potencial de privação de água decorrente do consumo de água, considerando a disponibilidade e a escassez hídrica nas regiões onde esse consumo ocorre.</div></div>
+                        </div>
+
+                        <p data-i18n="concepts.indCedIntro">Além dessas categorias de impacto, a ferramenta apresenta a Demanda Acumulada de Energia (CED – Cumulative Energy Demand ou Demanda Acumulada de Energia) (HUIJBREGTS et al., 2006). Esse indicador foi incluído por ser amplamente utilizado na avaliação do consumo de recursos energéticos ao longo do ciclo de vida de produtos e edificações, permitindo complementar a análise dos impactos ambientais com uma medida da demanda total de energia associada aos sistemas construtivos.</p>
+                        <div class="indicators-grid">
+                            <div class="indicator-item"><div class="indicator-label">CED</div><div class="indicator-name" data-i18n="concepts.ind.ced"><strong>Demanda Acumulada de Energia</strong>Expressa em MJ. Mede a quantidade total de energia primária requerida ao longo do ciclo de vida do produto ou sistema, incluindo fontes renováveis e não renováveis.</div></div>
+                        </div>
+
+                        <h4 data-i18n="concepts.whyCatTitle">Por que avaliar diferentes categorias?</h4>
+                        <p data-i18n="concepts.whyCatText1">A avaliação de diferentes categorias permite comparar os sistemas de paredes considerando múltiplos impactos ambientais associados aos materiais que os compõem, seus processos produtivos e logística envolvida na sua produção. Na ferramenta, os resultados da ACV são integrados às propriedades térmicas prescritivas, permitindo visualizar e comparar diferentes sistemas durante as etapas iniciais do projeto.</p>
+                        <p data-i18n="concepts.whyCatText2">A avaliação ambiental apresentada na ferramenta está limitada aos estágios <strong>A1–A3</strong>. Portanto, seus resultados não representam os impactos ambientais de todo o ciclo de vida da edificação. Conforme o projeto avança, recomenda-se a realização de avaliações ambientais mais completas.</p>
+                    </div>
+                </div>
+
+                <!-- References -->
+                <div class="about-block concepts-block" id="conceptsReferences">
+                    <h3 class="about-block-title" data-i18n="concepts.refsTitle">Referências</h3>
+                    <div class="references-list">
+                        <p>AMERICAN SOCIETY OF HEATING, REFRIGERATING AND AIR-CONDITIONING ENGINEERS (ASHRAE). <strong>ANSI/ASHRAE/IES Standard 90.1-2016: Energy Standard for Buildings Except Low-Rise Residential Buildings</strong>. Atlanta: ASHRAE, 2016.</p>
+                        <p>ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS (ABNT). <strong>ABNT NBR 15220-1:2024: Desempenho térmico de edificações — Parte 1: Definições, símbolos e unidades</strong>. Rio de Janeiro: ABNT, 2024.</p>
+                        <p>ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS (ABNT). <strong>ABNT NBR 15575-1:2025: Edificações habitacionais — Desempenho — Parte 1: Requisitos gerais</strong>. Rio de Janeiro: ABNT, 2025.</p>
+                        <p>ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS (ABNT). <strong>ABNT NBR 15575-4:2025: Edificações habitacionais — Desempenho — Parte 4: Requisitos para os sistemas de vedações verticais internas e externas — SVVIE</strong>. Rio de Janeiro: ABNT, 2025.</p>
+                        <p>ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS (ABNT). <strong>ABNT NBR ISO 14040:2025: Gestão ambiental — Avaliação do ciclo de vida — Princípios e estrutura</strong>. Rio de Janeiro: ABNT, 2025.</p>
+                        <p>ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS (ABNT). <strong>ABNT NBR ISO 14044:2025: Gestão ambiental — Avaliação do ciclo de vida — Requisitos e orientações</strong>. Rio de Janeiro: ABNT, 2025.</p>
+                        <p>EUROPEAN COMMITTEE FOR STANDARDIZATION (CEN). <strong>EN 15804:2012+A2:2019: Sustainability of construction works — Environmental product declarations — Core rules for the product category of construction products</strong>. Brussels: CEN, 2019.</p>
+                        <p>EUROPEAN COMMITTEE FOR STANDARDIZATION (CEN). <strong>EN 15804:2012+A2:2019/AC:2021: Sustainability of construction works — Environmental product declarations — Core rules for the product category of construction products</strong>. Brussels: CEN, 2021.</p>
+                        <p>EUROPEAN COMMITTEE FOR STANDARDIZATION (CEN). <strong>EN 15978:2026: Sustainability of construction works — Assessment of environmental performance of buildings — Requirements and guidance</strong>. Brussels: CEN, 2026.</p>
+                        <p>HUIJBREGTS, M. A. J. et al. Is cumulative fossil energy demand a useful indicator for the environmental performance of products? <strong>Environmental Science &amp; Technology</strong>, v. 40, n. 3, p. 641–648, 2006. DOI: <a href="https://doi.org/10.1021/es051689g" target="_blank" rel="noopener">https://doi.org/10.1021/es051689g</a>.</p>
+                    </div>
+                </div>
+                        </div>
+                    </details>
+                </div>
+
                 <!-- Section 2: LCA Concepts -->
                 <div class="about-block" id="aboutLCA">
                     <h3 class="about-block-title" data-i18n="about.lcaTitle">Desempenho ambiental</h3>
@@ -816,8 +996,9 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="js/i18n.js?v=20261028"></script>
-    <script src="js/auth.js?v=20261026"></script>
+    <script src="js/i18n.js?v=20261103"></script>
+    <script src="js/terms.js?v=20261030"></script>
+    <script src="js/auth.js?v=20261030"></script>
     <script src="js/data.js?v=20261026"></script>
     <script src="js/userSystems.js?v=20261026"></script>
     <script src="js/app.js?v=20261030"></script>

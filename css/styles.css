@@ -990,6 +990,50 @@ section { padding: var(--space-3xl) 0; }
 .references-list { background: var(--warm-50); border-radius: var(--radius-md); padding: var(--space-xl); }
 .references-list p { color: var(--gray-600); font-size: 0.9rem; line-height: 1.8; margin-bottom: var(--space-sm); padding-left: var(--space-lg); border-left: 2px solid var(--warm-300); }
 
+/* Concepts page */
+.glossary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-lg); }
+.glossary-item {
+    background: var(--warm-50); border: 1px solid var(--warm-200); border-left: 4px solid var(--primary-500);
+    border-radius: var(--radius-md); padding: var(--space-lg) var(--space-xl);
+}
+.about-block-content .glossary-item { margin: var(--space-lg) 0 var(--space-xl); background: var(--warm-100); }
+.glossary-item .glossary-term { font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin: 0 0 var(--space-sm); }
+.concepts-block .glossary-item .glossary-term { margin: 0 0 var(--space-sm); }
+.glossary-item .glossary-term::first-letter { text-transform: uppercase; }
+.glossary-item .glossary-term .regulation-badge { margin-left: 6px; vertical-align: middle; }
+.glossary-item .glossary-def { font-size: 0.95rem; color: var(--gray-600); line-height: 1.7; margin: 0; }
+.glossary-item .glossary-note { font-size: 0.85rem; color: var(--gray-500); line-height: 1.6; margin: var(--space-sm) 0 0; }
+.glossary-item .glossary-note strong { margin-right: 6px; color: var(--gray-600); }
+.concepts-block .about-block-content h4 { margin-top: var(--space-xl); }
+.concepts-block .info-callout p strong { display: inline; margin: 0; color: var(--gray-700); }
+.concepts-block .indicator-name { font-size: 0.9rem; }
+.concepts-block .indicator-name strong { display: block; margin-bottom: 4px; color: var(--gray-700); }
+.concepts-block .indicators-grid { margin-bottom: var(--space-xl); }
+.concepts-block .references-list a { color: var(--primary-600); word-break: break-all; }
+
+/* Collapsible "Entenda os conceitos" window */
+.concepts-details { border: 1px solid var(--warm-200); border-radius: var(--radius-md); background: white; overflow: hidden; }
+.concepts-details > summary {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg); cursor: pointer; list-style: none; user-select: none;
+    font-weight: 700; color: var(--primary-600); background: var(--warm-100); transition: background var(--transition-fast);
+}
+.concepts-details > summary::-webkit-details-marker { display: none; }
+.concepts-details > summary:hover { background: var(--warm-200); }
+.concepts-details > summary:focus-visible { outline: 2px solid var(--primary-500); outline-offset: -2px; }
+.concepts-details > summary::after {
+    content: ""; flex: none; width: 10px; height: 10px; margin: 0 4px 4px 0;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    transform: rotate(45deg); transition: transform var(--transition-base);
+}
+.concepts-details[open] > summary { border-bottom: 1px solid var(--warm-200); }
+.concepts-details[open] > summary::after { margin: 4px 4px 0 0; transform: rotate(-135deg); }
+.concepts-label-open, .concepts-details[open] .concepts-label-closed { display: none; }
+.concepts-details[open] .concepts-label-open { display: inline; }
+.concepts-details-body { padding: var(--space-xl); animation: conceptsReveal var(--transition-base); }
+.concepts-details-body > .about-block { padding: 0; border: 0; border-radius: 0; box-shadow: none; margin: var(--space-2xl) 0 0; }
+@keyframes conceptsReveal { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
 /* Inline link */
 .inline-link { color: var(--primary-500); text-decoration: underline; font-weight: 600; cursor: pointer; }
 .inline-link:hover { color: var(--primary-700); }
@@ -1227,6 +1271,35 @@ section { padding: var(--space-3xl) 0; }
 @media (max-width: 560px) {
     .popup-grid { grid-template-columns: 1fr; }
 }
+
+/* Terms of Use */
+.terms-link { color: var(--primary-600); font-weight: 600; text-decoration: underline; }
+.form-check-hint { display: block; margin: 6px 0 0 26px; font-size: 0.75rem; color: var(--gray-500); }
+.popup-container.terms-container {
+    max-width: 760px; display: flex; flex-direction: column; overflow: hidden; max-height: 90vh;
+}
+.terms-container .popup-header { flex-shrink: 0; }
+.terms-body {
+    flex: 1; min-height: 0; overflow-y: auto; padding: var(--space-xl);
+    font-size: 0.92rem; line-height: 1.65; color: var(--gray-700);
+}
+.terms-body:focus { outline: none; }
+.terms-body p { margin: 0 0 12px; }
+.terms-body h4 {
+    margin: 24px 0 8px; font-size: 1rem; font-weight: 700; color: var(--primary-700);
+    padding-bottom: 4px; border-bottom: 1px solid var(--warm-200);
+}
+.terms-body ul { margin: 0 0 12px; padding-left: 22px; }
+.terms-body li { margin-bottom: 4px; }
+.terms-updated { font-size: 0.8rem; color: var(--gray-500); margin-bottom: 4px; }
+.terms-lang-note { font-size: 0.8rem; color: var(--gray-500); font-style: italic; }
+.terms-footer {
+    flex-shrink: 0; padding: var(--space-md) var(--space-xl) var(--space-lg);
+    border-top: 1px solid var(--warm-200); background: var(--warm-50);
+}
+.terms-scroll-hint { display: block; font-size: 0.8rem; color: var(--gray-500); margin-bottom: 10px; text-align: center; }
+.terms-footer .popup-actions { margin-top: 0; }
+.terms-footer .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* ===== Cartilha Modal ===== */
 .cartilha-modal {
