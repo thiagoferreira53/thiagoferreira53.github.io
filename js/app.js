@@ -1293,7 +1293,7 @@
         const series = IMPACT_CATEGORIES.map(cat => ({
             id: `chart_${cat.key}_${prefix}`,
             title: `${cat.acronym} (${cat.unit})`,
-            values: systems.map(s => s.impactos?.[cat.key] || 0)
+            values: systems.map(s => s.impactos?.[cat.key] ?? null)
         }));
         series.push({
             id: `chart_ced_${prefix}`,
@@ -1525,49 +1525,56 @@
     };
 
     // ===================================================================
-    //  Create System – Builder
+    //  Create System – Builder ("Crie e Avalie")
     // ===================================================================
-    let builderLayers = []; // {compIndex, name, thickness}
+    // Materiais da aba "Impactos do crie e calcule" (assets/crie_calcule.json), de fora para dentro
+    let builderLayers = [];
+    let builderPendingIdx = null;
+    let builderLastResult = null;
 
-    /**
-     * Agrupa os componentes pelo nome sem a espessura ("Alvenaria bloco cerâmico 9cm (6 furos)"
-     * -> "Alvenaria bloco cerâmico (6 furos)"). Cada grupo guarda as espessuras permitidas e o
-     * componente correspondente; componentes sem espessura no nome aceitam valor livre.
-     */
-    const EXTRA_THICKNESS = { 'Argamassa de revestimento': [2, 2.5, 3] };
-    let builderMaterialGroups = null;
+    // Categorias da aba "Impactos do crie e calcule" (EN 15804+A2) + CED
+    const BUILDER_IMPACTS = [
+        { key: 'gwp', acronym: 'GWP-total', i18nKey: 'impactA2.gwp', unit: 'kg CO₂ eq' },
+        { key: 'adpf', acronym: 'ADP-f', i18nKey: 'impactA2.adpf', unit: 'MJ' },
+        { key: 'adpe', acronym: 'ADP-e', i18nKey: 'impactA2.adpe', unit: 'kg Sb eq' },
+        { key: 'ap', acronym: 'AP', i18nKey: 'impactA2.ap', unit: 'mol H⁺ eq' },
+        { key: 'odp', acronym: 'ODP', i18nKey: 'impactA2.odp', unit: 'kg CFC-11 eq' },
+        { key: 'epfw', acronym: 'EP-freshwater', i18nKey: 'impactA2.epfw', unit: 'kg P eq' },
+        { key: 'epm', acronym: 'EP-marine', i18nKey: 'impactA2.epm', unit: 'kg N eq' },
+        { key: 'ept', acronym: 'EP-terrestrial', i18nKey: 'impactA2.ept', unit: 'mol N eq' },
+        { key: 'pocp', acronym: 'POCP', i18nKey: 'impactA2.pocp', unit: 'kg NMVOC eq' },
+        { key: 'wdp', acronym: 'WDP', i18nKey: 'impactA2.wdp', unit: 'm³ world eq' },
+        { key: 'ced', acronym: 'CED', i18nKey: 'impact.ced', unit: 'MJ' }
+    ];
 
-    function getBuilderMaterialGroups() {
-        if (builderMaterialGroups) return builderMaterialGroups;
-        const groups = [];
-        const byLabel = new Map();
-        dataManager.getComponents().forEach((c, i) => {
-            const desc = c.descricao || c.componente || c.nome || `Componente ${i + 1}`;
-            const m = desc.match(/\s*(\d+(?:[.,]\d+)?)\s*cm\b/i);
-            if (!m) { groups.push({ label: desc, compIndex: i }); return; }
-            const label = desc.replace(m[0], '').replace(/\s{2,}/g, ' ').trim();
-            const thickness = parseFloat(m[1].replace(',', '.'));
-            let g = byLabel.get(label);
-            if (!g) { g = { label, options: [] }; byLabel.set(label, g); groups.push(g); }
-            if (!g.options.some(o => o.thickness === thickness)) g.options.push({ thickness, compIndex: i });
-        });
-        groups.forEach(g => {
-            if (!g.options) return;
-            (EXTRA_THICKNESS[g.label] || []).forEach(t => {
-                if (!g.options.some(o => o.thickness === t)) g.options.push({ thickness: t, compIndex: g.options[0].compIndex });
-            });
-            g.options.sort((a, b) => a.thickness - b.thickness);
-        });
-        builderMaterialGroups = groups;
-        return groups;
+    const numLocale = () => (i18n.getLang() === 'en' ? 'en-GB' : 'pt-BR');
+    function fmtFixed(v, digits) {
+        if (v == null || isNaN(v)) return '—';
+        return Number(v).toLocaleString(numLocale(), { minimumFractionDigits: digits, maximumFractionDigits: digits });
     }
+    /** Como formatScientific, mas com o separador decimal do idioma. */
+    function fmtSci(v) {
+        if (v == null || isNaN(v)) return '—';
+        if (v === 0) return '0';
+        if (Math.abs(v) >= 0.01 && Math.abs(v) < 10000) return fmtFixed(v, 2);
+        const [m, e] = v.toExponential(2).split('e');
+        return `${fmtFixed(Number(m), 2)}e${e}`;
+    }
+    function fmtShort(v) {
+        return Number(v).toLocaleString(numLocale(), { maximumFractionDigits: 3 });
+    }
+    /** Espessura do material: "2,5 cm"; "—" quando a planilha não atribui espessura (pintura). */
+    function fmtCm(v) {
+        return v ? `${fmtShort(v)} cm` : '—';
+    }
+    const esc = s => (typeof escapeHTML === 'function' ? escapeHTML(s) : String(s ?? ''));
 
     function fillBuilderMaterialSelect(select) {
         while (select.options.length > 1) select.remove(1);
-        getBuilderMaterialGroups().forEach((g, i) => {
+        dataManager.getBuilderComponents().forEach((c, i) => {
             const opt = document.createElement('option');
             opt.value = i;
-            opt.textContent = tData(g.label);
+            opt.textContent = tData(c.nome);
             select.appendChild(opt);
         });
     }
@@ -1575,107 +1582,59 @@
     function initBuilder() {
         const select = document.getElementById('builderMaterial');
         if (!select || !dataManager.loaded) return;
+        if (!select.dataset.bound) {
+            select.addEventListener('change', () => {
+                builderPendingIdx = select.value === '' ? null : parseInt(select.value);
+                renderBuilderPreview();
+            });
+            select.dataset.bound = '1';
+        }
         // Keep existing options if already populated
         if (select.options.length > 1) return;
         fillBuilderMaterialSelect(select);
-        updateThicknessInputMode();
-    }
-
-    window.builderMaterialChanged = function () { updateThicknessInputMode(); };
-
-    function formatThickness(v) {
-        return i18n.getLang() === 'en' ? String(v) : String(v).replace('.', ',');
-    }
-
-    // Materiais com espessuras definidas mostram a lista; os demais, um campo livre
-    function updateThicknessInputMode() {
-        const select = document.getElementById('builderMaterial');
-        const input = document.getElementById('builderThickness');
-        const options = document.getElementById('builderThicknessOptions');
-        if (!select || !input || !options) return;
-
-        const group = getBuilderMaterialGroups()[parseInt(select.value)];
-        const list = group?.options;
-
-        options.innerHTML = '';
-        (list || []).forEach(o => {
-            const opt = document.createElement('option');
-            opt.value = o.thickness;
-            opt.textContent = formatThickness(o.thickness);
-            options.appendChild(opt);
-        });
-        input.style.display = list ? 'none' : '';
-        options.style.display = list ? '' : 'none';
-    }
-
-    function getBuilderThickness() {
-        const input = document.getElementById('builderThickness');
-        const options = document.getElementById('builderThicknessOptions');
-        if (options && options.style.display !== 'none') return parseFloat(options.value);
-        return parseFloat(input?.value);
     }
 
     // Re-render builder when language changes
     document.addEventListener('languageChanged', () => {
-        // Re-populate dropdown with translated names
         const select = document.getElementById('builderMaterial');
         if (select && dataManager.loaded) {
             const savedVal = select.value;
-            const savedThickness = document.getElementById('builderThicknessOptions')?.value;
             fillBuilderMaterialSelect(select);
             select.value = savedVal;
-            updateThicknessInputMode();
-            const opts = document.getElementById('builderThicknessOptions');
-            if (opts && savedThickness) opts.value = savedThickness;
         }
-        // Re-render layers and preview with translated names
         renderBuilderLayers();
         renderBuilderPreview();
+        renderBuilderResults();
     });
 
-    window.builderAddLayer = function () {
-        const matSelect = document.getElementById('builderMaterial');
-        const thicknessInput = document.getElementById('builderThickness');
-        const group = getBuilderMaterialGroups()[parseInt(matSelect?.value)];
-        const thickness = getBuilderThickness();
-
-        if (!group) return;
-        if (isNaN(thickness) || thickness <= 0) { thicknessInput?.focus(); return; }
-
-        const compIndex = group.options
-            ? group.options.find(o => o.thickness === thickness)?.compIndex
-            : group.compIndex;
-        const comp = dataManager.getComponents()[compIndex];
-        if (!comp) return;
-
-        builderLayers.push({
-            compIndex,
-            name: group.label,
-            thickness,
-            comp
-        });
-
-        matSelect.value = '';
-        thicknessInput.value = '';
-        updateThicknessInputMode();
+    /** Qualquer alteração nas camadas invalida o resultado calculado. */
+    function builderLayersChanged() {
+        builderLastResult = null;
         renderBuilderLayers();
         renderBuilderPreview();
+        renderBuilderResults();
+    }
+
+    window.builderAddLayer = function () {
+        const select = document.getElementById('builderMaterial');
+        const comp = dataManager.getBuilderComponents()[parseInt(select?.value)];
+        if (!comp) { select?.focus(); return; }
+        builderLayers.push(comp);
+        select.value = '';
+        builderPendingIdx = null;
+        builderLayersChanged();
     };
 
     window.builderRemoveLayer = function (idx) {
         builderLayers.splice(idx, 1);
-        renderBuilderLayers();
-        renderBuilderPreview();
+        builderLayersChanged();
     };
 
     window.builderMoveLayer = function (idx, dir) {
         const newIdx = idx + dir;
         if (newIdx < 0 || newIdx >= builderLayers.length) return;
-        const temp = builderLayers[idx];
-        builderLayers[idx] = builderLayers[newIdx];
-        builderLayers[newIdx] = temp;
-        renderBuilderLayers();
-        renderBuilderPreview();
+        [builderLayers[idx], builderLayers[newIdx]] = [builderLayers[newIdx], builderLayers[idx]];
+        builderLayersChanged();
     };
 
     function renderBuilderLayers() {
@@ -1691,8 +1650,8 @@
             <div class="builder-layer-item">
                 <div class="builder-layer-order">${i + 1}</div>
                 <div class="builder-layer-info">
-                    <span class="builder-layer-name">${tData(layer.name)}</span>
-                    <span class="builder-layer-thick">${layer.thickness} cm</span>
+                    <span class="builder-layer-name">${tData(layer.nome)}</span>
+                    <span class="builder-layer-thick">${fmtCm(layer.espessura_cm)}</span>
                 </div>
                 <div class="builder-layer-actions">
                     <button class="builder-layer-btn" onclick="builderMoveLayer(${i}, -1)" ${i === 0 ? 'disabled' : ''}>↑</button>
@@ -1705,25 +1664,21 @@
 
     // Material colors for visual preview
     const materialColors = {
-        'argamassa': '#d4a574',
-        'gesso': '#f5f0e8',
-        'concreto': '#a0a0a0',
         'bloco de concreto': '#b0b0b0',
         'bloco cerâmico': '#c4725a',
-        'cerâm': '#c4725a',
-        'tijolo': '#b85c3a',
-        'tinta': '#e8dcc8',
+        'argamassa': '#d4a574',
+        'placa de gesso': '#eee8d5',
+        'gesso': '#f5f0e8',
+        'concreto': '#a0a0a0',
+        'granito': '#8e8a8f',
         'placa cimentícia': '#c0c0c0',
-        'drywall': '#eee8d5',
-        'gesso acartonado': '#eee8d5',
-        'lã de vidro': '#e6d45a',
-        'lã de rocha': '#8b7355',
-        'eps': '#d0e8ff',
-        'xps': '#a0d4ff',
-        'poliuretano': '#ffe0a0',
-        'steel frame': '#808080',
-        'madeira': '#b8834e',
-        'revestimento': '#d4a574'
+        'alumínio': '#cfd6dc',
+        'perfil de aço': '#9aa3ab',
+        'lã de rocha': '#e6d45a',
+        'poliestireno': '#d0e8ff',
+        'mdf': '#c49a6c',
+        'pintura': '#e8dcc8',
+        'camara de ar': '#f4f9fc'
     };
 
     function getMaterialColor(name) {
@@ -1737,129 +1692,316 @@
     function getMaterialPattern(name) {
         const lower = (name || '').toLowerCase();
         if (lower.includes('bloco') || lower.includes('tijolo')) return 'brick';
-        if (lower.includes('concreto maciço') || lower.includes('concreto') && !lower.includes('bloco')) return 'concrete';
-        if (lower.includes('lã') || lower.includes('eps') || lower.includes('xps') || lower.includes('poliuretano')) return 'insulation';
+        if (lower.includes('concreto') || lower.includes('granito')) return 'concrete';
+        if (lower.includes('lã') || lower.includes('poliestireno')) return 'insulation';
+        if (lower.includes('perfil de aço')) return 'steel';
+        if (lower.includes('camara de ar')) return 'air';
         return 'solid';
     }
 
-    function renderBuilderPreview(showFullResults) {
+    /** Uma faixa vertical da parede: só a representação do material e a espessura (cm). */
+    function wallLayerHtml(comp, pending) {
+        const e = comp.espessura_cm || 0;
+        const label = e ? `<span class="preview-layer-label">${fmtCm(e)}</span>` : '';
+        const title = `${tData(comp.nome)} — ${fmtCm(e)}`;
+        return `<div class="preview-layer preview-pattern-${getMaterialPattern(comp.nome)}${e ? '' : ' preview-layer-thin'}${pending ? ' preview-layer-pending' : ''}"
+            style="flex-grow:${e || 0};background-color:${getMaterialColor(comp.nome)};" title="${esc(title)}">${label}</div>`;
+    }
+
+    function renderBuilderPreview() {
         const card = document.getElementById('builderPreviewCard');
         if (!card) return;
 
-        if (builderLayers.length === 0) {
+        const pending = builderPendingIdx != null ? dataManager.getBuilderComponents()[builderPendingIdx] : null;
+        if (builderLayers.length === 0 && !pending) {
             card.innerHTML = `<div class="builder-preview-empty">${i18n.t('create.previewEmpty')}</div>`;
             return;
         }
 
         const systemName = document.getElementById('builderSystemName')?.value || i18n.t('create.namePlaceholder');
-        const totalThickness = builderLayers.reduce((s, l) => s + l.thickness, 0);
-        const { totals } = builderTotals();
-        const gwp = totals.gwp;
-        const ced = totals.ced;
+        const totalThickness = builderLayers.reduce((s, l) => s + (l.espessura_cm || 0), 0);
 
-        // Build visual wall section
+        // Corte vertical da parede: exterior à esquerda, interior à direita
         let wallHtml = `<div class="preview-wall">`;
-        wallHtml += `<div class="preview-wall-label">${i18n.t('create.exterior')}</div>`;
+        wallHtml += `<div class="preview-wall-side">${i18n.t('create.exterior')}</div>`;
         wallHtml += `<div class="preview-wall-layers">`;
-        builderLayers.forEach((layer, i) => {
-            const pct = Math.max((layer.thickness / totalThickness) * 100, 8);
-            const color = getMaterialColor(layer.name);
-            const pattern = getMaterialPattern(layer.name);
-            wallHtml += `<div class="preview-layer preview-pattern-${pattern}" style="width:${pct}%;background-color:${color};" title="${tData(layer.name)} (${layer.thickness}cm)">
-                <span class="preview-layer-label">${layer.thickness}</span>
-            </div>`;
-        });
+        builderLayers.forEach(layer => { wallHtml += wallLayerHtml(layer, false); });
+        if (pending) wallHtml += wallLayerHtml(pending, true);
         wallHtml += `</div>`;
-        wallHtml += `<div class="preview-wall-label">${i18n.t('create.interior')}</div>`;
+        wallHtml += `<div class="preview-wall-side">${i18n.t('create.interior')}</div>`;
         wallHtml += `</div>`;
 
-        // Legend
         let legendHtml = `<div class="preview-legend">`;
-        builderLayers.forEach((layer, i) => {
-            const color = getMaterialColor(layer.name);
-            legendHtml += `<div class="preview-legend-item"><span class="preview-legend-swatch" style="background:${color};"></span>${tData(layer.name)} (${layer.thickness}cm)</div>`;
+        const legendItems = pending ? [...builderLayers, pending] : builderLayers;
+        legendItems.forEach((layer, i) => {
+            const isPending = pending && i === legendItems.length - 1;
+            legendHtml += `<div class="preview-legend-item${isPending ? ' pending' : ''}"><span class="preview-legend-swatch" style="background:${getMaterialColor(layer.nome)};"></span>${tData(layer.nome)}${isPending ? ` <em>(${i18n.t('create.pendingLayer')})</em>` : ''}</div>`;
         });
         legendHtml += `</div>`;
 
-        // System info card (like existing system cards)
-        let infoHtml = `<div class="preview-info">
-            <h4 class="preview-system-name">${systemName}</h4>
+        const infoHtml = `<div class="preview-info">
+            <h4 class="preview-system-name">${esc(systemName)}</h4>
             <div class="preview-specs">
-                <div class="spec-item"><span class="spec-label">${i18n.t('card.thickness')}:</span><span class="spec-value">${totalThickness.toFixed(1)} cm</span></div>
-                <div class="spec-item"><span class="spec-label">GWP:</span><span class="spec-value">${formatScientific(gwp)} kg CO₂ eq/m²</span></div>
-                <div class="spec-item"><span class="spec-label">CED:</span><span class="spec-value">${formatScientific(ced)} MJ/m²</span></div>
+                <div class="spec-item"><span class="spec-label">${i18n.t('card.thickness')}:</span><span class="spec-value">${fmtCm(totalThickness)}</span></div>
             </div>
         </div>`;
 
-        // Resultado completo (exibido pelo botão "Calcular")
-        let resultsHtml = '';
-        if (showFullResults) {
-            resultsHtml = `<div class="preview-results"><h5>${i18n.t('create.resultsTitle')}</h5><p class="preview-results-note">${i18n.t('create.resultsNote')}</p><table class="cartilha-table"><thead><tr><th>${i18n.t('cartilha.indicator')}</th><th>${i18n.t('cartilha.value')}</th><th>${i18n.t('cartilha.unitCol')}</th></tr></thead><tbody>`;
-            IMPACT_CATEGORIES.forEach(cat => {
-                resultsHtml += `<tr><td>${impactFullLabel(cat)}</td><td>${formatScientific(totals[cat.key])}</td><td>${cat.unit}</td></tr>`;
-            });
-            resultsHtml += `<tr><td>${i18n.t('impact.ced')} (CED)</td><td>${formatScientific(totals.ced)}</td><td>MJ</td></tr>`;
-            resultsHtml += `</tbody></table></div>`;
-        }
-
-        card.innerHTML = infoHtml + wallHtml + legendHtml + resultsHtml;
+        card.innerHTML = infoHtml + wallHtml + legendHtml;
     }
 
-    /** Soma os impactos das camadas montadas pelo usuário. */
+    /** Soma os impactos (por 1 m² de parede) das camadas montadas. */
     function builderTotals() {
-        const totals = { gwp: 0, ap: 0, ep: 0, pocp: 0, odp: 0, adpf: 0, adpnf: 0, ced: 0 };
-        const componentes = [];
-
+        const totals = {};
+        BUILDER_IMPACTS.forEach(c => { totals[c.key] = 0; });
         builderLayers.forEach(l => {
-            const imp = l.comp?.Impactos || l.comp?.impactos || {};
-            const ced = imp.ced || l.comp?.consumo?.total || 0;
-            Object.keys(totals).forEach(k => {
-                if (k === 'ced') totals.ced += ced;
-                else totals[k] += imp[k] || 0;
-            });
-            componentes.push({
-                componente: l.name,
-                espessura: l.thickness,
-                consumo_componente: ced,
-                gwp: imp.gwp || 0, ap: imp.ap || 0, ep: imp.ep || 0,
-                pocp: imp.pocp || 0, odp: imp.odp || 0,
-                adpf: imp.adpf || 0, adpnf: imp.adpnf || 0
+            BUILDER_IMPACTS.forEach(c => { totals[c.key] += l.impactos?.[c.key] || 0; });
+        });
+        return totals;
+    }
+
+    // ---- Texto das regras normativas -------------------------------------------------
+    function criterionText(c) {
+        if (c.porCT) {
+            const r = c.porCT;
+            return `CT ≤ ${fmtShort(r.ref)}: U ≤ ${fmtShort(r.ateRef)}; CT > ${fmtShort(r.ref)}: U ≤ ${fmtShort(r.acimaRef)}`;
+        }
+        if (c.min != null && c.max != null) return `${fmtShort(c.min)} ≤ ${c.p} ≤ ${fmtShort(c.max)}`;
+        if (c.max != null) return `${c.p} ≤ ${fmtShort(c.max)}`;
+        return `${c.p} ≥ ${fmtShort(c.min)}`;
+    }
+
+    /** Agrupa zonas consecutivas com os mesmos critérios: "ZB 1–2: U ≤ 2,7 · CT ≥ 130". */
+    function zoneRulesText(norm) {
+        const groups = [];
+        CrieCalcule.ZONAS_BR.forEach(z => {
+            const crit = norm.zonas[z];
+            const text = crit ? crit.map(criterionText).join(' · ') : i18n.t('create.noCriterion');
+            const last = groups[groups.length - 1];
+            if (last && last.text === text) last.to = z;
+            else groups.push({ from: z, to: z, text });
+        });
+        return groups.map(g => `<li><strong>ZB ${g.from}${g.to !== g.from ? '–' + g.to : ''}:</strong> ${g.text}</li>`).join('');
+    }
+
+    function statusCell(status) {
+        if (status === 'atende') return `<td class="compliance-cell pass">${i18n.t('create.meets')}</td>`;
+        if (status === 'naoAtende') return `<td class="compliance-cell fail">${i18n.t('create.notMeets')}</td>`;
+        return `<td class="compliance-cell na">—</td>`;
+    }
+
+    const normLabel = n => `${n.norma}<small class="norm-variant">${i18n.t('create.variant.' + n.variante)}</small>`;
+
+    function renderBuilderResults() {
+        const box = document.getElementById('builderResults');
+        if (!box) return;
+        if (!builderLastResult) { box.hidden = true; box.innerHTML = ''; return; }
+
+        const { name, layers, calc, normas, totals } = builderLastResult;
+        const t = k => i18n.t(k);
+        let html = `<div class="builder-results-card">`;
+        html += `<h3 class="builder-subtitle">${t('create.resultsHeading')} — ${esc(name || t('create.namePlaceholder'))}</h3>`;
+        html += `<p class="preview-results-note">${t('create.resultsNote')}</p>`;
+
+        // 1. Desempenho térmico
+        html += `<h4 class="sheet-section-title">${t('create.thermalSection')}</h4>`;
+        if (!calc.calculavel) {
+            html += `<div class="builder-warning">${t('create.notCalculable')}</div>`;
+        }
+        html += `<div class="sheet-table-wrap"><table class="cartilha-table"><thead><tr><th>${t('cartilha.property')}</th><th>${t('cartilha.value')}</th><th>${t('cartilha.unitCol')}</th></tr></thead><tbody>`;
+        html += `<tr><td>${t('cartilha.totalThickness')}</td><td>${fmtShort(calc.espessuraCm)}</td><td>cm</td></tr>`;
+        html += `<tr><td>${t('create.totalResistance')} (R<sub>T</sub>)</td><td>${fmtFixed(calc.RT, 3)}</td><td>m²·K/W</td></tr>`;
+        html += `<tr><td>${t('cartilha.thermalTransmittance')}</td><td><strong>${fmtFixed(calc.U, 2)}</strong></td><td>W/(m²·K)</td></tr>`;
+        html += `<tr><td>${t('cartilha.thermalCapacity')}</td><td><strong>${fmtFixed(calc.CT, 0)}</strong></td><td>kJ/(m²·K)</td></tr>`;
+        html += `<tr><td>${t('create.surfaceMass')}</td><td>${fmtFixed(calc.massa, 1)}</td><td>kg/m²</td></tr>`;
+        html += `</tbody></table></div>`;
+
+        // 2. Impactos ambientais
+        html += `<h4 class="sheet-section-title">${t('create.impactsSection')}</h4>`;
+        html += `<div class="sheet-table-wrap"><table class="cartilha-table"><thead><tr><th>${t('cartilha.indicator')}</th><th>${t('cartilha.value')}</th><th>${t('cartilha.unitCol')}</th></tr></thead><tbody>`;
+        BUILDER_IMPACTS.forEach(cat => {
+            html += `<tr><td>${t(cat.i18nKey)} (${cat.acronym})</td><td>${fmtSci(totals[cat.key])}</td><td>${cat.unit}</td></tr>`;
+        });
+        html += `</tbody></table></div>`;
+
+        // 3. Conformidade — zonas bioclimáticas brasileiras
+        html += `<h4 class="sheet-section-title">${t('create.complianceSection')}</h4>`;
+        html += `<div class="sheet-table-wrap"><table class="cartilha-table compliance-matrix builder-compliance"><thead><tr><th>${t('cartilha.standard')}</th>`;
+        CrieCalcule.ZONAS_BR.forEach(z => { html += `<th>ZB ${z}</th>`; });
+        html += `</tr></thead><tbody>`;
+        normas.brasil.forEach(n => {
+            html += `<tr><td class="norm-name-cell">${normLabel(n)}</td>`;
+            CrieCalcule.ZONAS_BR.forEach(z => { html += statusCell(n.resultados[z]); });
+            html += `</tr>`;
+        });
+        html += `</tbody></table></div>`;
+        html += `<p class="sheet-note">${t('create.complianceNote')}</p>`;
+
+        // ASHRAE — zonas climáticas próprias (0 a 8)
+        html += `<h5 class="sheet-subtitle">ASHRAE 90.1-2025 — ${t('create.ashraeWalls')} · ${t('create.ashraeClass')}: <em>${t('create.ashraeClass.' + normas.classeAshrae)}</em></h5>`;
+        html += `<div class="sheet-table-wrap"><table class="cartilha-table compliance-matrix builder-compliance"><thead><tr><th>${t('cartilha.standard')}</th>`;
+        CrieCalcule.ZONAS_ASHRAE.forEach(z => { html += `<th>${t('create.climateZone')} ${z}</th>`; });
+        html += `</tr></thead><tbody>`;
+        normas.ashrae.forEach(n => {
+            html += `<tr><td class="norm-name-cell">${normLabel(n)}</td>`;
+            CrieCalcule.ZONAS_ASHRAE.forEach(z => { html += statusCell(n.resultados[z]); });
+            html += `</tr>`;
+        });
+        html += `</tbody></table></div>`;
+        html += `<p class="sheet-note">${t('create.ashraeNote')}</p>`;
+
+        html += buildCalcDetailsHtml(layers, calc, normas);
+        html += `</div>`;
+
+        box.innerHTML = html;
+        box.hidden = false;
+    }
+
+    /** Seção expansível: memória de cálculo + regras normativas aplicadas. */
+    function buildCalcDetailsHtml(layers, calc, normas) {
+        const t = k => i18n.t(k);
+        let h = `<details class="concepts-details builder-calc-details">`;
+        h += `<summary><span>${t('create.detailsTitle')}</span></summary><div class="concepts-details-body">`;
+
+        // Método
+        h += `<h5 class="sheet-subtitle">${t('create.methodTitle')}</h5>`;
+        h += `<p>${t('create.methodIntro')}</p>`;
+        h += `<ul class="builder-formulas">
+            <li>${t('create.formulaR')}</li>
+            <li>${t('create.formulaAir')}</li>
+            <li>R<sub>T</sub> = R<sub>si</sub> + ΣR + R<sub>se</sub> &nbsp;(R<sub>si</sub> = ${fmtShort(calc.Rsi)}; R<sub>se</sub> = ${fmtShort(calc.Rse)} m²·K/W)</li>
+            <li>U = 1 / R<sub>T</sub></li>
+            <li>CT = Σ (e · ρ · c) ${t('create.formulaCT')}</li>
+        </ul>`;
+
+        // Memória por camada
+        h += `<div class="sheet-table-wrap"><table class="cartilha-table builder-calc-table"><thead><tr>
+            <th>${t('create.colLayer')}</th><th>e (cm)</th><th>λ<br><small>W/(m·K)</small></th><th>ρ<br><small>kg/m³</small></th>
+            <th>c<br><small>kJ/(kg·K)</small></th><th>R<br><small>m²·K/W</small></th><th>e·ρ·c<br><small>kJ/(m²·K)</small></th></tr></thead><tbody>`;
+        h += `<tr class="calc-surface"><td>${t('create.rse')}</td><td></td><td></td><td></td><td></td><td>${fmtFixed(calc.Rse, 3)}</td><td></td></tr>`;
+        calc.linhas.forEach(l => {
+            const material = l.material === l.componente ? '' : ` — ${tData(l.material)}`;
+            h += `<tr><td>${tData(l.componente)}${material}</td><td>${fmtShort(l.e_m * 100)}</td>
+                <td>${l.camaraAr ? t('create.table8') : fmtShort(l.lambda)}</td><td>${l.rho ? fmtShort(l.rho) : '—'}</td>
+                <td>${l.c ? fmtShort(l.c) : '—'}</td><td>${fmtFixed(l.R, 3)}</td><td>${l.ct ? fmtFixed(l.ct, 1) : '—'}</td></tr>`;
+        });
+        h += `<tr class="calc-surface"><td>${t('create.rsi')}</td><td></td><td></td><td></td><td></td><td>${fmtFixed(calc.Rsi, 3)}</td><td></td></tr>`;
+        h += `<tr class="calc-total"><td>${t('create.total')}</td><td></td><td></td><td></td><td></td><td>R<sub>T</sub> = ${fmtFixed(calc.RT, 3)}</td><td>CT = ${fmtFixed(calc.CT, 1)}</td></tr>`;
+        h += `</tbody></table></div>`;
+        h += `<p class="sheet-note">U = 1 / ${fmtFixed(calc.RT, 3)} = <strong>${fmtFixed(calc.U, 2)} W/(m²·K)</strong> · CT = <strong>${fmtFixed(calc.CT, 0)} kJ/(m²·K)</strong></p>`;
+
+        // Regras — normas brasileiras
+        h += `<h5 class="sheet-subtitle">${t('create.rulesTitle')}</h5>`;
+        h += `<p>${t('create.rulesIntro')}</p>`;
+        h += `<div class="sheet-table-wrap"><table class="cartilha-table builder-rules-table"><thead><tr><th>${t('cartilha.standard')}</th><th>${t('create.rulesCriteria')}</th><th>${t('create.rulesSource')}</th></tr></thead><tbody>`;
+        normas.brasil.forEach(n => {
+            h += `<tr><td class="norm-name-cell">${normLabel(n)}</td><td><ul class="builder-rule-list">${zoneRulesText(n)}</ul></td><td>${t('create.src.' + n.fonte)}</td></tr>`;
+        });
+        h += `</tbody></table></div>`;
+
+        // Regras — ASHRAE
+        h += `<p>${t('create.ashraeRulesIntro')}</p>`;
+        h += `<div class="sheet-table-wrap"><table class="cartilha-table compliance-matrix builder-rules-table"><thead><tr><th>${t('create.ashraeClass')}</th><th>${t('create.use')}</th>`;
+        CrieCalcule.ZONAS_ASHRAE.forEach(z => { h += `<th>${z}</th>`; });
+        h += `</tr></thead><tbody>`;
+        ['mass', 'steel', 'wood'].forEach(cls => {
+            CrieCalcule.NORMAS_ASHRAE.forEach(n => {
+                const active = cls === normas.classeAshrae;
+                h += `<tr class="${active ? 'rule-active' : ''}"><td class="norm-name-cell">${t('create.ashraeClass.' + cls)}</td><td>${t('create.variant.' + n.variante)}</td>`;
+                CrieCalcule.ZONAS_ASHRAE.forEach(z => { h += `<td>${fmtFixed(CrieCalcule.ASHRAE_U[cls][n.chave][z], 3)}</td>`; });
+                h += `</tr>`;
             });
         });
+        h += `</tbody></table></div>`;
+        h += `<p class="sheet-note">${t('create.ashraeClassRule')}</p>`;
 
-        return { totals, componentes, espessura: builderLayers.reduce((s, l) => s + l.thickness, 0) };
+        // Observações
+        const warnings = calc.avisos.map(a => {
+            const comp = `<strong>${tData(a.componente)}</strong>`;
+            if (a.tipo === 'naoCalculavel') return `${comp}: ${t('create.warn.notCalculable')}`;
+            if (a.tipo === 'naoEntra') return `${comp}: ${t('create.warn.notIncluded')}`;
+            if (a.tipo === 'semMassa') return `${comp}: ${t('create.warn.noMass')}`;
+            if (a.tipo === 'calorIncomum') return `${comp}: ${t('create.warn.unusualHeat').replace('{c}', fmtShort(a.valor))}`;
+            return comp;
+        });
+        layers.forEach(l => {
+            if (BUILDER_IMPACTS.every(c => !l.impactos?.[c.key])) warnings.push(`<strong>${tData(l.nome)}</strong>: ${t('create.warn.noImpacts')}`);
+        });
+        h += `<h5 class="sheet-subtitle">${t('create.notesTitle')}</h5><ul class="builder-formulas">`;
+        [...new Set(warnings)].forEach(w => { h += `<li>${w}</li>`; });
+        h += `<li>${t('create.noteIni')}</li><li>${t('create.noteAlpha')}</li>`;
+        h += `</ul>`;
+
+        h += `</div></details>`;
+        return h;
     }
 
-    /** Botão "Calcular": mostra o resultado completo do sistema montado. */
+    /** Botão "Calcular": U e CT pelo motor V1.2, impactos e verificação das normas. */
     window.builderCalculate = function () {
         if (builderLayers.length === 0) {
             showAlert('error', i18n.t('create.errorNoLayers'));
             return;
         }
-        renderBuilderPreview(true);
-        document.getElementById('builderPreviewCard')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const layers = [...builderLayers];
+        let calc;
+        try {
+            calc = CrieCalcule.calcularParede(layers);
+        } catch (e) {
+            console.error(e);
+            showAlert('error', i18n.t('create.calcError'));
+            return;
+        }
+        builderLastResult = {
+            name: document.getElementById('builderSystemName')?.value?.trim() || '',
+            layers,
+            calc,
+            normas: CrieCalcule.avaliarNormas(layers, calc),
+            totals: builderTotals()
+        };
+        renderBuilderResults();
+        document.getElementById('builderResults')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
     /** Cria o objeto de sistema a partir das camadas montadas. */
     function buildCustomSystem(name) {
-        const { totals, componentes, espessura } = builderTotals();
+        const totals = builderTotals();
+        const calc = CrieCalcule.calcularParede(builderLayers);
+        const espessura = builderLayers.reduce((s, l) => s + (l.espessura_cm || 0), 0);
+        const has = re => builderLayers.some(l => re.test(l.nome));
+        const round = (v, d) => (v == null ? null : Number(v.toFixed(d)));
         return {
             nome: name,
             tipo: 'Personalizado',
-            transmitancia: null,
-            capacidade_termica: null,
+            transmitancia: round(calc.U, 2),
+            capacidade_termica: round(calc.CT, 0),
             identificacao: {
-                descricao: { peso: null, espessura: Number(espessura.toFixed(1)), sistema_leve: false, isolante_termico: false },
-                camadas: builderLayers.map(l => `${l.name} (${l.thickness}cm)`),
+                descricao: {
+                    peso: round(calc.massa, 1),
+                    espessura: Number(espessura.toFixed(1)),
+                    sistema_leve: has(/perfil de aço/i),
+                    isolante_termico: has(/lã de rocha|poliestireno/i)
+                },
+                camadas: builderLayers.map(l => (/\d\s*cm/i.test(l.nome) || !l.espessura_cm ? l.nome : `${l.nome} (${fmtCm(l.espessura_cm)})`)),
                 unidade: '1m²',
                 fronteira: 'Fase de produção (A1-3)',
                 validade: new Date().toLocaleDateString()
             },
+            // AP, EP e POCP da planilha (EN 15804+A2) têm unidades diferentes das usadas pelos sistemas da base;
+            // ficam só em impactos_a2 para não serem comparados como se fossem a mesma grandeza.
             impactos: {
-                gwp: totals.gwp, ap: totals.ap, ep: totals.ep,
-                pocp: totals.pocp, odp: totals.odp, adpf: totals.adpf, adpnf: totals.adpnf
+                gwp: totals.gwp, ap: null, ep: null, pocp: null,
+                odp: totals.odp, adpf: totals.adpf, adpnf: totals.adpe
             },
-            consumo: { total: totals.ced, componentes },
+            impactos_a2: totals,
+            consumo: {
+                total: totals.ced,
+                componentes: builderLayers.map(l => ({
+                    componente: l.nome,
+                    espessura: l.espessura_cm,
+                    consumo_componente: l.impactos?.ced || 0,
+                    gwp: l.impactos?.gwp || 0, ap: null, ep: null, pocp: null,
+                    odp: l.impactos?.odp || 0, adpf: l.impactos?.adpf || 0, adpnf: l.impactos?.adpe || 0
+                }))
+            },
             custom: true
         };
     }
@@ -1881,8 +2023,7 @@
             showAlert('success', i18n.t('alert.systemCreated'));
             builderLayers = [];
             document.getElementById('builderSystemName').value = '';
-            renderBuilderLayers();
-            renderBuilderPreview();
+            builderLayersChanged();
             displayUserSystems();
             renderSystems();
 

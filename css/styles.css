@@ -721,18 +721,7 @@ section { padding: var(--space-3xl) 0; }
     background: white; transition: border-color 0.2s;
 }
 .builder-add-layer select:focus { outline: none; border-color: var(--primary-500); }
-.builder-add-row { display: flex; gap: 10px; align-items: center; }
-.builder-thickness-input { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-.builder-thickness-input input,
-.builder-thickness-input select {
-    width: 84px; padding: 10px 8px; border: 2px solid var(--warm-300);
-    border-radius: var(--radius-md); font-size: 0.9rem; text-align: center;
-    font-family: var(--font-sans); transition: border-color 0.2s; background: white;
-}
-.builder-thickness-input select { cursor: pointer; }
-.builder-thickness-input input:focus { outline: none; border-color: var(--primary-500); }
-.builder-thickness-input span { color: var(--gray-500); font-size: 0.85rem; font-weight: 500; }
-.builder-add-row .btn { flex: 1; white-space: nowrap; padding: 10px 18px; justify-content: center; }
+.builder-add-layer > .btn { width: 100%; justify-content: center; padding: 10px 18px; }
 .builder-actions-main { margin-bottom: 12px; }
 
 /* Preview card */
@@ -743,25 +732,31 @@ section { padding: var(--space-3xl) 0; }
 .builder-preview-card .preview-empty {
     text-align: center; padding: 48px 24px; color: var(--gray-400); font-size: 0.95rem;
 }
-.builder-preview-card .preview-wall { margin-bottom: 20px; }
-.builder-preview-card .preview-wall-label {
-    font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase;
-    letter-spacing: 0.05em; margin-bottom: 4px; text-align: center;
+/* Corte vertical da parede: exterior à esquerda, interior à direita */
+.builder-preview-card .preview-wall {
+    display: flex; align-items: stretch; gap: 8px; margin-bottom: 20px;
 }
+.builder-preview-card .preview-wall-side {
+    writing-mode: vertical-rl; transform: rotate(180deg); text-align: center;
+    font-size: 0.75rem; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.08em;
+}
+.builder-preview-card .preview-wall-side:last-child { transform: none; }
 .builder-preview-card .preview-wall-layers {
-    display: flex; height: 180px; border-radius: var(--radius-md);
+    flex: 1; display: flex; height: 300px; border-radius: var(--radius-sm);
     overflow: hidden; border: 2px solid var(--warm-300);
 }
 .builder-preview-card .preview-layer {
-    display: flex; align-items: center; justify-content: center;
-    position: relative; overflow: hidden; min-width: 22px;
-    font-size: 0.7rem; color: rgba(0,0,0,0.6); font-weight: 700;
+    flex: 1 1 0; display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden; min-width: 50px;
+    border-right: 1px solid rgba(0,0,0,0.18);
+    font-size: 0.7rem; color: rgba(0,0,0,0.7); font-weight: 700;
 }
-/* Números das camadas sempre na horizontal */
+.builder-preview-card .preview-layer:last-child { border-right: none; }
+.builder-preview-card .preview-layer-thin { flex: 0 0 10px; min-width: 10px; }
+.builder-preview-card .preview-layer-pending { opacity: 0.55; outline: 2px dashed var(--primary-500); outline-offset: -3px; }
 .builder-preview-card .preview-layer-label {
-    writing-mode: horizontal-tb; text-orientation: mixed;
-    background: rgba(255,255,255,0.82); border-radius: 4px; padding: 1px 4px;
-    line-height: 1.2; white-space: nowrap;
+    background: rgba(255,255,255,0.88); border-radius: 4px; padding: 1px 5px;
+    line-height: 1.3; white-space: nowrap;
 }
 
 /* Layer patterns */
@@ -782,6 +777,15 @@ section { padding: var(--space-3xl) 0; }
     );
 }
 .preview-pattern-solid { background-image: none; }
+.preview-pattern-air {
+    background-image: radial-gradient(circle, rgba(90,140,170,0.25) 1px, transparent 1.5px);
+    background-size: 10px 10px;
+}
+.preview-pattern-steel {
+    background-image: repeating-linear-gradient(
+        -45deg, transparent, transparent 5px, rgba(0,0,0,0.15) 5px, rgba(0,0,0,0.15) 6px
+    );
+}
 
 /* Legend */
 .builder-preview-card .preview-legend {
@@ -790,6 +794,7 @@ section { padding: var(--space-3xl) 0; }
 .builder-preview-card .preview-legend-item {
     display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--gray-600);
 }
+.builder-preview-card .preview-legend-item.pending { color: var(--gray-400); }
 .builder-preview-card .preview-legend-color,
 .builder-preview-card .preview-legend-swatch {
     display: inline-block; width: 14px; height: 14px; border-radius: 3px;
@@ -803,6 +808,49 @@ section { padding: var(--space-3xl) 0; }
 .builder-preview-card .preview-results .cartilha-table { font-size: 0.78rem; margin: 0; }
 .builder-preview-card .preview-results .cartilha-table th,
 .builder-preview-card .preview-results .cartilha-table td { padding: 6px 10px; }
+
+/* Resultados do "Calcular" (mesmo cartão do painel da calculadora) */
+.builder-results { max-width: 1100px; margin: 32px auto 0; scroll-margin-top: 90px; }
+.builder-results-card {
+    background: white; border-radius: var(--radius-xl); padding: 32px;
+    box-shadow: var(--shadow-lg); border: 1px solid var(--warm-200);
+}
+.builder-results-card .preview-results-note { font-size: 0.85rem; color: var(--gray-600); background: var(--warm-50); border-left: 3px solid var(--primary-500); padding: 8px 12px; margin: 0 0 var(--space-md); }
+.builder-results-card .sheet-section-title { font-size: 1rem; margin-top: var(--space-xl); }
+.builder-results-card .cartilha-table { font-size: 0.84rem; margin: 0 0 var(--space-lg); }
+.builder-results-card .cartilha-table th,
+.builder-results-card .cartilha-table td { padding: 8px 12px; }
+.builder-results-card .sheet-note { margin-top: calc(-1 * var(--space-sm)); }
+.builder-compliance td.compliance-cell { font-size: 0.78rem; white-space: nowrap; }
+.builder-compliance .compliance-cell.pass { background: rgba(61, 122, 84, 0.08); }
+.builder-compliance .compliance-cell.fail { background: rgba(192, 57, 43, 0.06); }
+.norm-name-cell .norm-variant { display: block; font-weight: 500; font-size: 0.75rem; color: var(--gray-500); }
+.builder-warning {
+    background: rgba(192, 57, 43, 0.06); border-left: 3px solid var(--error-500); color: var(--gray-700);
+    padding: 8px 12px; margin-bottom: var(--space-md); font-size: 0.85rem;
+}
+.builder-calc-details { margin-top: var(--space-xl); }
+.builder-calc-details .concepts-details-body { font-size: 0.88rem; color: var(--gray-700); line-height: 1.6; }
+.builder-calc-details .sheet-subtitle:first-child { margin-top: 0; }
+.builder-calc-details p { margin-bottom: var(--space-md); }
+.builder-formulas { margin: 0 0 var(--space-lg) var(--space-xl); }
+.builder-formulas li { margin-bottom: 4px; }
+.builder-calc-table th, .builder-calc-table td { text-align: right; }
+.builder-calc-table th:first-child, .builder-calc-table td:first-child { text-align: left; }
+.builder-calc-table th small { font-weight: 400; opacity: 0.85; }
+.builder-calc-table tr.calc-surface td { color: var(--gray-500); font-style: italic; }
+.builder-calc-table tr.calc-total td { font-weight: 700; background: rgba(61,122,84,0.08); }
+.builder-rules-table td { vertical-align: top; }
+.builder-rules-table:not(.compliance-matrix) th:nth-child(1) { width: 22%; }
+.builder-rules-table:not(.compliance-matrix) th:nth-child(2) { width: 40%; }
+.builder-results-card .builder-rules-table .norm-name-cell { white-space: normal; font-weight: 600; color: var(--gray-800); }
+.builder-results-card .builder-rules-table.compliance-matrix th,
+.builder-results-card .builder-rules-table.compliance-matrix td { padding: 6px 8px; font-size: 0.8rem; }
+.builder-calc-table td:not(:first-child) { white-space: nowrap; }
+.builder-rules-table td:last-child { font-size: 0.8rem; color: var(--gray-600); }
+.builder-rule-list { list-style: none; margin: 0; padding: 0; }
+.builder-rule-list li { margin-bottom: 2px; }
+.builder-rules-table tr.rule-active td { background: rgba(61,122,84,0.12); font-weight: 700; }
 
 /* Preview info */
 .builder-preview-card .preview-info { margin-top: 12px; }
@@ -833,8 +881,9 @@ section { padding: var(--space-3xl) 0; }
     .builder-layout { grid-template-columns: 1fr; }
     .builder-preview-panel { position: static; }
     .builder-panel { padding: 20px; }
-    .builder-preview-card .preview-wall-layers { height: 120px; }
+    .builder-preview-card .preview-wall-layers { height: 220px; }
     .builder-preview-card .preview-specs { grid-template-columns: 1fr; }
+    .builder-results-card { padding: 20px; }
     .partner-logo-life-secondary { max-width: 120px; }
     .partner-logo-ppgci { max-width: 150px; }
     .partner-logo-ufrgs-home { max-width: 170px; }

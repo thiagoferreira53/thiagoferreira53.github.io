@@ -1,0 +1,1095 @@
+{
+  "fonte": {
+    "arquivo": "app planilha_05.09_Resumo Thiago.xlsx",
+    "abas": [
+      "Impactos do crie e calcule",
+      "Prop. térmicas crie e calcule"
+    ]
+  },
+  "unidade_funcional": "1 m² de parede",
+  "componentes": [
+    {
+      "id": "argamassa-de-revestimento-2-5-cm",
+      "nome": "Argamassa de revestimento 2,5 cm",
+      "espessura_cm": 2.5,
+      "impactos": {
+        "gwp": 12.70238,
+        "adpf": 63.847500000000004,
+        "adpe": 8.431200000000002e-05,
+        "ap": 0.0421069,
+        "odp": 4.8287e-08,
+        "epfw": 0.000134041,
+        "epm": 0.010310709999999999,
+        "ept": 0.1167267,
+        "pocp": 0.033668300000000005,
+        "wdp": 1.6776999999999997,
+        "ced": 74.572
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Argamassa de revestimento 2,5 cm",
+            "e_m": 0.025,
+            "lambda": 1.15,
+            "rho": 2000.0,
+            "c": 1.0,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "bloco-ceramico-9x9x24cm-com-argamassa-assentamento",
+      "nome": "Bloco cerâmico 9x9x24cm com argamassa assentamento",
+      "espessura_cm": 9.0,
+      "impactos": {
+        "gwp": 27.138779999999997,
+        "adpf": 227.4103,
+        "adpe": 0.00012106239999999999,
+        "ap": 0.0858069,
+        "odp": 2.092391e-07,
+        "epfw": 0.000332266,
+        "epm": 0.022387999999999998,
+        "ept": 0.2547462,
+        "pocp": 0.0894383,
+        "wdp": 2.6379099999999998,
+        "ced": 263.3691
+      },
+      "termico": {
+        "grupo": "heterogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Cerâmica",
+            "e_m": 0.014,
+            "lambda": 0.9,
+            "rho": 1600.0,
+            "c": 0.92,
+            "camaraAr": false
+          },
+          {
+            "material": "Câmara de ar",
+            "e_m": 0.061,
+            "lambda": 0.442,
+            "rho": null,
+            "c": null,
+            "camaraAr": false
+          },
+          {
+            "material": "Cerâmica",
+            "e_m": 0.014,
+            "lambda": 0.9,
+            "rho": 1600.0,
+            "c": 0.92,
+            "camaraAr": false
+          },
+          {
+            "material": "Argamassa",
+            "e_m": 0.015,
+            "lambda": 1.15,
+            "rho": 2000.0,
+            "c": 1.0,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "bloco-ceramico-14x19x29cm-com-argamassa-assentamento",
+      "nome": "Bloco cerâmico 14x19x29cm com argamassa assentamento",
+      "espessura_cm": 14.0,
+      "impactos": {
+        "gwp": 24.638779999999997,
+        "adpf": 202.4103,
+        "adpe": 0.0001119624,
+        "ap": 0.07780690000000001,
+        "odp": 1.852391e-07,
+        "epfw": 0.000298266,
+        "epm": 0.020288,
+        "ept": 0.2297462,
+        "pocp": 0.0801383,
+        "wdp": 2.42791,
+        "ced": 233.3691
+      },
+      "termico": {
+        "grupo": "heterogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Cerâmica",
+            "e_m": 0.0165,
+            "lambda": 0.9,
+            "rho": 1600.0,
+            "c": 0.92,
+            "camaraAr": false
+          },
+          {
+            "material": "Câmara de ar",
+            "e_m": 0.107,
+            "lambda": 0.36,
+            "rho": null,
+            "c": null,
+            "camaraAr": false
+          },
+          {
+            "material": "Cerâmica",
+            "e_m": 0.0165,
+            "lambda": 0.9,
+            "rho": 1600.0,
+            "c": 0.92,
+            "camaraAr": false
+          },
+          {
+            "material": "Argamassa",
+            "e_m": 0.015,
+            "lambda": 1.15,
+            "rho": 2000.0,
+            "c": 1.0,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "bloco-ceramico-macico-10x6x22cm-com-argamassa-assentamento",
+      "nome": "Bloco cerâmico maciço 10x6x22cm com argamassa assentamento",
+      "espessura_cm": 10.0,
+      "impactos": {
+        "gwp": 46.23674,
+        "adpf": 396.6313,
+        "adpe": 0.00020013,
+        "ap": 0.1457296,
+        "odp": 3.65702e-07,
+        "epfw": 0.000567874,
+        "epm": 0.03818908,
+        "ept": 0.4341708,
+        "pocp": 0.1536596,
+        "wdp": 4.4212,
+        "ced": 457.878
+      },
+      "termico": {
+        "grupo": "heterogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Cerâmica",
+            "e_m": 0.1,
+            "lambda": 1.05,
+            "rho": 1800.0,
+            "c": 0.92,
+            "camaraAr": false
+          },
+          {
+            "material": "Argamassa",
+            "e_m": 0.015,
+            "lambda": 1.15,
+            "rho": 2000.0,
+            "c": 1.0,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": [
+        "Planilha (linha 51): colunas deslocadas; espessura lida da coluna D (0.1 m)."
+      ]
+    },
+    {
+      "id": "bloco-ceramico-macico-9x6x22cm-com-argamassa-assentamento",
+      "nome": "Bloco cerâmico maciço 9x6x22cm com argamassa assentamento",
+      "espessura_cm": 9.0,
+      "impactos": {
+        "gwp": 41.916959999999996,
+        "adpf": 359.4832,
+        "adpe": 0.000180897,
+        "ap": 0.1320637,
+        "odp": 3.32011e-07,
+        "epfw": 0.000515186,
+        "epm": 0.03469127,
+        "ept": 0.3937118,
+        "pocp": 0.1394067,
+        "wdp": 4.007099999999999,
+        "ced": 415.705
+      },
+      "termico": {
+        "grupo": "heterogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Cerâmica",
+            "e_m": 0.09,
+            "lambda": 1.05,
+            "rho": 1800.0,
+            "c": 0.92,
+            "camaraAr": false
+          },
+          {
+            "material": "Argamassa",
+            "e_m": 0.015,
+            "lambda": 1.15,
+            "rho": 2000.0,
+            "c": 1.0,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": [
+        "Planilha (linha 53): colunas deslocadas; espessura lida da coluna D (0.09 m)."
+      ]
+    },
+    {
+      "id": "bloco-ceramico-9x14x24cm-com-argamassa-assentamento",
+      "nome": "Bloco cerâmico 9x14x24cm com argamassa assentamento",
+      "espessura_cm": 9.0,
+      "impactos": {
+        "gwp": 21.43233,
+        "adpf": 178.7892,
+        "adpe": 9.54972e-05,
+        "ap": 0.0674928,
+        "odp": 1.6472390000000002e-07,
+        "epfw": 0.000261452,
+        "epm": 0.0176749,
+        "ept": 0.1998138,
+        "pocp": 0.0702443,
+        "wdp": 2.0783899999999997,
+        "ced": 207.3017
+      },
+      "termico": {
+        "grupo": "heterogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Cerâmica",
+            "e_m": 0.0134,
+            "lambda": 0.9,
+            "rho": 1600.0,
+            "c": 0.92,
+            "camaraAr": false
+          },
+          {
+            "material": "Câmara de ar",
+            "e_m": 0.0632,
+            "lambda": 0.389,
+            "rho": null,
+            "c": null,
+            "camaraAr": false
+          },
+          {
+            "material": "Cerâmica",
+            "e_m": 0.0134,
+            "lambda": 0.9,
+            "rho": 1600.0,
+            "c": 0.92,
+            "camaraAr": false
+          },
+          {
+            "material": "Argamassa",
+            "e_m": 0.015,
+            "lambda": 1.15,
+            "rho": 2000.0,
+            "c": 1.0,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "bloco-ceramico-9x19x19cm-com-argamassa-assentamento",
+      "nome": "Bloco cerâmico 9x19x19cm com argamassa assentamento",
+      "espessura_cm": 9.0,
+      "impactos": {
+        "gwp": 19.2091,
+        "adpf": 162.7476,
+        "adpe": 8.463519999999999e-05,
+        "ap": 0.060736700000000005,
+        "odp": 1.499762e-07,
+        "epfw": 0.000235358,
+        "epm": 0.01588234,
+        "ept": 0.1797376,
+        "pocp": 0.0635323,
+        "wdp": 1.8483200000000002,
+        "ced": 187.37290000000002
+      },
+      "termico": {
+        "grupo": "heterogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Cerâmica",
+            "e_m": 0.013,
+            "lambda": 0.9,
+            "rho": 1600.0,
+            "c": 0.92,
+            "camaraAr": false
+          },
+          {
+            "material": "Câmara de ar",
+            "e_m": 0.064,
+            "lambda": 0.356,
+            "rho": null,
+            "c": null,
+            "camaraAr": false
+          },
+          {
+            "material": "Cerâmica",
+            "e_m": 0.013,
+            "lambda": 0.9,
+            "rho": 1600.0,
+            "c": 0.92,
+            "camaraAr": false
+          },
+          {
+            "material": "Argamassa",
+            "e_m": 0.015,
+            "lambda": 1.15,
+            "rho": 2000.0,
+            "c": 1.0,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "bloco-ceramico-12x19x19cm-com-argamassa-assentamento",
+      "nome": "Bloco cerâmico 12x19x19cm com argamassa assentamento",
+      "espessura_cm": 12.0,
+      "impactos": {
+        "gwp": 22.655260000000002,
+        "adpf": 186.97480000000002,
+        "adpe": 0.0001022003,
+        "ap": 0.0715678,
+        "odp": 1.7095159999999999e-07,
+        "epfw": 0.000274764,
+        "epm": 0.018656449999999998,
+        "ept": 0.21158,
+        "pocp": 0.0739963,
+        "wdp": 2.22016,
+        "ced": 216.09050000000002
+      },
+      "termico": {
+        "grupo": "heterogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Cerâmica",
+            "e_m": 0.013,
+            "lambda": 0.9,
+            "rho": 1600.0,
+            "c": 0.92,
+            "camaraAr": false
+          },
+          {
+            "material": "Câmara de ar",
+            "e_m": 0.094,
+            "lambda": 0.414,
+            "rho": null,
+            "c": null,
+            "camaraAr": false
+          },
+          {
+            "material": "Cerâmica",
+            "e_m": 0.013,
+            "lambda": 0.9,
+            "rho": 1600.0,
+            "c": 0.92,
+            "camaraAr": false
+          },
+          {
+            "material": "Argamassa",
+            "e_m": 0.015,
+            "lambda": 1.15,
+            "rho": 2000.0,
+            "c": 1.0,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "bloco-de-concreto-14x19x39cm-com-argamassa-de-assentamento",
+      "nome": "Bloco de concreto 14x19x39cm com argamassa de assentamento",
+      "espessura_cm": 14.0,
+      "impactos": {
+        "gwp": 17.92233,
+        "adpf": 106.7892,
+        "adpe": 7.75972e-05,
+        "ap": 0.0863928,
+        "odp": 1.374239e-07,
+        "epfw": 0.00010985199999999999,
+        "epm": 0.0265149,
+        "ept": 0.3160138,
+        "pocp": 0.08432429999999999,
+        "wdp": 4.15839,
+        "ced": 139.70170000000002
+      },
+      "termico": {
+        "grupo": "heterogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Concreto",
+            "e_m": 0.03,
+            "lambda": 1.75,
+            "rho": 2400.0,
+            "c": 1.0,
+            "camaraAr": false
+          },
+          {
+            "material": "Câmara de ar",
+            "e_m": 0.08,
+            "lambda": 0.625,
+            "rho": null,
+            "c": null,
+            "camaraAr": false
+          },
+          {
+            "material": "Concreto",
+            "e_m": 0.03,
+            "lambda": 1.75,
+            "rho": 2400.0,
+            "c": 1.0,
+            "camaraAr": false
+          },
+          {
+            "material": "Argamassa",
+            "e_m": 0.015,
+            "lambda": 1.15,
+            "rho": 2000.0,
+            "c": 1.0,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "bloco-de-concreto-9x19x39cm-com-argamassa-de-assentamento",
+      "nome": "Bloco de concreto 9x19x39cm com argamassa de assentamento",
+      "espessura_cm": 9.0,
+      "impactos": {
+        "gwp": 11.4694,
+        "adpf": 68.2343,
+        "adpe": 4.98015e-05,
+        "ap": 0.055232500000000004,
+        "odp": 8.77147e-08,
+        "epfw": 7.04892e-05,
+        "epm": 0.01686451,
+        "ept": 0.2019882,
+        "pocp": 0.05387121,
+        "wdp": 2.65637,
+        "ced": 89.0688
+      },
+      "termico": {
+        "grupo": "heterogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Concreto",
+            "e_m": 0.0173,
+            "lambda": 1.75,
+            "rho": 2400.0,
+            "c": 1.0,
+            "camaraAr": false
+          },
+          {
+            "material": "Câmara de ar",
+            "e_m": 0.0554,
+            "lambda": 0.434,
+            "rho": null,
+            "c": null,
+            "camaraAr": false
+          },
+          {
+            "material": "Concreto",
+            "e_m": 0.0173,
+            "lambda": 1.75,
+            "rho": 2400.0,
+            "c": 1.0,
+            "camaraAr": false
+          },
+          {
+            "material": "Argamassa",
+            "e_m": 0.015,
+            "lambda": 1.15,
+            "rho": 2000.0,
+            "c": 1.0,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "gesso-0-2-cm",
+      "nome": "Gesso 0,2 cm",
+      "espessura_cm": 0.2,
+      "impactos": {
+        "gwp": 0.16691,
+        "adpf": 2.18956,
+        "adpe": 8.36245e-05,
+        "ap": 0.00083101,
+        "odp": 2.2931e-09,
+        "epfw": 3.7134e-06,
+        "epm": 0.00018295,
+        "ept": 0.0021607,
+        "pocp": 0.0006834800000000001,
+        "wdp": 0.019309999999999997,
+        "ced": 2.5051
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Gesso 0,2 cm",
+            "e_m": 0.002,
+            "lambda": 0.35,
+            "rho": 900.0,
+            "c": 0.87,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "granito-2cm",
+      "nome": "Granito 2cm",
+      "espessura_cm": 2.0,
+      "impactos": {
+        "gwp": 64.2,
+        "adpf": 853.0,
+        "adpe": 5.97e-05,
+        "ap": 0.368,
+        "odp": 5.25e-07,
+        "epfw": 0.0027,
+        "epm": 0.101,
+        "ept": 1.11,
+        "pocp": 0.332,
+        "wdp": 16.7,
+        "ced": 998.0
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Granito 2cm",
+            "e_m": 0.02,
+            "lambda": 3.0,
+            "rho": 2600.0,
+            "c": 0.8,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "la-de-rocha-9-cm",
+      "nome": "Lã de Rocha 9 cm",
+      "espessura_cm": 9.0,
+      "impactos": {
+        "gwp": 5.06,
+        "adpf": 57.3,
+        "adpe": 3.12e-05,
+        "ap": 0.0425,
+        "odp": 1.11e-07,
+        "epfw": 0.000148,
+        "epm": 0.00427,
+        "ept": 0.0737,
+        "pocp": 0.0174,
+        "wdp": 1.18,
+        "ced": 64.7
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Lã de Rocha 9 cm",
+            "e_m": 0.09,
+            "lambda": 0.045,
+            "rho": 100.0,
+            "c": 0.8,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "la-de-rocha-7-5-cm",
+      "nome": "Lã de Rocha 7,5 cm",
+      "espessura_cm": 7.5,
+      "impactos": {
+        "gwp": 4.22,
+        "adpf": 47.8,
+        "adpe": 2.6e-05,
+        "ap": 0.0354,
+        "odp": 9.21e-08,
+        "epfw": 0.000123,
+        "epm": 0.00356,
+        "ept": 0.0614,
+        "pocp": 0.0145,
+        "wdp": 0.987,
+        "ced": 53.9
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Lã de Rocha 7,5 cm",
+            "e_m": 0.075,
+            "lambda": 0.045,
+            "rho": 100.0,
+            "c": 0.8,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "la-de-rocha-4-cm",
+      "nome": "Lã de Rocha 4 cm",
+      "espessura_cm": 4.0,
+      "impactos": {
+        "gwp": 2.25,
+        "adpf": 25.5,
+        "adpe": 1.39e-05,
+        "ap": 0.0189,
+        "odp": 4.91e-08,
+        "epfw": 6.56e-05,
+        "epm": 0.0019,
+        "ept": 0.0328,
+        "pocp": 0.00773,
+        "wdp": 0.526,
+        "ced": 28.7
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Lã de Rocha 4 cm",
+            "e_m": 0.04,
+            "lambda": 0.045,
+            "rho": 100.0,
+            "c": 0.8,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "mdf",
+      "nome": "MDF",
+      "espessura_cm": 2.0,
+      "impactos": {
+        "gwp": -36.7,
+        "adpf": 90.7,
+        "adpe": 3.74e-05,
+        "ap": 0.06,
+        "odp": 1.16e-07,
+        "epfw": 0.000116,
+        "epm": 0.00612,
+        "ept": 0.0711,
+        "pocp": 0.0395,
+        "wdp": 6.28,
+        "ced": 874.0
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "MDF",
+            "e_m": 0.02,
+            "lambda": 0.27,
+            "rho": 1500.0,
+            "c": 2.3,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "parede-de-concreto-10-cm",
+      "nome": "Parede de concreto 10 cm",
+      "espessura_cm": 10.0,
+      "impactos": {
+        "gwp": 22.223999999999997,
+        "adpf": 173.5949,
+        "adpe": 0.0509997761,
+        "ap": 0.16409040000000003,
+        "odp": 0.050900225607,
+        "epfw": 0.05121515,
+        "epm": 0.0857697,
+        "ept": 0.461721,
+        "pocp": 0.1651786,
+        "wdp": 7.5108999999999995,
+        "ced": 212.1259
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Parede de concreto 10 cm",
+            "e_m": 0.1,
+            "lambda": 1.75,
+            "rho": 2400.0,
+            "c": 1.0,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "parede-de-concreto-12-cm",
+      "nome": "Parede de concreto 12 cm",
+      "espessura_cm": 12.0,
+      "impactos": {
+        "gwp": 25.623999999999995,
+        "adpf": 198.5949,
+        "adpe": 0.0510160761,
+        "ap": 0.1829904,
+        "odp": 0.050900266607,
+        "epfw": 0.05123405,
+        "epm": 0.0918697,
+        "ept": 0.534721,
+        "pocp": 0.1844786,
+        "wdp": 8.5709,
+        "ced": 243.1259
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Parede de concreto 12 cm",
+            "e_m": 0.12,
+            "lambda": 1.75,
+            "rho": 2400.0,
+            "c": 1.0,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "perfil-de-aco-galvanizado-9cm",
+      "nome": "Perfil de aço Galvanizado 9cm",
+      "espessura_cm": 9.0,
+      "impactos": {
+        "gwp": 8.131489999999998,
+        "adpf": 103.0376,
+        "adpe": 0.0013372708,
+        "ap": 0.3764448,
+        "odp": 9.49236e-08,
+        "epfw": 0.000449799,
+        "epm": 0.01957573,
+        "ept": 1.5934393,
+        "pocp": 0.034844400000000005,
+        "wdp": 5.3921600000000005,
+        "ced": 119.4705
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": false,
+        "motivo": "Seção composta (perfil de aço + câmara de ar): a planilha não informa ρ, c nem as frações de área do perfil, necessárias ao cálculo por caminhos paralelos.",
+        "camadas": [
+          {
+            "material": "Perfil de aço Galvanizado 9cm + camara de ar",
+            "e_m": 0.09,
+            "lambda": 55.0,
+            "rho": null,
+            "c": null,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "pintura",
+      "nome": "Pintura",
+      "espessura_cm": 0,
+      "impactos": {
+        "gwp": 1.38,
+        "adpf": 16.5,
+        "adpe": 1.34e-05,
+        "ap": 0.0093,
+        "odp": 2.08e-08,
+        "epfw": 7.99e-05,
+        "epm": 0.00226,
+        "ept": 0.0137,
+        "pocp": 0.0058,
+        "wdp": 0.576,
+        "ced": 21.7
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": false,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": []
+      },
+      "avisos": [
+        "Planilha: espessura \"não entra\" — camada não entra no cálculo térmico."
+      ],
+      "notas_planilha": []
+    },
+    {
+      "id": "placa-cimenticia-1cm",
+      "nome": "Placa cimentícia 1cm",
+      "espessura_cm": 1.0,
+      "impactos": {
+        "gwp": 5.2,
+        "adpf": 68.2,
+        "adpe": 3.74e-05,
+        "ap": 0.0288,
+        "odp": 7.4e-08,
+        "epfw": 0.000126,
+        "epm": 0.00748,
+        "ept": 0.0854,
+        "pocp": 0.0267,
+        "wdp": 1.1,
+        "ced": 101.0
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Placa cimentícia 1cm",
+            "e_m": 0.01,
+            "lambda": 0.95,
+            "rho": 1520.0,
+            "c": 1.0,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "placa-de-aluminio-composto",
+      "nome": "Placa de alumínio composto",
+      "espessura_cm": 3.0,
+      "impactos": {
+        "gwp": 8.52,
+        "adpf": 175.01,
+        "adpe": 2.0100293999999996,
+        "ap": 2.0317,
+        "odp": 2.0100001699999996,
+        "epfw": 2.0101769999999997,
+        "epm": 2.01429,
+        "ept": 2.0570999999999997,
+        "pocp": 2.0444,
+        "wdp": 4.029999999999999,
+        "ced": 192.01
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Placa de alumínio composto",
+            "e_m": 0.03,
+            "lambda": 0.0413,
+            "rho": 2700.0,
+            "c": 0.0462,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "placa-de-gesso",
+      "nome": "Placa de gesso",
+      "espessura_cm": 1.2,
+      "impactos": {
+        "gwp": 2.599941,
+        "adpf": 32.79083,
+        "adpe": 0.0002966226,
+        "ap": 0.019650479999999998,
+        "odp": 1.0541110000000001e-07,
+        "epfw": 0.0001296749,
+        "epm": 0.003822778,
+        "ept": 0.04008587,
+        "pocp": 0.011622219999999999,
+        "wdp": 0.9133700000000001,
+        "ced": 44.4489
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Placa de gesso",
+            "e_m": 0.012,
+            "lambda": 0.35,
+            "rho": 900.0,
+            "c": 0.87,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "poliestireno-8cm-placa",
+      "nome": "Poliestireno (8cm) Placa",
+      "espessura_cm": 8.0,
+      "impactos": {
+        "gwp": 10.8,
+        "adpf": 257.0,
+        "adpe": 1.4e-06,
+        "ap": 0.039,
+        "odp": 1.18e-07,
+        "epfw": 0.000199,
+        "epm": 0.0059,
+        "ept": 0.0635,
+        "pocp": 0.0341,
+        "wdp": 8.52,
+        "ced": 278.0
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Poliestireno (8cm) Placa",
+            "e_m": 0.08,
+            "lambda": 0.04,
+            "rho": 35.0,
+            "c": 1.4,
+            "camaraAr": false
+          }
+        ]
+      },
+      "avisos": [],
+      "notas_planilha": []
+    },
+    {
+      "id": "camara-de-ar-5cm",
+      "nome": "Camara de ar 5cm",
+      "espessura_cm": 5.0,
+      "impactos": {
+        "gwp": 0.0,
+        "adpf": 0.0,
+        "adpe": 0.0,
+        "ap": 0.0,
+        "odp": 0.0,
+        "epfw": 0.0,
+        "epm": 0.0,
+        "ept": 0.0,
+        "pocp": 0.0,
+        "wdp": 0.0,
+        "ced": 0.0
+      },
+      "termico": {
+        "grupo": "homogeneo",
+        "incluir": true,
+        "calculavel": true,
+        "motivo": null,
+        "camadas": [
+          {
+            "material": "Camara de ar",
+            "e_m": 0.05,
+            "lambda": null,
+            "rho": null,
+            "c": null,
+            "camaraAr": true
+          }
+        ]
+      },
+      "avisos": [
+        "Planilha: sem dados de impacto — considerado zero."
+      ],
+      "notas_planilha": []
+    }
+  ]
+}

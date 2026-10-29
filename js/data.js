@@ -3,6 +3,7 @@ class DataManager {
     constructor() {
         this.systems = [];
         this.components = [];
+        this.builderComponents = [];
         this.regulations = {
             ashrae_residential: null,
             ashrae_commercial: null,
@@ -18,13 +19,16 @@ class DataManager {
     async loadAll() {
         try {
             // Load systems and components
-            const [systemsData, componentsData] = await Promise.all([
+            const [systemsData, componentsData, builderData] = await Promise.all([
                 fetch('assets/sistemas.json').then(r => r.json()),
-                fetch('assets/componentes.json').then(r => r.json())
+                fetch('assets/componentes.json').then(r => r.json()),
+                fetch('assets/crie_calcule.json?v=20261029').then(r => r.json())
             ]);
 
             this.systems = systemsData;
             this.components = componentsData;
+            // Materiais do "Crie e Avalie" (abas "Impactos do crie e calcule" + "Prop. térmicas crie e calcule")
+            this.builderComponents = builderData.componentes || [];
 
             // Load regulations (optional)
             try {
@@ -131,6 +135,10 @@ class DataManager {
 
     getComponents() {
         return this.components;
+    }
+
+    getBuilderComponents() {
+        return this.builderComponents || [];
     }
 
     getRegulations() {
